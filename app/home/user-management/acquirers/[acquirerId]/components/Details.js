@@ -3,7 +3,9 @@ import styles from "../page.module.css";
 import avatar from "../../../../../../public/images/programmer.png";
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import Mapping from "./Mapping";
+import Tabs from "./Tabs";
+import PayinProfiles from "./PayinProfiles";
+import PayoutProfiles from "./PayoutProfiles";
 import { useParams } from "next/navigation";
 import { decryptParams } from "@/app/utils/decryptions";
 import useGetRequest from "@/app/hooks/useFetch";
@@ -18,25 +20,28 @@ import AddPayout from "../modals/AddPayout";
 const Details = () => {
   const param = useParams();
   const { loading, error, response = [], getData } = useGetRequest();
+  const [tab, setTab] = useState(1);
+  
+  const handleTabs = (data) => {
+    setTab(data);
+  };
+
   useEffect(() => {
     getData(endPoints.users.acquirer + "/" + decryptParams(param.acquirerId));
   }, []);
 
   const {
-    loading: changeStatusLoading,
     error: changeStatusError,
     response: changeStatusResponse,
     postData: postAquirerStatus,
   } = usePostRequest(endPoints.users.acquirerStatus + "acquirer");
 
   const {
-    loading: changePayInStatusLoading,
     error: changePayInStatusError,
     response: changePayInStatusResponse,
     postData: postPayInStatus,
   } = usePostRequest(endPoints.users.acquirerStatus + "payin");
   const {
-    loading: changePayoutStatusLoading,
     error: changePayoutStatusError,
     response: changePayoutStatusResponse,
     postData: postPayoutStatus,
@@ -317,12 +322,11 @@ const Details = () => {
                     <i
                       className="bi bi-plus-circle"
                       id={styles.editicon}
-                      onClick={handleUpdatePayout}
+                      onClick={handleAddPayout}
                     ></i>
                   )}
                 </span>
               </div>
-              {/* {JSON.stringify(response?.data)} */}
               {response?.data && (
                 <div className={styles.detail}>
                   <table>
@@ -348,7 +352,6 @@ const Details = () => {
                       <tr>
                         <td>Password</td>
                         <td>
-                          {/* {response?.data.acquirerPayoutPgPassword || "NA"} */}
                           <SecretViewer
                             text={response?.data.acquirerPayoutPgPassword}
                           />
@@ -361,10 +364,29 @@ const Details = () => {
             </div>
           </div>
         </div>
+        <Tabs handleTabs={handleTabs} />
+        
+        {tab === 1 && (
+          <PayinProfiles
+            name={response?.data.fullName}
+            id={decryptParams(param.acquirerId)}
+          />
+        )}
+        
+        {tab === 2 && (
+          <PayoutProfiles
+            name={response?.data.fullName}
+            id={decryptParams(param.acquirerId)}
+          />
+        )}
+        
+        {/* Commented out Transfer Modes for now */}
+        {/*
         <Mapping
           name={response?.data.fullName}
           id={decryptParams(param.acquirerId)}
         />
+        */}
       </>
     );
   }
