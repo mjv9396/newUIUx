@@ -1,0 +1,61 @@
+.card {
+  padding: 24px;
+  height: 100%;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.cardTitle {
+  font-size: 22px;
+  font-weight: 600;
+  margin: 0;
+  color: #333;
+}
+
+.menuButton {
+  background: transparent;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #333;
+  padding: 0;
+  transform: rotate(90deg);
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.totalAmount {
+  display: flex;
+  align-items: baseline;
+  margin-bottom: 20px;
+}
+
+.dollarSign {
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+  margin-right: 2px;
+}
+
+.amount {
+  font-size: 26px;
+  font-weight: 700;
+  color: #333;
+}
+
+.period {
+  font-size: 14px;
+  color: #9CA3AF;
+  margin-left: 10px;
+}
+

@@ -1,0 +1,35 @@
+.card {
+  padding: 18px;
+  border-radius: 5px;
+  background-color: #f5f6fa;
+  height: calc(100vh);
+  position: relative;
+  overflow-y: hidden;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+  width: 100%;
+  flex-grow: 1;
+
+}
+.card h4 {
+  font-size: 20px;
+  padding: 0px;
+  color: var(--primary);
+  font-weight: 600;
+  margin: 0;
+  margin-left: 10px;
+}
+.username {
+  display: flex;
+  flex-direction: column;
+  gap: -10px;
+  padding-right: 10px;
+  border-right: 2px dashed gray;
+}
+.username span {
+  font-size: 0.9rem;
+}
+.username small {
+  text-align: end;
+  font-size: 0.8rem;
+}

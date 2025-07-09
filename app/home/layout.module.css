@@ -1,0 +1,12 @@
+
+
+.layout{
+    display: flex;
+
+}
+
+@media (max-width: 768px) {
+    .layout{
+        margin-left: 7rem;
+    }
+}

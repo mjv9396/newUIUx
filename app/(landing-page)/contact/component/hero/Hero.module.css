@@ -1,0 +1,28 @@
+.header {
+  display: flex;
+  min-height: 600px;
+  height: 95vh;
+  position: relative;
+}
+.header .header-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0 30px;
+  height: 100%;
+  width: 100%;
+  clip-path: polygon(0 0, 100% 0, 100% 80%, 0 100%);
+  background-color: #00317f;
+  color: white;
+}
+.header .header-content h5 {
+  font-size: 25px;
+  font-weight: 500;
+  margin: 0;
+  padding: 0;
+}
+.header .header-content h3 {
+  font-size: 50px;
+  font-weight: 500;
+}

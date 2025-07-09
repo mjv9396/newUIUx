@@ -1,0 +1,20 @@
+.navbar {
+  position: relative;
+  width: 100%;
+  background-color: var(--primary);
+}
+.navbar-content {
+  display: flex;
+  justify-content: space-between;
+  padding: 1.5rem 2rem;
+}
+.navbar-content-left,
+.navbar-content-right {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+#terms {
+  position: relative;
+  background-color: var(--primary);
+}

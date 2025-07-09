@@ -1,0 +1,285 @@
+/* SignupForm.module.css */
+
+.signupContainer {
+  min-height: 100vh;
+  background: linear-gradient(
+    135deg,
+    var(--primary) 0%,
+    color-mix(in srgb, var(--primary) 70%, #764ba2 30%) 100%
+  );
+  padding: 2rem 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.signupCard {
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
+    0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  padding: 2rem;
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.signup {
+  width: 100%;
+}
+
+.formTitle {
+  text-align: center;
+  margin-bottom: 2.5rem;
+  color: #333;
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.formGroup {
+  margin-bottom: 1rem;
+}
+
+.formLabel {
+  display: block;
+  margin-bottom: 0.4rem;
+  font-weight: 600;
+  color: #374151;
+  font-size: 0.875rem;
+}
+
+.formInput {
+  width: 100%;
+  padding: 0.6rem 0.75rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+  background-color: #ffffff;
+  height: 42px;
+}
+
+.formInput:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 20%, transparent 80%);
+}
+
+.formInput::placeholder {
+  color: #9ca3af;
+}
+
+.errorMessage {
+  color: #dc2626;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.submitButton {
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 0.7rem 2rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 100%;
+  margin-top: 1.5rem;
+}
+
+.submitButton:hover {
+  background: color-mix(in srgb, var(--primary) 80%, white 20%);
+  transform: translateY(-1px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+.submitButton:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.loginLink {
+  text-align: center;
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+.loginLink a {
+  color: var(--primary);
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.3s ease;
+}
+
+.loginLink a:hover {
+  color: color-mix(in srgb, var(--primary) 80%, white 20%);
+  text-decoration: underline;
+}
+
+/* Dropdown styles */
+.dropdownContainer {
+  position: relative;
+  width: 100%;
+}
+
+/* Style the dropdown to match inputs */
+.dropdownContainer select,
+.dropdownContainer .dropdown-toggle {
+  width: 100%;
+  padding: 0.6rem 0.75rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  background-color: #ffffff;
+  height: 42px;
+  transition: all 0.3s ease;
+}
+
+.dropdownContainer .dropdown-toggle:focus,
+.dropdownContainer .dropdown-toggle:active {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 20%, transparent 80%);
+  outline: none;
+}
+
+/* Remove button group styles since we don't need back button */
+
+/* OTP Verification Styles */
+.otpContainer {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.otpInput {
+  width: 120px;
+  padding: 0.6rem 0.75rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  background-color: #ffffff;
+  height: 42px;
+  transition: all 0.3s ease;
+}
+
+.otpInput:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 20%, transparent 80%);
+}
+
+.verifyButton {
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 0.6rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  height: 42px;
+  white-space: nowrap;
+}
+
+.verifyButton:hover {
+  background: color-mix(in srgb, var(--primary) 80%, white 20%);
+}
+
+.verifyButton:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+}
+
+.sendOtpButton {
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 0.6rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  height: 42px;
+  white-space: nowrap;
+}
+
+.sendOtpButton:hover {
+  background: color-mix(in srgb, var(--primary) 80%, white 20%);
+}
+
+.sendOtpButton:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+}
+
+.verifiedBadge {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--primary);
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-top: 0.5rem;
+}
+
+.resendTimer {
+  color: #6b7280;
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+}
+
+.inputWithVerification {
+  position: relative;
+}
+
+.verificationStatus {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.875rem;
+  color: var(--primary);
+  font-weight: 600;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .signupContainer {
+    padding: 1rem;
+  }
+
+  .signupCard {
+    padding: 2rem 1.5rem;
+    margin: 1rem;
+  }
+
+  .formTitle {
+    font-size: 1.75rem;
+    margin-bottom: 2rem;
+  }
+
+  .submitButton {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .signupCard {
+    padding: 1.5rem 1rem;
+  }
+
+  .formTitle {
+    font-size: 1.5rem;
+  }
+}
