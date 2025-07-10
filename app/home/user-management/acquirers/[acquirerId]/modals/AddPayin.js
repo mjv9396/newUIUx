@@ -17,6 +17,7 @@ const Overlay = ({ name, id, onClick, onSuccess, response }) => {
     response: update = [],
     loading,
   } = usePutRequest(endPoints.users.acquirer);
+  
   // form json state data
   const [formData, setFormData] = useState(() =>
     addPayinAcquirer(
@@ -28,8 +29,10 @@ const Overlay = ({ name, id, onClick, onSuccess, response }) => {
       response?.acquirerPayoutPgPassword || ""
     )
   );
+  
   // State to handle errors on form submission
   const [errors, setErrors] = useState({});
+  
   // handle input change
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });

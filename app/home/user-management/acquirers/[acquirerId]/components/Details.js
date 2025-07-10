@@ -370,6 +370,8 @@ const Details = () => {
           <PayinProfiles
             name={response?.data.fullName}
             id={decryptParams(param.acquirerId)}
+            onAddPayin={handleAddPayin}
+            response={response?.data}
           />
         )}
         
@@ -377,6 +379,8 @@ const Details = () => {
           <PayoutProfiles
             name={response?.data.fullName}
             id={decryptParams(param.acquirerId)}
+            onAddPayout={handleAddPayout}
+            response={response?.data}
           />
         )}
         

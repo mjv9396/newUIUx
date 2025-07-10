@@ -1,7 +1,7 @@
 import { useState } from "react";
 import styles from "../page.module.css";
 
-const PayinProfiles = ({ name, id }) => {
+const PayinProfiles = ({ name, id, onAddPayin, response }) => {
   const [active, setActive] = useState(1);
   
   // Template data for payin profiles
@@ -96,6 +96,8 @@ const PayinProfiles = ({ name, id }) => {
               <i
                 className="bi bi-plus-lg"
                 id={styles.editicon}
+                onClick={onAddPayin}
+                style={{ cursor: 'pointer' }}
               ></i>
             </div>
             <div className="row p-2">

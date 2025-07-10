@@ -4,7 +4,7 @@ import { addPayinAcquirer, addPayoutAcquirer } from "@/app/formBuilder/acquirer"
 import { endPoints } from "@/app/services/apiEndpoints";
 import Label from "@/app/ui/label/Label";
 import usePutRequest from "@/app/hooks/usePut";
-import { validate } from "@/app/validations/forms/AddPayinFormValidation";
+import { validate } from "@/app/validations/forms/AddPayoutFormValidation";
 import usePostRequest from "@/app/hooks/usePost";
 
 const Backdrop = () => {
@@ -18,6 +18,7 @@ const Overlay = ({ name, id, onClick, onSuccess, response }) => {
     response: update = [],
     loading,
   } = usePostRequest(endPoints.users.acquirer);
+  
   // form json state data
   const [formData, setFormData] = useState(() =>
     addPayoutAcquirer(
@@ -29,8 +30,10 @@ const Overlay = ({ name, id, onClick, onSuccess, response }) => {
       response?.acquirerPayoutPgPassword || ""
     )
   );
+  
   // State to handle errors on form submission
   const [errors, setErrors] = useState({});
+  
   // handle input change
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -54,7 +57,7 @@ const Overlay = ({ name, id, onClick, onSuccess, response }) => {
   }, [update, error]);
   return (
     <div className="overlay w-30">
-      <h6>Add Payin Details</h6>
+      <h6>Add Payout Details</h6>
       <h5 id="username">Acquirer Name: &nbsp; {response.fullName}</h5>
       <small>ID:&nbsp;{response.acquirerId}</small>
       <form id="add" onSubmit={handleSubmit} ref={formRef}>

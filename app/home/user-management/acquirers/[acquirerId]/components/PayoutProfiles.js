@@ -1,7 +1,7 @@
 import { useState } from "react";
 import styles from "../page.module.css";
 
-const PayoutProfiles = ({ name, id }) => {
+const PayoutProfiles = ({ name, id, onAddPayout, response }) => {
   const [active, setActive] = useState(1);
 
   // Template data for payout profiles based on the handwritten notes
@@ -93,7 +93,12 @@ const PayoutProfiles = ({ name, id }) => {
                 <i className="bi bi-pencil-square" id={styles.editicon}></i>
               </span>
             </h6>
-            <i className="bi bi-plus-lg" id={styles.editicon}></i>
+            <i 
+              className="bi bi-plus-lg" 
+              id={styles.editicon}
+              onClick={onAddPayout}
+              style={{ cursor: 'pointer' }}
+            ></i>
           </div>
           <div className="row p-2">
             <div className="d-flex gap-4 mb-2">
