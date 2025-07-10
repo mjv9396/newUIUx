@@ -60,7 +60,7 @@ const Currency = ({ name, id }) => {
         <div className="col-12 mb-3">
           <div className={styles.secondaryCard}>
             <div className="d-flex justify-content-between align-items-center">
-              <h6>Currency Mapping</h6>
+              <h6>Enabled Currencies</h6>
               <i
                 className="bi bi-plus-lg"
                 id={styles.editicon}

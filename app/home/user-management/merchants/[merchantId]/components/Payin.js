@@ -276,6 +276,7 @@ const Payin = ({ name, id }) => {
                                         <th>PG Charges</th>
                                         <th>Bank Charges</th>
                                         <th>Merchant Charge</th>
+                                        <th>Vendor Charge</th>
                                         <th>Min Amount Limit</th>
                                         <th>Max Amount Limit</th>
                                         <th>Action</th>
@@ -285,9 +286,10 @@ const Payin = ({ name, id }) => {
                                       {type.merchantCharges.map(
                                         (charge, index) => (
                                           <tr key={charge?.merchantChargeId}>
-                                            <td>{charge?.pgCharge}</td>
-                                            <td>{charge?.bankCharge}</td>
-                                            <td>{charge?.merchantCharge}</td>
+                                            <td>{charge?.pgCharge ?? 0}{!charge?.fixCharge && "%"}</td>
+                                            <td>{charge?.bankCharge ?? 0} {!charge?.fixCharge && "%"}</td>
+                                            <td>{charge?.merchantCharge ?? 0} {!charge?.fixCharge && "%"}</td>
+                                            <td>{charge?.vendorCharge ?? 0} {!charge?.fixCharge && "%"}</td>
                                             <td>
                                               {charge?.minimumAmountLimit}
                                             </td>
@@ -370,7 +372,7 @@ const Payin = ({ name, id }) => {
                   >
                     <thead>
                       <tr>
-                        <th>Merchant</th>
+                        {/* <th>Merchant</th> */}
 
                         <th>Daily Count Limit</th>
                         <th>Daily Amount Limit</th>
@@ -384,9 +386,9 @@ const Payin = ({ name, id }) => {
                     </thead>
                     <tbody>
                       <tr key={minAmtLimitResponse.data.amountLimitId}>
-                        <td>
+                        {/* <td>
                           {minAmtLimitResponse.data?.merchant?.fullName || "-"}
-                        </td>
+                        </td> */}
 
                         <td>{minAmtLimitResponse.data.dailyCountLimit || 0}</td>
                         <td>

@@ -19,6 +19,7 @@ export const transferModeMapping = async (acquirerId, transferModeCode) => {
 export const merchantTdrMapping = (merchantId) => {
   return {
     merchantId: merchantId,
+    currencyId: "",
     acquirerId: "",
     paymentTypeId: "",
     mopTypeId: "",
@@ -40,6 +41,7 @@ export const priority = (merchantId, acquirerId) => {
 export const payoutTdrMapping = (merchantId) => {
   return {
     merchant: merchantId,
+    currencyId: "",
     acquirer: "",
     transferMode: "",
     priority: "",

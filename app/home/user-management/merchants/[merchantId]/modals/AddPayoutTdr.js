@@ -31,9 +31,25 @@ const Overlay = ({ merchant, id, onClick, onSuccess, acquirerId }) => {
   const [currentPage, setCurrentPage] = useState(0);
 
   // handling search keyword
-  const [keyword, setKeyword] = useState({ acquirerId: "" });
+  const [keyword, setKeyword] = useState({ acquirerId: "", currencyId: "" });
   const handleKeyword = (dropdownKey, keyword) => {
     setKeyword({ ...keyword, [dropdownKey]: keyword });
+  };
+  
+  // Get merchant mapped currencies
+  const { getData: getMappedCurrencies, response: mappedCurrencies = [] } = useGetRequest();
+  
+  useEffect(() => {
+    // Fetch mapped currencies for the merchant
+    getMappedCurrencies(endPoints.users.mappedCurrency + id);
+  }, [id]);
+  
+  const [selectedCurrency, setSelectedCurrency] = useState({ id: "", name: "Select Currency" });
+  
+  const handleCurrencyChange = (currencyId, name) => {
+    setSelectedCurrency({ id: currencyId, name });
+    setFormData({ ...formData, currencyId });
+    setErrors({});
   };
 
   // Get acquirer list
@@ -182,6 +198,26 @@ const Overlay = ({ merchant, id, onClick, onSuccess, acquirerId }) => {
       <small>ID:{id}</small>
       <form id="add" onSubmit={handleSubmit} ref={formRef}>
         <div className="row mt-3">
+          <div className="col-12 mb-2">
+            <Label htmlFor="currencyId" label="Currency" required={true} />
+            <Dropdown
+              initialLabel="Select Currency"
+              selectedValue={selectedCurrency}
+              options={mappedCurrencies?.data || []}
+              onChange={handleCurrencyChange}
+              id="currencyId"
+              search={true}
+              onSearch={handleKeyword}
+              value="currencyName"
+            />
+            {errors.currencyId && (
+              <small className="text-danger">
+                <span className="text-danger"> *</span>
+                {errors.currencyId}
+              </small>
+            )}
+          </div>
+        
           <div className="col-12 mb-2">
             <Label htmlFor="acquirerId" label="Acquirer" required={true} />
             <Dropdown

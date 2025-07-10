@@ -28,9 +28,25 @@ const Overlay = ({ merchant, id, onClick, onSuccess }) => {
   // State to handle errors on form submission
   const [errors, setErrors] = useState({});
   // handling search keyword
-  const [keyword, setKeyword] = useState({ acquirerId: "", countryId: "" });
+  const [keyword, setKeyword] = useState({ acquirerId: "", countryId: "", currencyId: "" });
   const handleKeyword = (dropdownKey, keyword) => {
     setKeyword({ ...keyword, [dropdownKey]: keyword });
+  };
+  
+  // Get merchant mapped currencies
+  const { getData: getMappedCurrencies, response: mappedCurrencies = [] } = useGetRequest();
+  
+  useEffect(() => {
+    // Fetch mapped currencies for the merchant
+    getMappedCurrencies(endPoints.users.mappedCurrency + id);
+  }, [id]);
+  
+  const [selectedCurrency, setSelectedCurrency] = useState({ id: "", name: "Select Currency" });
+  
+  const handleCurrencyChange = (currencyId, name) => {
+    setSelectedCurrency({ id: currencyId, name });
+    setFormData({ ...formData, currencyId });
+    setErrors({});
   };
   // Logics to get all the fields required for the form like acquirer,payment type and mop type
   const { response: acquirers = [], postData: getAllAcquirer } = usePostRequest(
@@ -138,6 +154,26 @@ const Overlay = ({ merchant, id, onClick, onSuccess }) => {
       <small>ID:{id}</small>
       <form id="add" onSubmit={handleSubmit} ref={formRef}>
         <div className="row mt-3">
+          <div className="col-12 mb-2">
+            <Label htmlFor="currencyId" label="Currency" required={true} />
+            <Dropdown
+              initialLabel="Select Currency"
+              selectedValue={selectedCurrency}
+              options={mappedCurrencies?.data || []}
+              onChange={handleCurrencyChange}
+              id="currencyId"
+              search={true}
+              onSearch={handleKeyword}
+              value="currencyName"
+            />
+            {errors.currencyId && (
+              <small className="text-danger">
+                <span className="text-danger"> *</span>
+                {errors.currencyId}
+              </small>
+            )}
+          </div>
+          
           <div className="col-12 mb-2">
             <Label htmlFor="acquireId" label="Acquirer" required={true} />
             <Dropdown

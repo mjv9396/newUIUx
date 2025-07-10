@@ -27,6 +27,14 @@ const Tabs = ({ handleTabs }) => {
       </button>
       <button
         className={
+          tab === 5 ? styles.button + " " + styles.active : styles.button
+        }
+        onClick={() => setTab(5)}
+      >
+        KYC
+      </button>
+      <button
+        className={
           tab === 3 ? styles.button + " " + styles.active : styles.button
         }
         onClick={() => setTab(3)}
@@ -41,14 +49,7 @@ const Tabs = ({ handleTabs }) => {
       >
         Payout
       </button>
-      <button
-        className={
-          tab === 5 ? styles.button + " " + styles.active : styles.button
-        }
-        onClick={() => setTab(5)}
-      >
-        Documents
-      </button>
+      
       <button
         className={
           tab === 6 ? styles.button + " " + styles.active : styles.button
