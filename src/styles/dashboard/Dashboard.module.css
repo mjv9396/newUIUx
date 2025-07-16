@@ -1,0 +1,259 @@
+.dashboard {
+  position: relative;
+  margin-top: 2rem;
+}
+.input {
+  position: relative;
+  width: 15rem;
+}
+.user {
+  position: absolute;
+  display: flex;
+  gap: 1rem;
+  right: 10px;
+  top: -5.2rem;
+
+  @media screen and (max-width: 730px) {
+    position: relative;
+    top: -2rem;
+  }
+}
+.card {
+  box-shadow: 0 0 10px 0 lightgray;
+  padding: 20px;
+  border-radius: 30px;
+  margin-bottom: 20px;
+  height: 100%;
+}
+.card h6 {
+  font-size: 1rem;
+}
+
+.subcard {
+  display: flex;
+  gap: 10px;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 120px;
+  width: 100%;
+  padding: 1rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+.subcard.settle {
+  background-color: #d3f0e3;
+  border-left: 5px solid #10b981;
+  color: #014632;
+}
+.subcard.unsettle {
+  background-color: #ececce;
+  border-left: 5px solid #e7d215;
+  color: #503702;
+}
+.subcard span {
+  font-size: 100%;
+  font-weight: 600;
+  word-break: break-all;
+}
+.subcard h6 {
+  font-size: 130%;
+  word-break: break-all;
+  margin: 0;
+  padding: 0;
+  font-weight: 700;
+}
+.subcard img {
+  width: 50px;
+  height: auto;
+}
+
+/* card css */
+.detailcard {
+  display: flex;
+  gap: 10px;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 90px;
+  max-height: 100px;
+  width: 100%;
+  padding: 1rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+.detailcard.payin.success {
+  background-color: #e6ffed; /* light green */
+  border-left: 5px solid #22c55e; /* strong green */
+  color: #065f46;
+}
+.detailcard.payin.failed {
+  background-color: #fee2e2; /* light red */
+  border-left: 5px solid #ef4444; /* red-500 */
+  color: #991b1b; /* red-800 */
+}
+.detailcard.payin.pending {
+  background-color: #fef9c3; /* light yellow */
+  border-left: 5px solid #eab308; /* yellow-500 */
+  color: #78350f; /* yellow-800 */
+}
+.detailcard.payout.success {
+  background-color: #ecfdf5;
+  border-left: 5px solid #14b8a6;
+  color: #134e4a;
+}
+.detailcard.payout.failed {
+  background-color: #fef2f2;
+  border-left: 5px solid #dc2626;
+  color: #7f1d1d;
+}
+.detailcard.payout.pending {
+  background-color: #fefce8;
+  border-left: 5px solid #facc15;
+  color: #92400e;
+}
+.detailcard.rejected {
+  background-color: #fef2f2;
+  border-left: 5px solid #ef4444;
+  color: #991b1b;
+}
+.detailcard.dispute {
+  background-color: #fef2f2;
+  border-left: 5px solid #dc2626;
+  color: #7f1d1d;
+}
+.detailcard.settled {
+  background-color: #ecfdf5;
+  border-left: 5px solid #10b981;
+  color: #065f46;
+}
+.detailcard.credited {
+  background-color: #e0f2fe;
+  border-left: 5px solid #0ea5e9;
+  color: #075985;
+}
+.detailcard.unsettled {
+  background-color: #fefce8;
+  border-left: 5px solid #facc15;
+  color: #92400e;
+}
+.detailcard h5 {
+  font-size: 120%;
+  font-weight: 600;
+}
+.detailcard h6 {
+  margin: 0;
+  font-size: 125%;
+  font-weight: 700;
+}
+.detailcard span:nth-child(3) {
+  font-size: 12px;
+  font-weight: 700;
+  color: gray;
+}
+.detailcard img {
+  width: 40px;
+  height: auto;
+}
+.reserve {
+  background-color: #f0f9ff;
+  border-left: 5px solid #0ea5e9;
+  color: #0369a1;
+}
+
+/* TDR (Transaction Discount Rate) */
+.tdr {
+  background-color: #f5f3ff;
+  border-left: 5px solid #8b5cf6;
+  color: #4c1d95;
+}
+
+.wallet {
+  background-color: #f0fdf4;
+  border-left: 5px solid #10b981;
+  color: #065f46;
+  padding: 1rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  min-height: 120px;
+}
+.virtualCard {
+  min-height: 90px;
+  padding: 1rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  width: 300px;
+  background-color: #f0fdf4;
+  text-decoration: none;
+  margin-top: 1.5rem
+  
+}
+
+.virtualCard i {
+  cursor: pointer;
+}
+
+.virtualCard span {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--primary);
+}
+.virtualCard h4 {
+  margin: 0.6rem 0 0 0;
+  padding: 0;
+  font-size: 16px;
+  font-weight: 700;
+}
+.virtualCard small {
+  font-size: 12px;
+  color: rgb(31, 30, 30);
+  font-weight: 700;
+}
+.virtualCard h5 {
+  margin: 0;
+  padding: 0;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--primary);
+  letter-spacing: 1px;
+}
+.depositCard {
+  min-height: 90px;
+  padding: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  border-radius: 1rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  width: 300px;
+  height: 230px;
+}
+.depositCard img {
+  height: 80px;
+  width: auto;
+}
+.depositCard h5 {
+  font-size: 18px;
+  color: var(--primary);
+}
+.depositCard:nth-child(1) {
+  background-color: #f0fdf4;
+}
+.depositCard:nth-child(2) {
+  background-color: #fefce8;
+}
+.depositCard:nth-child(3) {
+  background-color: #f5f3ff;
+}
+.addAccount {
+  width: 60px;
+  word-break: break-all;
+  background-color: #e9e094;
+  border: none;
+  border-radius: 0.8rem 0 0 0.8rem;
+  transition: all 0.3s ease-in-out;
+  font-size: 16px;
+  font-weight: 900;
+}
+.addAccount:hover {
+  width: 70px;
+}

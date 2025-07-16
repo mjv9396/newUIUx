@@ -1,0 +1,98 @@
+.listing {
+  background-color: white;
+  border: 1px solid lightgray;
+  padding: 30px;
+  box-shadow: 0 0 10px 0 lightgray;
+  border-radius: 30px;
+  margin-top: 1rem;
+  max-height: 80vh;
+}
+.listing input {
+  font-size: 0.9rem;
+}
+.listing select {
+  font-size: 0.9rem;
+}
+.input {
+  min-width: 17rem;
+  max-width: 17rem;
+  position: relative;
+}
+
+.status {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid lightgray;
+  margin-bottom: 0.5rem;
+
+  h5 {
+    font-size: 1.1em;
+    font-weight: 600;
+  }
+}
+.sidetab {
+  width: 100%;
+  padding: 12px 1rem;
+  border: none;
+  font-size: 0.85rem;
+  background-color: #e3f2fd; /* Light dim blue */
+  color: #1976d2; /* Darker blue text */
+  border-radius: 8px;
+  margin-bottom: 0.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  text-align: left;
+  cursor: pointer;
+  font-weight: 500;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.sidetab:hover {
+  background-color: #bbdefb; /* Slightly darker on hover */
+}
+
+.sidetab.active {
+  background-color: #1976d2; /* Darker blue for selected */
+  color: white;
+  font-weight: 600;
+}
+
+.moonIcon {
+  width: 40px;
+  height: 40px;
+  opacity: 0.8;
+}
+.update {
+  padding: 5px 1rem;
+  text-transform: uppercase;
+  border: none;
+  font-size: 0.7rem;
+  background-color: var(--primary);
+  color: white;
+  letter-spacing: 0.2em;
+  border-radius: 5px;
+  box-shadow: 0 0 5px 0 var(--primary);
+}
+.table {
+  padding: 1rem 0;
+  font-size: 1rem;
+  font-weight: 500;
+  scrollbar-width: thin;
+  overflow-x: auto;
+  text-align: center;
+}
+.table table thead tr th {
+  color: var(--secondary);
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.pagination {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  align-items: center;
+  margin-top: 30px;
+}

@@ -1,36 +1,47 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Project Name
+
+AK GLOBAL TRADING PRIVATE LIMITED
+
+A Payment Gateway System is a technology that facilitates secure online payment transactions between customers, merchants, and financial institutions. It acts as a bridge that securely transmits payment data from the customer’s device to the merchant’s account while ensuring sensitive information is encrypted and protected.
+
+## Table of Contents
+
+1. [Features](#features)
+2. [Getting Started](#getting-started)
+3. [Installation](#installation)
+4. [Usage](#usage)
+5. [Scripts](#scripts)
+6. [Technologies Used](#technologies-used)
+7. [Contributing](#contributing)
+8. [License](#license)
+
+## Features
+
+- Briefly list the key features of the project.
 
 ## Getting Started
 
-First, run the development server:
+Instructions to get the project running locally.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+### Prerequisites
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- Node.js (v20.07.0 or later)
+- npm(v11.0.0) or yarn
+- vite 6.0.5
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+### Installation
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. Clone the repository:
+   ```bash
+   git clone <project clone link>
+   cd your-project-name
+   ```
+2. npm install
+3. npm run dev
+4. create a .env file
 
-## Learn More
+### Technologies Used
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- React+vite as frontend
+- Spring Boot + JAVA for the API Development
+- POSTMAN for API Testing

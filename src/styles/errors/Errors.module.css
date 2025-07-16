@@ -1,0 +1,42 @@
+.wrapper {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.error {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 22rem;
+  text-align: center;
+  height: auto;
+  padding: 1.5rem;
+  box-shadow: 0 0 3px 0 lightgray;
+}
+.error a,
+.notfound a {
+  width: 100%;
+  padding: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border: none;
+  font-size: 0.8rem;
+  background-color: var(--primary);
+  color: white;
+  border-radius: 0px;
+  text-align: center;
+  text-decoration: none;
+}
+.notfound {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-top: 150px;
+}
+.notfound a {
+  width: auto;
+}

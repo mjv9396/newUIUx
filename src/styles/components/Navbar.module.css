@@ -1,0 +1,99 @@
+.nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 3.5rem;
+  background-color: var(--primary);
+  display: flex;
+  align-items: center;
+  color: white;
+  padding: 1rem 1rem;
+  z-index: 3;
+
+  justify-content: space-between;
+}
+#toggleSidebar {
+  font-size: 1.2rem;
+  position: absolute;
+  top: 10px;
+  left: 200px;
+  z-index: 10;
+}
+
+.logo img {
+  height: 60px;
+  background-color: white;
+  padding: 5px;
+  width: auto;
+}
+.user {
+  display: flex;
+  position: relative;
+  align-items: center;
+  @media screen and (max-width: 667px) {
+    display: none;
+  }
+}
+#submenuToggle {
+  display: none;
+  @media screen and (max-width: 667px) {
+    display: block;
+  }
+}
+.submenu {
+  visibility: hidden;
+  opacity: 0;
+  background-color: white;
+  box-shadow: 0 0 3px 0 gray;
+  position: absolute;
+  top: 100%;
+  width: auto;
+  margin: 5px;
+  right: 10px;
+  padding: 10px;
+  transform: translateY(-50px);
+  transition: all 0.3s ease;
+}
+.submenu.active {
+  transform: translateY(0);
+  opacity: 1;
+  visibility: visible;
+}
+.submenu li {
+  display: block;
+  list-style: none;
+  padding: 5px 5px;
+}
+.submenu li:hover {
+  background-color: rgb(99, 161, 99);
+}
+.submenu li a {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 400;
+  color: black;
+  text-decoration: none;
+}
+.submenu li:hover a {
+  color: white;
+}
+.username {
+  font-size: 0.9rem;
+  padding: 0 0.7rem;
+  font-weight: 300;
+}
+
+.user i {
+  position: relative;
+  font-size: larger;
+  cursor: pointer;
+}
+
+.user button {
+  border: 1px solid white;
+  background-color: transparent;
+  border-radius: 5px;
+  font-size: 0.8rem;
+  color: white;
+}

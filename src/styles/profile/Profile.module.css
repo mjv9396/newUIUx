@@ -1,0 +1,104 @@
+.maincard {
+  padding: 20px;
+  width: 100%;
+  background-color: white;
+  box-shadow: 0 0 2px 0 gray;
+  margin-bottom: 30px;
+  border-radius: 3px;
+  margin-top: 20px;
+}
+
+.maincard h5 {
+  font-size: 22px;
+  font-weight: 600;
+  margin: 0;
+  padding: 0;
+  color: var(--primary);
+}
+
+.maincard img {
+  border-radius: 50%;
+  padding: 3px;
+}
+.info {
+  display: flex;
+  gap: 20px;
+}
+
+.designation {
+  margin-bottom: 10px;
+  font-size: 13px;
+  font-weight: 400;
+  color: gray;
+}
+
+.employeeid {
+  display: flex;
+  flex-direction: column;
+  font-size: 13px;
+}
+
+.employeeid b {
+  font-weight: 600;
+  color: var(--primary);
+}
+
+.employeeid span {
+  color: gray;
+  font-size: 13px;
+}
+
+.detail {
+  display: flex;
+  justify-content: space-between;
+}
+.detail table {
+  font-size: 0.8rem;
+}
+
+.detail table tr td:nth-child(1) {
+  font-weight: 500;
+}
+.secondaryCard {
+  padding: 10px 20px;
+  width: 100%;
+  background-color: white;
+  box-shadow: 0 0 2px 0 gray;
+  height: 100%;
+  border-radius: 3px;
+}
+
+.secondaryCard h6 {
+  font-size: 16px;
+  font-weight: 500;
+  padding: 0;
+  margin: 0;
+}
+#infotable,
+#relationtable {
+  font-size: 14px;
+}
+
+#infotable tr td:nth-child(1) {
+  font-weight: 500;
+}
+
+#infotable tr td:nth-child(2) {
+  color: gray;
+}
+/* Amount limit table */
+#table {
+  font-size: 0.8rem;
+}
+
+#table thead tr th {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: gray;
+}
+
+#table tbody tr td:nth-child(1),
+#table thead tr th:nth-child(1) {
+  position: sticky;
+  left: -15px;
+}
