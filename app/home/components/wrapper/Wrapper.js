@@ -22,7 +22,7 @@ const Wrapper = ({ pagename, children }) => {
         <span className="d-flex gap-2">
           <span className={styles.username}>
             <span>
-              <b>{decryptToken(cookieStore.get("email").value)}</b>
+              <b>Welcome Back</b>
             </span>
             <small>{decryptToken(cookieStore.get("user_role").value)}</small>
           </span>

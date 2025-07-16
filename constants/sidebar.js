@@ -43,28 +43,28 @@ export const sidebarJson = [
         },
       ],
     },
-    {
-      moduleName: "Teams",
-      isOpen: false,
-      pageDetails: [
-        {
-          pageName: "Sub Admin",
-          pageLink: "/home/team/sub-admins",
-          icon: "bi bi-people",
-          isActive: false,
-          isOpen: false,
-          submenu: [],
-        },
-        {
-          pageName: "Sub merchant",
-          pageLink: "/home/team/sub-merchants",
-          icon: "bi bi-people",
-          isActive: false,
-          isOpen: false,
-          submenu: [],
-        },
-      ],
-    },
+    // {
+    //   moduleName: "Teams",
+    //   isOpen: false,
+    //   pageDetails: [
+    //     {
+    //       pageName: "Sub Admin",
+    //       pageLink: "/home/team/sub-admins",
+    //       icon: "bi bi-people",
+    //       isActive: false,
+    //       isOpen: false,
+    //       submenu: [],
+    //     },
+    //     {
+    //       pageName: "Sub merchant",
+    //       pageLink: "/home/team/sub-merchants",
+    //       icon: "bi bi-people",
+    //       isActive: false,
+    //       isOpen: false,
+    //       submenu: [],
+    //     },
+    //   ],
+    // },
     {
       moduleName: "PayIn",
       isOpen: false,
@@ -140,28 +140,28 @@ export const sidebarJson = [
         },
       ],
     },
-    {
-      moduleName: "Payments Links",
-      isOpen: false,
-      pageDetails: [
-        {
-          pageName: "Payment Link",
-          pageLink: "/home/payment-links",
-          icon: "bi bi-link-45deg",
-          isActive: false,
-          isOpen: false,
-          submenu: [],
-        },
-        {
-          pageName: "Reports",
-          pageLink: "/home/payment-links", // Assuming the main Payment Link page also serves as a report overview or has a separate reports section within it. Adjust if needed.
-          icon: "bi bi-file-earmark-bar-graph",
-          isActive: false,
-          isOpen: false,
-          submenu: [],
-        },
-      ],
-    },
+    // {
+    //   moduleName: "Payments Links",
+    //   isOpen: false,
+    //   pageDetails: [
+    //     {
+    //       pageName: "Payment Link",
+    //       pageLink: "/home/payment-links",
+    //       icon: "bi bi-link-45deg",
+    //       isActive: false,
+    //       isOpen: false,
+    //       submenu: [],
+    //     },
+    //     {
+    //       pageName: "Reports",
+    //       pageLink: "/home/payment-links", // Assuming the main Payment Link page also serves as a report overview or has a separate reports section within it. Adjust if needed.
+    //       icon: "bi bi-file-earmark-bar-graph",
+    //       isActive: false,
+    //       isOpen: false,
+    //       submenu: [],
+    //     },
+    //   ],
+    // },
     {
       moduleName: "Payout",
       isOpen: false,
@@ -269,6 +269,26 @@ export const sidebarJson = [
           isOpen: false,
           submenu: [],
         },
+      ],
+    },
+    {
+      moduleName: "API Documentation",
+      isOpen: false,
+      pageDetails: [
+        {
+          pageName: "API Documentation",
+          pageLink: "/home/documentation",
+          icon: "bi bi-file-code",
+          isActive: false,
+          isOpen: false,
+          submenu: [],
+        },
+      ],
+    },
+    {
+      moduleName: "Change Password",
+      isOpen: false,
+      pageDetails: [
         {
           pageName: "Change Password",
           pageLink: "/home/reset-password",
@@ -277,6 +297,12 @@ export const sidebarJson = [
           isOpen: false,
           submenu: [],
         },
+      ],
+    },
+    {
+      moduleName: "Login History",
+      isOpen: false,
+      pageDetails: [
         {
           pageName: "Login History",
           pageLink: "/home/login-history",
@@ -307,20 +333,20 @@ export const sidebarJson = [
         },
       ],
     },
-    {
-      moduleName: "Teams",
-      isOpen: false,
-      pageDetails: [
-        {
-          pageName: "Sub merchant",
-          pageLink: "/home/team/sub-merchants",
-          icon: "bi bi-people-fill", // Example icon (adjust if needed)
-          isActive: false,
-          isOpen: false,
-          submenu: [],
-        },
-      ],
-    },
+    // {
+    //   moduleName: "Teams",
+    //   isOpen: false,
+    //   pageDetails: [
+    //     {
+    //       pageName: "Sub merchant",
+    //       pageLink: "/home/team/sub-merchants",
+    //       icon: "bi bi-people-fill", // Example icon (adjust if needed)
+    //       isActive: false,
+    //       isOpen: false,
+    //       submenu: [],
+    //     },
+    //   ],
+    // },
     {
       moduleName: "PayIn",
       isOpen: false,
@@ -396,28 +422,28 @@ export const sidebarJson = [
         },
       ],
     },
-    {
-      moduleName: "Payments Links",
-      isOpen: false,
-      pageDetails: [
-        {
-          pageName: "PaymentLinks",
-          pageLink: "/home/payment-links",
-          icon: "bi bi-link-45deg",
-          isActive: false,
-          isOpen: false,
-          submenu: [],
-        },
-        {
-          pageName: "Reports",
-          pageLink: "/home/payment-links", // Assuming reports are on the same page or a sub-section
-          icon: "bi bi-file-earmark-bar-graph", // Example icon (adjust if needed)
-          isActive: false,
-          isOpen: false,
-          submenu: [],
-        },
-      ],
-    },
+    // {
+    //   moduleName: "Payments Links",
+    //   isOpen: false,
+    //   pageDetails: [
+    //     {
+    //       pageName: "PaymentLinks",
+    //       pageLink: "/home/payment-links",
+    //       icon: "bi bi-link-45deg",
+    //       isActive: false,
+    //       isOpen: false,
+    //       submenu: [],
+    //     },
+    //     {
+    //       pageName: "Reports",
+    //       pageLink: "/home/payment-links", // Assuming reports are on the same page or a sub-section
+    //       icon: "bi bi-file-earmark-bar-graph", // Example icon (adjust if needed)
+    //       isActive: false,
+    //       isOpen: false,
+    //       submenu: [],
+    //     },
+    //   ],
+    // },
     {
       moduleName: "Payout",
       isOpen: false,
@@ -484,18 +510,16 @@ export const sidebarJson = [
           isOpen: false,
           submenu: [],
         },
+      ],
+    },
+    {
+      moduleName: "API Documentation",
+      isOpen: false,
+      pageDetails: [
         {
-          pageName: "Change Password",
-          pageLink: "/home/reset-password",
-          icon: "bi bi-key", // Example icon (adjust if needed)
-          isActive: false,
-          isOpen: false,
-          submenu: [],
-        },
-        {
-          pageName: "Login History",
-          pageLink: "/home/login-history", // Assuming similar path
-          icon: "bi bi-clock-history", // Example icon (adjust if needed)
+          pageName: "API Documentation",
+          pageLink: "/home/documentation",
+          icon: "bi bi-file-code",
           isActive: false,
           isOpen: false,
           submenu: [],
@@ -503,19 +527,34 @@ export const sidebarJson = [
       ],
     },
     {
-      moduleName: "API Documentations",
+      moduleName: "Change Password",
       isOpen: false,
       pageDetails: [
         {
-          pageName: "API Documentations",
-          pageLink: "/home/documentation",
-          icon: "bi bi-file-code", // Example icon (adjust if needed)
+          pageName: "Change Password",
+          pageLink: "/home/reset-password",
+          icon: "bi bi-key", 
           isActive: false,
           isOpen: false,
           submenu: [],
         },
       ],
     },
+    {
+      moduleName: "Login History",
+      isOpen: false,
+      pageDetails: [
+        {
+          pageName: "Login History",
+          pageLink: "/home/login-history",
+          icon: "bi bi-clock-history",
+          isActive: false,
+          isOpen: false,
+          submenu: [],
+        },
+      ],
+    },
+    // API Documentation moved to Settings section
   ];
 
 
@@ -647,6 +686,48 @@ export const sidebarJson = [
           pageName: "Ledger Reports",
           pageLink: "#", // Not directly in ResellerMenu
           icon: "bi bi-book-half", // Example icon
+          isActive: false,
+          isOpen: false,
+          submenu: [],
+        },
+      ],
+    },
+    {
+      moduleName: "API Documentation",
+      isOpen: false,
+      pageDetails: [
+        {
+          pageName: "API Documentation",
+          pageLink: "/home/documentation",
+          icon: "bi bi-file-code",
+          isActive: false,
+          isOpen: false,
+          submenu: [],
+        },
+      ],
+    },
+    {
+      moduleName: "Change Password",
+      isOpen: false,
+      pageDetails: [
+        {
+          pageName: "Change Password",
+          pageLink: "/home/reset-password",
+          icon: "bi bi-key",
+          isActive: false,
+          isOpen: false,
+          submenu: [],
+        },
+      ],
+    },
+    {
+      moduleName: "Login History",
+      isOpen: false,
+      pageDetails: [
+        {
+          pageName: "Login History",
+          pageLink: "/home/login-history",
+          icon: "bi bi-clock-history",
           isActive: false,
           isOpen: false,
           submenu: [],

@@ -3,6 +3,7 @@ export const validate = (data) => {
   const errors = {};
   const {
     merchant,
+    currencyId,
     acquirer,
     transferMode,
     priority,
@@ -19,6 +20,7 @@ export const validate = (data) => {
 
   // Validate empty fields
   errors.merchant = validateEmpty(merchant);
+  errors.currencyId = validateEmpty(currencyId);
   errors.acquirer = validateEmpty(acquirer);
   errors.transferMode = validateEmpty(transferMode);
   errors.priority = validateEmpty(priority);

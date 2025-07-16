@@ -236,6 +236,7 @@ const AddForm = () => {
                             onChange={(e) => {
                               handleChange(e);
                               setPermissions((prev) => {
+                                
                                 const updatedPermissions = [...prev];
                                 updatedPermissions[index].pages[index].isRead =
                                   e.target.checked;

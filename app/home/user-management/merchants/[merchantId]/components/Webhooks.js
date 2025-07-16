@@ -7,17 +7,7 @@ import DeleteWarning from "@/app/ui/modals/DeleteWarning";
 import AddWebhook from "../modals/AddWebhook";
 
 const Webhooks = ({ name, id }) => {
-  const {
-    getData: getPayinWebhook,
-    response: responsePayinWebhook,
-    error: errorPayinWebhook,
-  } = useGetRequest();
-
-  if (errorPayinWebhook) {
-    return <p className="text-center">Error loading webhook data</p>;
-  }
-
-  //   Adding Webhook Url logics
+  // State for managing modals and form data
   const [successfullAdd, setSuccessfullAdd] = useState(false);
   const [viewAddWebhookModal, setViewAddWebhookModal] = useState(false);
   const [addWebhookData, setAddWebhookData] = useState({
@@ -27,34 +17,57 @@ const Webhooks = ({ name, id }) => {
     action: "",
     defaultValue: null,
   });
-  const handleAddWebhook = (userId, type, url, action, defaultValue = null) => {
-    setAddWebhookData({ userId, type, url, action, defaultValue });
-    setViewAddWebhookModal(true);
-  };
 
-  //   Deleting webhook url
+  // State for delete warning
   const [viewDeleteWarning, setViewDeleteWarning] = useState(false);
   const [deletionTypeUrl, setDeletionTypeUrl] = useState();
-  const handleViewDeleteWarning = (url) => {
-    setDeletionTypeUrl(url);
-    setViewDeleteWarning(true);
-  };
+
+  // API hooks
+  const {
+    getData: getPayinWebhook,
+    response: responsePayinWebhook,
+    error: errorPayinWebhook,
+  } = useGetRequest();
+  
+  const {
+    getData: getPayoutWebhook,
+    response: responsePayoutWebhook,
+    error: errorPayoutWebhook,
+  } = useGetRequest();
+
   const {
     response: deleteResponse,
     deleteData,
     error: deleteError,
   } = useDeleteRequest();
 
+  // Handle adding webhook
+  const handleAddWebhook = (userId, type, url, action, defaultValue = null) => {
+    setAddWebhookData({ userId, type, url, action, defaultValue });
+    setViewAddWebhookModal(true);
+  };
+
+  // Handle deleting webhook
+  const handleViewDeleteWarning = (url) => {
+    setDeletionTypeUrl(url);
+    setViewDeleteWarning(true);
+  };
+
   const handleConfirmDelete = async () => {
     await deleteData(deletionTypeUrl);
     setViewDeleteWarning(false);
   };
 
-  //
-
+  // Fetch webhooks data
   useEffect(() => {
     getPayinWebhook(endPoints.mapping.payinWebhook + "/" + id);
+    getPayoutWebhook(endPoints.mapping.payoutWebhook + "/" + id);
   }, [successfullAdd, deleteResponse, deleteError]);
+
+  if (errorPayinWebhook || errorPayoutWebhook) {
+    return <p className="text-center">Error loading webhook data</p>;
+  }
+
   return (
     <>
       {viewAddWebhookModal && (
@@ -72,15 +85,16 @@ const Webhooks = ({ name, id }) => {
           onConfirm={handleConfirmDelete}
         />
       )}
+      
+      {/* Payin Webhook Section */}
       <div className="row">
         <div className="col-md-12 col-sm-12 mb-4">
           <div className={styles.secondaryCard}>
             <div className="d-flex justify-content-between align-items-center">
               <h6>Payin Webhook</h6>
-              {!responsePayinWebhook?.data.payinWebhookUrl && (
-                <i
-                  className="bi bi-plus-lg"
-                  id={styles.editicon}
+              {!responsePayinWebhook?.data?.payinWebhookUrl && (
+                <button 
+                  className="btn btn-sm btn-outline-primary"
                   onClick={() =>
                     handleAddWebhook(
                       id,
@@ -89,12 +103,13 @@ const Webhooks = ({ name, id }) => {
                       "Add"
                     )
                   }
-                ></i>
+                >
+                  <i className="bi bi-plus-lg"></i> Add
+                </button>
               )}
-              {responsePayinWebhook?.data.payinWebhookUrl && (
-                <i
-                  className="bi bi-pencil-fill"
-                  id={styles.editicon}
+              {responsePayinWebhook?.data?.payinWebhookUrl && (
+                <button
+                  className="btn btn-sm btn-outline-secondary"
                   onClick={() =>
                     handleAddWebhook(
                       id,
@@ -104,10 +119,12 @@ const Webhooks = ({ name, id }) => {
                       responsePayinWebhook?.data.payinWebhookUrl
                     )
                   }
-                ></i>
+                >
+                  <i className="bi bi-pencil-fill"></i> Edit
+                </button>
               )}
             </div>
-            {responsePayinWebhook?.data.payinWebhookUrl && (
+            {responsePayinWebhook?.data?.payinWebhookUrl && (
               <div className="row p-2">
                 <table
                   className="table table-borderless table-sm"
@@ -127,18 +144,112 @@ const Webhooks = ({ name, id }) => {
                         {responsePayinWebhook?.data.payinWebhookUrl || "NA"}
                       </td>
                       <td>
-                        <i
-                          className="bi bi-trash-fill text-danger"
+                        <button
+                          className="btn btn-sm text-danger"
                           onClick={() =>
                             handleViewDeleteWarning(
                               `${endPoints.mapping.payinWebhook}/${id}`
                             )
                           }
-                        ></i>
+                        >
+                          <i className="bi bi-trash-fill"></i>
+                        </button>
                       </td>
                     </tr>
                   </tbody>
                 </table>
+              </div>
+            )}
+            {!responsePayinWebhook?.data?.payinWebhookUrl && (
+              <div className="row p-2">
+                <div className="col-12 text-center">
+                  <small>No webhook URL configured</small>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* Payout Webhook Section */}
+      <div className="row">
+        <div className="col-md-12 col-sm-12 mb-4">
+          <div className={styles.secondaryCard}>
+            <div className="d-flex justify-content-between align-items-center">
+              <h6>Payout Webhook</h6>
+              {!responsePayoutWebhook?.data?.payoutWebhookUrl && (
+                <button
+                  className="btn btn-sm btn-outline-primary"
+                  onClick={() =>
+                    handleAddWebhook(
+                      id,
+                      "payout",
+                      endPoints.mapping.payoutWebhook,
+                      "Add"
+                    )
+                  }
+                >
+                  <i className="bi bi-plus-lg"></i> Add
+                </button>
+              )}
+              {responsePayoutWebhook?.data?.payoutWebhookUrl && (
+                <button
+                  className="btn btn-sm btn-outline-secondary"
+                  onClick={() =>
+                    handleAddWebhook(
+                      id,
+                      "payout",
+                      endPoints.mapping.payoutWebhook,
+                      "Edit",
+                      responsePayoutWebhook?.data.payoutWebhookUrl
+                    )
+                  }
+                >
+                  <i className="bi bi-pencil-fill"></i> Edit
+                </button>
+              )}
+            </div>
+            {responsePayoutWebhook?.data?.payoutWebhookUrl && (
+              <div className="row p-2">
+                <table
+                  className="table table-borderless table-sm"
+                  id={styles.infotable}
+                >
+                  <thead className="hidden">
+                    <tr>
+                      <th></th>
+                      <th></th>
+                      <th style={{ width: 50 }}></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td style={{ width: 120 }}>URL</td>
+                      <td>
+                        {responsePayoutWebhook?.data.payoutWebhookUrl || "NA"}
+                      </td>
+                      <td>
+                        <button
+                          className="btn btn-sm text-danger"
+                          onClick={() =>
+                            handleViewDeleteWarning(
+                              `${endPoints.mapping.payoutWebhook}/${id}`
+                            )
+                          }
+                        >
+                          <i className="bi bi-trash-fill"></i>
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            )}
+            {!responsePayoutWebhook?.data?.payoutWebhookUrl && (
+              <div className="row p-2">
+                <div className="col-12 text-center">
+                  <small>No webhook URL configured</small>
+                </div>
               </div>
             )}
           </div>
