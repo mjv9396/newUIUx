@@ -13,7 +13,6 @@ const PayinAnalytics = ({ type, value, min, max }) => {
   const { postData, data, error, loading } = usePost(
     endpoints.user.transactionChart
   );
-  console.log("🚀 ~ PayinAnalytics ~ data:", data)
   useEffect(() => {
     postData({});
   }, []);
