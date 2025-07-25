@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import React, { useEffect, useState } from "react";
 import "./ResponsePage.css";
 import {
   useLocation,

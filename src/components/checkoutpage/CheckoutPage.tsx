@@ -234,9 +234,10 @@ const CheckoutPage = () => {
                     </button>
                     <div id="logo-mobile">
                       <img
-                        src="/images/logo.jpg"
+                        src="/images/logo.png"
                         alt="ATMOON"
                         height="50"
+                        style={{objectFit: "contain"}}
                       />
                     </div>
                   </div>
@@ -271,10 +272,10 @@ const CheckoutPage = () => {
                           id="logo"
                         >
                           <img
-                            src="/images/logo.jpg"
+                            src="/images/logo.png"
                             alt="ATMOON"
                             height="60"
-                            width="auto"
+                            width="100%"
                           />
                         </div>
                         <List sx={{ width: "100%" }} aria-label="contacts">
