@@ -1,0 +1,130 @@
+.App {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f7f7f7;
+  }
+  
+  /* Success page styles */
+  .success-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    padding: 20px;
+  }
+  
+  .success-content {
+    text-align: center;
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 500px;
+  }
+  
+  .success-content h1 {
+    font-size: 2rem;
+    color: #4caf50;
+    margin-bottom: 20px;
+  }
+  
+  .success-content p {
+    font-size: 1rem;
+    color: #333;
+    margin-bottom: 20px;
+  }
+  
+  .success-content button {
+    padding: 10px 20px;
+    font-size: 1rem;
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .success-content button:hover {
+    background-color: #45a049;
+  }
+  
+  /* Responsive styles */
+  @media screen and (max-width: 768px) {
+    .success-content h1 {
+      font-size: 1.5rem;
+    }
+  
+    .success-content p {
+      font-size: 0.9rem;
+    }
+  
+    .success-content button {
+      font-size: 0.9rem;
+      padding: 8px 16px;
+    }
+  }
+  
+  @media screen and (max-width: 480px) {
+    .success-content h1 {
+      font-size: 1.3rem;
+    }
+  
+    .success-content p {
+      font-size: 0.8rem;
+    }
+  
+    .success-content button {
+      font-size: 0.8rem;
+      padding: 6px 14px;
+    }
+  }
+
+
+  .align-rigth{
+    text-align: right;
+  }
+
+  .align-left{
+    text-align: left;
+  }
+
+  .status-heading {
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  .status-message {
+    text-align: center;
+    font-size: 18px;
+    padding: 10px;
+    border-radius: 5px;
+  }
+  .status-success {
+    color: #28a745;
+    background-color: #e9f7ee;
+  }
+  .status-failure {
+    color: #dc3545;
+    background-color: #f8d7da;
+  }
+  .status-pending {
+    color: #ffc107;
+    background-color: #fff3cd;
+  }
+
+  .transaction-details {
+    font-size: 16px;
+    margin-top: 20px;
+  }
+  .transaction-details p {
+    margin: 10px 0;
+  }
+
+  .details-label {
+    font-weight: bold;
+  }

@@ -1,211 +1,69 @@
-#root {
-  font-family: "Inter", serif;
-  font-optical-sizing: auto;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+.App {
+  text-align: center;
 }
-body {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-size: 16px;
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
 }
-label {
-  position: absolute;
-  top: -12px;
-  padding: 5px;
-  background-color: rgba(255, 255, 255, 0.993);
-  left: 16px;
-  font-size: 0.8em;
-  font-weight: 800;
-  color: var(--secondary);
-  margin: 0 0 5px 0.1rem;
-  display: block;
-}
-body input[type="text"],
-body input[type="email"],
-body input[type="password"],
-body input[type="search"],
-body input[type="file"],
-body input[type="number"],
-body select,
-body textarea {
-  -webkit-appearance: none; /* For Safari/Chrome */
-  -moz-appearance: none; /* For Firefox */
-  appearance: none; /* Standard */
-  border-radius: 5px; /* Remove rounded corners */
-  outline: none; /* Remove focus outline */
-  box-shadow: none; /* Remove inner shadow */
-  border: 2px solid gray;
-  padding: 0.8rem 0.7rem;
-  width: 100%;
-  font-size: small;
-  @media screen and (max-width: 1000px) {
-    body input[type="text"],
-    body input[type="email"],
-    body input[type="password"],
-    body select {
-      padding: 5px;
-      font-size: smaller;
-    }
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
   }
-  transition: all 0.2s ease;
-}
-body option:disabled {
-  color: gray;
-}
-body input:focus {
-  border-color: var(--secondary);
-}
-body h6 {
-  font-size: 1.1rem;
-  font-weight: 800;
-  margin-bottom: 0.5rem;
-  letter-spacing: 0.05em;
-  color: var(--primary);
-}
-.errors {
-  font-size: 12px;
-  color: var(--required);
-}
-.info {
-  font-size: 12px;
-  color: var(--primary);
-}
-.required {
-  color: var(--required);
 }
 
-/* dashboard Main wrapper css  */
-.main {
-  width: 100vw;
-  height: 100vh;
-  scrollbar-width: thin;
-  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #f1f5f9 100%);
-  overflow: hidden;
-  padding: 0;
-}
-
-.section {
-  position: relative;
-  left: 280px;
-  top: 0;
-  width: calc(100vw - 280px);
-  height: 100vh;
-  padding: 30px 40px;
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(20px);
-  overflow-y: auto;
-  transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-  border-radius: 25px 0 0 0;
-  margin-top: 0;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(30, 60, 114, 0.3) transparent;
-}
-
-.section::-webkit-scrollbar {
-  width: 6px;
-}
-
-.section::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.section::-webkit-scrollbar-thumb {
-  background: rgba(30, 60, 114, 0.3);
-  border-radius: 10px;
-}
-
-.section::-webkit-scrollbar-thumb:hover {
-  background: rgba(30, 60, 114, 0.5);
-}
-
-.section.active {
-  left: 0;
-  width: 100vw;
-  border-radius: 0;
-  padding-top: 100px; /* Extra space for floating button */
-  padding-left: 40px;
-  padding-right: 40px;
-  padding-bottom: 30px;
-}
-
-.pagetitle {
-  width: fit-content;
-  font-size: 28px;
-  font-weight: 700;
-  margin: 0 0 8px 0;
-  padding: 0;
-  background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  letter-spacing: -0.5px;
-}
-
-.pagetitle + small {
-  color: rgba(30, 60, 114, 0.7);
-  font-size: 14px;
-  font-weight: 500;
-  display: block;
-  margin-bottom: 25px;
-}
-
-/* Floating toggle button */
-.floating-toggle-btn {
-  position: fixed;
-  top: 25px;
-  left: 25px;
-  width: 50px;
-  height: 50px;
-  background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-  border: none;
-  border-radius: 12px;
-  color: white;
-  font-size: 20px;
-  cursor: pointer;
-  z-index: 1001;
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 8px 25px rgba(30, 60, 114, 0.3);
-  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-  backdrop-filter: blur(10px);
+  font-size: calc(10px + 2vmin);
+  color: white;
 }
 
-.floating-toggle-btn:hover {
-  transform: scale(1.1);
-  box-shadow: 0 12px 35px rgba(30, 60, 114, 0.4);
-  background: linear-gradient(135deg, #2a5298 0%, #1e3c72 100%);
+.App-link {
+  color: #61dafb;
 }
 
-.floating-toggle-btn:active {
-  transform: scale(0.95);
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
-@media screen and (max-width: 1000px) {
-  .section {
-    left: 0;
-    width: 100vw;
-    padding: 20px;
-    border-radius: 0;
-  }
-
-  .section.active {
-    padding-top: 80px; /* Less space on mobile */
-  }
-
-  .pagetitle {
-    font-size: 24px;
-    font-weight: 600;
-  }
-
-  .floating-toggle-btn {
-    width: 45px;
-    height: 45px;
-    font-size: 18px;
-    top: 15px;
-    left: 15px;
-  }
+.loadingmodel {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100dvh;
+  background: rgba(0, 0, 0, 0);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  backdrop-filter: blur(5px);
+}
+.loadingmodeloverlay {
+  position: fixed;
+  top: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  max-width: 500px;
+  height: auto;
+  padding: 2rem;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  font-weight: 700;
 }

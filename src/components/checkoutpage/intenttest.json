@@ -1,0 +1,39 @@
+{
+  "statusCode": 200,
+  "error": null,
+  "data": {
+    "transactionPayinRequest": {
+      "userId": "3",
+      "txnId": "TXN1661994538",
+      "txnPayinId": "PIN81505841",
+      "orderId": "m554544556",
+      "appId": "MOON7418294252",
+      "amount": "100.0",
+      "currencyCode": "356",
+      "returnUrl": "https://www.google.com",
+      "paymentTypeCode": "UP",
+      "mopCode": "INTENT",
+      "transactionType": "SALE",
+      "productDesc": "Test Transaction",
+      "custEmail": "neeraj@gmail.com",
+      "custPhone": "8882360961",
+      "cardNumber": null,
+      "cardExp": null,
+      "cvv": null,
+      "custVpa": null,
+      "bankCode": null,
+      "businessName": "BROWN BREAD",
+      "custFristName": null,
+      "custLastName": null,
+      "custStreetAddress": null,
+      "custCity": null,
+      "custState": null,
+      "custCountry": null,
+      "custZip": null,
+      "ipAddress": null,
+      "userAgent": null,
+      "intentUrl": "upi://pay?pa=beeinbox@icici&pn=BEEINBOX%20INDIA%20PRIVATE%20LIMITED&tr=EZV2025011911534139057016&am=100.00&cu=INR&mc=4816"
+    },
+    "paymentType": { "UP": ["COLLECT", "INTENT"] }
+  }
+}

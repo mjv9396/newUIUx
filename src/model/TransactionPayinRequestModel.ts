@@ -1,0 +1,70 @@
+export class TransactionPayinRequestModel {
+    userId: string;
+    txnId: string;
+    orderId: string;
+    appId: string;
+    amount: string;
+    currencyCode: string;
+    returnUrl: string;
+    paymentTypeCode: string;
+    mopTypeCode: string;
+    transactionType: string;
+    productDesc: string;
+    custEmail: string;
+    custPhone: string;
+    cardNumber: string;
+    cardExp: string;
+    cvv: string;
+    custVpa: string;
+    bankCode: string;
+    businessName: string;
+    custFristName: string;
+    custLastName: string;
+    custStreetAddress: string;
+    custCity: string;
+    custState: string;
+    custCountry: string;
+    custZip: string;
+    ipAddress: string;
+    userAgent: string;
+    mopCode: string;
+    status: string;
+    utr: string;
+    responseMessage: string;
+    intentUrl: string
+    constructor() {
+
+        this.userId = "";
+        this.txnId = "";
+        this.orderId = "";
+        this.appId = "";
+        this.amount = "";
+        this.currencyCode = "";
+        this.returnUrl = "";
+        this.paymentTypeCode = "";
+        this.mopTypeCode = "";
+        this.transactionType = "";
+        this.productDesc = "";
+        this.custEmail = "";
+        this.custPhone = "";
+        this.cardNumber = "";
+        this.cardExp = "";
+        this.cvv = "";
+        this.custVpa = "";
+        this.bankCode = "";
+        this.businessName = "";
+        this.custFristName = "";
+        this.custLastName = "";
+        this.custStreetAddress = "";
+        this.custCity = "";
+        this.custState = "";
+        this.custCountry = "";
+        this.custZip = "";
+        this.ipAddress = "";
+        this.userAgent = "";
+        this.mopCode = "";
+        this.status = "";
+        this.utr = "";
+        this.responseMessage = "";
+    }
+}
