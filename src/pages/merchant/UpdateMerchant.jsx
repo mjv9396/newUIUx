@@ -16,6 +16,8 @@ import PayinTransactionFlag from "./components/PayinTransactionFlag";
 import PayinSettlement from "./components/PayinSettlement";
 import Webhooks from "./components/Webhooks";
 import KycDocuments from "./components/KycDocuments";
+import moonGif from "../../assets/moon.gif";
+
 const UpdateMerchant = () => {
   const [tab, setTab] = useState(1);
   const { state } = useLocation();
@@ -27,7 +29,7 @@ const UpdateMerchant = () => {
           <h5>APP ID: {state.appId}</h5>
         </div>
         <div className="row">
-          <div 
+          <div
             className="col-md-3 col-sm-12 px-3 "
             style={{
               borderRight: "3px dashed gray",
@@ -43,7 +45,10 @@ const UpdateMerchant = () => {
                   : styles.sidetab
               }
             >
-              User Account Details
+              <span>User Account Details</span>
+              {tab === 1 && (
+                <img src={moonGif} alt="moon" className={styles.moonIcon} />
+              )}
             </button>
             <button
               onClick={() => setTab(2)}
@@ -182,10 +187,13 @@ const UpdateMerchant = () => {
               KYC Documents
             </button>
           </div>
-          <div style={{
+          <div
+            style={{
               maxHeight: "60vh",
               overflow: "auto",
-            }} className="col-md-9 col-sm-12 px-3">
+            }}
+            className="col-md-9 col-sm-12 px-3"
+          >
             {tab === 1 && <UserAccount {...state} />}
             {tab === 2 && <PayinAcquirerMapping {...state} />}
             {tab === 11 && <PayinTransactionFlag {...state} />}
