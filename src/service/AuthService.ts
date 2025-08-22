@@ -72,6 +72,16 @@ export class AuthService {
     return JSON.parse(JSON.stringify(res.data));
   };
 
+  static submitTransactionPurpose = async (requestData: { txnId: string; txnPurpose: string }) => {
+    const url = ApiUrl.baseUrl + "/transaction-purpose";
+    const res = await axios.post<string>(url, requestData, {
+      headers: {
+        "Content-Type": "application/json; charset=utf-8",
+      },
+    });
+    return JSON.parse(JSON.stringify(res.data));
+  };
+
   // Encrypt function
   static encrypt = async (
     strToEncrypt: string,
