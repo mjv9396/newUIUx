@@ -16,6 +16,7 @@ import {
 } from "../../services/cookieStore";
 import { formatToINRCurrency } from "../../utils/formatToINRCurrency ";
 import wallet from "../../assets/wallet.png";
+import transactional from "../../assets/transactional.png";
 import sponsor from "../../assets/sponsorship.png";
 import settlement from "../../assets/settlement.png";
 import resolution from "../../assets/resolution.png";
@@ -25,6 +26,8 @@ import success from "../../assets/transaction-success.png";
 import DetailCard from "./components/DetailCard";
 import VirtualAccountCard from "./components/VirtualAccountCard";
 import DepositCard from "./components/DepositCard";
+import WalletCard from "./components/WalletCard";
+import SettlementCard from "./components/SettlementCard";
 import debitcard from "../../assets/debit-card.png";
 import deposit from "../../assets/deposit.png";
 import passbook from "../../assets/passbook.png";
@@ -67,6 +70,18 @@ const Dashboard = () => {
       getTotalBalance(endpoints.user.balance);
     }
   }, []);
+
+  const { postData: getVirtualBalance, data: VirtualBalanceData } = usePost(endpoints.user.virtualBalance);
+  useEffect(() => {
+    getVirtualBalance({
+      userId: isAdmin() ? merchantId : GetUserId(),
+      startDate: dateFormatter(range[0].startDate),
+      endDate: dateFormatter(range[0].endDate),
+    });
+  }, [
+    merchantId,
+    range
+  ]);
 
   const {
     error: payinDashboardError,
@@ -188,160 +203,181 @@ const Dashboard = () => {
             isCurrencyDisabled
           />
         </div>
-        {/*  */}
         <div className="row">
-          <div className="col-12 mb-4">
+          <div className="col-md-6 col-sm-12 mb-3">
+            <div className={styles.card}>
+              <span className="d-flex justify-content-between">
+                <div className="d-flex gap-2 overflow-auto align-items-center justify-content-center">
+                  {!virtualAccountData ||
+                  virtualAccountData?.data?.length === 0 ? (
+                    <span className={styles.noData}>
+                      {virtualAccountDashboardLoading ? "Loading..." : null}
+                      {isAdmin() && !virtualAccountDashboardLoading
+                        ? "Select a merchant to view virtual accounts"
+                        : "No virtual accounts found"}
+                    </span>
+                  ) : (
+                    virtualAccountData?.data.map((item, index) => (
+                      <VirtualAccountCard
+                        key={index}
+                        title={item.acqCode}
+                        amt={item.balance}
+                        accountNo={item.virtualAccount}
+                        ifsc={item.ifscCode}
+                        vpa={item.userVPA}
+                      />
+                    ))
+                  )}
+                </div>
+                {/* <button className={styles.addAccount}>+</button> */}
+              </span>
+            </div>
+          </div>
+          <div className="col-md-6 col-sm-12 mb-3">
+            <div className="d-flex gap-3 flex-md-row flex-column">
+              <WalletCard
+                img={wallet}
+                title="Wallet Balance"
+                subtitle="Available Balance"
+                amount={
+                  isAdmin()
+                    ? totalBalanceData?.data
+                    : totalBalanceData?.data?.accountBalance
+                }
+              />
+              <WalletCard
+                img={transactional}
+                title="Virtual Collection"
+                subtitle="Virtual Collection"
+                amount={
+                  isAdmin()
+                    ? VirtualBalanceData?.data
+                    : VirtualBalanceData?.data
+                }
+              />
+              {/* <DepositCard img={debitcard} title="Credit Cards" /> */}
+            </div>
+          </div>
+        </div>
+        <div className="row">
+          <div className="col-md-6 col-lg-12 col-xl-6">
             <div className={styles.card}>
               <h6>Payin Details</h6>
               <div className="row mt-4">
-                <div className="col-md-3 col-sm-6 col-xs-12 mb-3">
+                <div className="col-md-6 col-sm-12 mb-3">
                   <DetailCard
-                    name="Success Amount"
-                    amt={payinData?.data?.totalSuccessAmount}
-                    type="payin"
-                    className="success"
+                    title="Success Amount"
+                    amount={payinData?.data?.totalSuccessAmount}
+                    type="success"
+                    // className="success"
                     img={success}
-                    count={payinData?.data?.totalSuccess}
+                    subtitle={`Txn Count : ${payinData?.data?.totalSuccess}`}
                   />
                 </div>
-                <div className="col-md-3 col-sm-6 col-xs-12 mb-3">
+                <div className="col-md-6 col-sm-12 mb-3">
                   <DetailCard
-                    name="Failed Amount"
-                    amt={payinData?.data?.totalFailedAmount}
-                    type="payin"
+                    title="Failed Amount"
+                    amount={payinData?.data?.totalFailedAmount}
+                    type="failed"
                     className="failed"
                     img={failed}
-                    count={payinData?.data?.totalFailed}
+                    subtitle={`Txn Count : ${payinData?.data?.totalFailed}`}
                   />
                 </div>
-                <div className="col-md-3 col-sm-6 col-xs-12 mb-3">
+                <div className="col-md-6 col-sm-12 mb-3">
                   <DetailCard
-                    name="Pending Amount"
-                    amt={payinData?.data?.totalPendingAmount}
-                    type="payin"
+                    title="Pending Amount"
+                    amount={payinData?.data?.totalPendingAmount}
+                    type="pending"
                     className="pending"
                     img={pending}
-                    count={payinData?.data?.totalPending}
+                    subtitle={`Txn Count : ${payinData?.data?.totalPending}`}
                   />
                 </div>
-                <div className="col-md-3 col-sm-6 col-xs-12 mb-3">
+                <div className="col-md-6 col-sm-12 mb-3">
                   <DetailCard
-                    name="Total Dispute"
-                    amt={chargebackData?.data.totalAmount}
-                    type="dispute"
+                    title="Total Dispute"
+                    amount={chargebackData?.data.totalAmount}
+                    type="info"
                     img={resolution}
-                    count={chargebackData?.data?.count}
+                    subtitle={`Txn Count : ${chargebackData?.data?.count}`}
                   />
                 </div>
               </div>
               <div className="row mb-1">
-                <div className="col-md-6 col-sm-12 mb-3">
-                  <div className={styles.subcard + " " + styles.settle}>
-                    <div className="flex flex-column">
-                      <span>Total Txn Amount</span>
-                      <h6>
-                        {formatToINRCurrency(settlementData?.data.amountSettle)}
-                      </h6>
-                    </div>
-                    <div className="flex flex-column">
-                      <span>Total Settled Amount</span>
-                      <h6>
-                        {formatToINRCurrency(
-                          settlementData?.data.netAmountSettle
-                        )}
-                      </h6>
-                    </div>
-                    <img src={sponsor} alt="" />
-                  </div>
+                <div className="col-md-12 col-sm-12 mb-3">
+                  <SettlementCard
+                    img={sponsor}
+                    primaryTitle="Total Txn Amount"
+                    primaryAmount={settlementData?.data.amountSettle}
+                    secondaryTitle="Total Settled Amount"
+                    secondaryAmount={settlementData?.data.netAmountSettle}
+                    type="settled"
+                  />
                 </div>
-                <div className="col-md-6 col-sm-12 mb-3">
-                  <div className={styles.subcard + " " + styles.unsettle}>
-                    <span className="d-flex flex-column">
-                      <span>Total Txn Amount</span>
-                      <h6>
-                        {formatToINRCurrency(
-                          settlementData?.data.amountUnsettle
-                        )}
-                      </h6>
-                    </span>
-                    <span className="d-flex flex-column">
-                      <span>Upcomming Settle Amount</span>
-                      <h6>
-                        {formatToINRCurrency(
-                          settlementData?.data.netAmountUnsettle
-                        )}
-                      </h6>
-                    </span>
-                    <img src={settlement} alt="" />
-                  </div>
+                <div className="col-md-12 col-sm-12">
+                  <SettlementCard
+                    img={settlement}
+                    primaryTitle="Total Txn Amount"
+                    primaryAmount={settlementData?.data.amountUnsettle}
+                    secondaryTitle="Upcoming Settle Amount"
+                    secondaryAmount={settlementData?.data.netAmountUnsettle}
+                    type="unsettled"
+                  />
                 </div>
               </div>
             </div>
           </div>
-          <div className="col-12 mb-4">
+          <div className="col-md-6 col-sm-12 ">
             <div className={styles.card}>
               <h6>Payout Details</h6>
-              <div className="row mt-3">
-                <div className="col-md-4 col-sm-6 col-xs-12 mb-3">
-                  <DetailCard
-                    amt={
-                      isAdmin()
-                        ? totalBalanceData?.data
-                        : totalBalanceData?.data?.accountBalance
-                    }
-                    count="Wallet Balance"
-                    type="wallet"
-                    img={wallet}
-                  />
-                </div>
-                <div className="col-md-4 col-sm-6 col-xs-12 mb-3">
+              <div className="row mt-4">
+                <div className="col-md-6 col-sm-12 mb-3">
                   <DetailCard
                     img={success}
-                    amt={payoutData?.data?.totalSuccessAmount}
-                    name="Success Debit Amount"
-                    type="wallet"
-                    count={payoutData?.data?.totalSuccess}
+                    amount={payoutData?.data?.totalSuccessAmount}
+                    title="Success Debit Amount"
+                    type="success"
+                    subtitle={`Txn Count : ${payoutData?.data?.totalSuccess}`}
                     className="success"
                   />
                 </div>
-                <div className="col-md-4 col-sm-6 col-xs-12 mb-3">
+                <div className="col-md-6 col-sm-12 mb-3">
                   <DetailCard
                     img={failed}
-                    amt={payoutData?.data?.totalFailedAmount}
-                    name="Failed Debit Amount"
-                    type="wallet"
+                    amount={payoutData?.data?.totalFailedAmount}
+                    title="Failed Debit Amount"
+                    type="failed"
                     className="failed"
-                    count={payoutData?.data?.totalFailed}
+                    subtitle={`Txn Count : ${payoutData?.data?.totalFailed}`}
                   />
                 </div>
-              </div>
-              <div className="row">
-                <div className="col-md-4 col-sm-6 col-xs-12 mb-3">
+                <div className="col-md-6 col-sm-12 mb-3">
                   <DetailCard
                     img={pending}
-                    amt={payoutData?.data?.totalPendingAmount}
-                    name="Pending Debit Amount"
-                    type="payout"
+                    amount={payoutData?.data?.totalPendingAmount}
+                    title="Pending Debit Amount"
+                    type="pending"
                     className="pending"
-                    count={payoutData?.data?.totalPending}
+                    subtitle={`Txn Count : ${payoutData?.data?.totalPending}`}
                   />
                 </div>
-                <div className="col-md-4 col-sm-6 col-xs-12 mb-3">
+                <div className="col-md-6 col-sm-12 mb-3">
                   <DetailCard
                     img={success}
-                    amt={payoutData?.data?.totalCreditSuccessAmount}
-                    name="Success Credited Amount"
-                    type="credited"
-                    count={payoutData?.data?.totalCreditSuccess}
+                    amount={payoutData?.data?.totalCreditSuccessAmount}
+                    title="Success Credited Amount"
+                    type="success"
+                    subtitle={`Txn Count : ${payoutData?.data?.totalCreditSuccess}`}
                   />
                 </div>
-                <div className="col-md-4 col-sm-6 col-xs-12 mb-3">
+                <div className="col-md-6 col-sm-12 mb-3">
                   <DetailCard
                     img={failed}
-                    amt={payoutData?.data?.totalCreditRejectAmount}
-                    name="Rejected Credit Amount"
-                    type="rejected"
-                    count={payoutData?.data?.totalCreditRejected}
+                    amount={payoutData?.data?.totalCreditRejectAmount}
+                    title="Rejected Credit Amount"
+                    type="failed"
+                    subtitle={`Txn Count : ${payoutData?.data?.totalCreditRejected}`}
                   />
                 </div>
               </div>

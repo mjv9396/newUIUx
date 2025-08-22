@@ -25,7 +25,7 @@ const VerificationStatus = ({
     setFormData({ ...formData, [name]: value });
     postData({
       userId: userId,
-      emailVerificationState: checked,
+      emailVerificationState: checked ? "VERIFIED" : "UNVERIFIED",
     });
   };
 
@@ -33,7 +33,7 @@ const VerificationStatus = ({
     const { checked } = e.target;
     postData({
       userId: userId,
-      phoneVerificationState: checked,
+      phoneVerificationState: checked ? "VERIFIED" : "UNVERIFIED",
     });
   };
 
@@ -57,7 +57,7 @@ const VerificationStatus = ({
               className="form-check-input"
               type="checkbox"
               id="flexSwitchCheckDefault"
-              defaultChecked={emailVerificationState === "true"}
+              defaultChecked={emailVerificationState === "VERIFIED" ? true : false}
               onChange={updateEmailStatus}
               name="emailVerificationState"
             />
@@ -71,7 +71,7 @@ const VerificationStatus = ({
               className="form-check-input"
               type="checkbox"
               id="flexSwitchCheckDefault"
-              defaultChecked={phoneVerificationState === "true"}
+              defaultChecked={phoneVerificationState === "VERIFIED" ? true : false}
               onChange={updatePhoneStatus}
               name="phoneVerificationState"
             />

@@ -179,6 +179,11 @@ const MerchantMenu = ({ toggle, setToggle, status }) => {
                     </Link>
                   </li>
                   <li className={styles.subMenuItem}>
+                    <Link to="/payout/bulk-payout">
+                      <span>Bulk Payout</span>
+                    </Link>
+                  </li>
+                  <li className={styles.subMenuItem}>
                     <Link to="/payout/transactions">
                       <span>Transactions</span>
                     </Link>

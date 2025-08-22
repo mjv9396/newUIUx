@@ -23,7 +23,6 @@ const AddVPA = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const validationError = validateAddBeneficiaryForm(formData, true);
-    console.log("🚀 ~ handleSubmit ~ validationError:", validationError)
     if (Object.keys(validationError).length > 0) {
       setErrors(validationError);
       return;

@@ -25,22 +25,24 @@ const MerchantList = () => {
     setCurrentPage((prev) => prev + 1);
   };
 
-  const handleGoToPage = (e) => {
-    e.preventDefault();
-    if (
-      e.target.goto.value < 1 ||
-      !e.target.goto.value ||
-      isNaN(parseInt(e.target.goto.value))
-    ) {
-      errorMessage("Please enter a valid page number");
-      return;
-    }
-    if (e.target.goto.value > data.data.totalPages) {
-      errorMessage("Page number exceeds total pages");
-      return;
-    }
-    setCurrentPage(parseInt(e.target.goto.value - 1));
-  };
+
+  
+ const handleGoToPage = (e) => {
+     e.preventDefault();
+     if (
+       e.target.goto.value < 1 ||
+       !e.target.goto.value ||
+       isNaN(parseInt(e.target.goto.value))
+     ) {
+       errorMessage("Please enter a valid page number");
+       return;
+     }
+     if (e.target.goto.value > data.data.totalPages) {
+       errorMessage("Page number exceeds total pages");
+       return;
+     }
+     setCurrentPage(parseInt(e.target.goto.value - 1));
+   };
 
   return (
     <DashboardLayout page="Merchant List" url="/dashboard/merchant-list">
@@ -58,7 +60,8 @@ const MerchantList = () => {
               <tr>
                 <th>APP ID</th>
                 <th>Business Name</th>
-                <th>Full Name</th>
+                <th>First Name</th>
+                <th>Last Name</th>
                 <th>Email</th>
                 <th>Phone Number</th>
                 <th style={{ minWidth: "100px" }}>Status</th>
@@ -68,69 +71,63 @@ const MerchantList = () => {
               </tr>
             </thead>
 
-            {data && (
-              <tbody>
-                {data && !loading && !error && data?.data.content.length > 0 ? (
-                  data?.data.content.map((item) => (
-                    <tr key={item.email}>
-                      <td>{item.appId}</td>
-                      <td>{item.businessName}</td>
-                      <td>
-                        {`${item.firstName || ""} ${
-                          item.lastName || ""
-                        }`.trim()}
-                      </td>
-                      <td>{item.email}</td>
-                      <td>{item.phoneNumber}</td>
-                      <td>{item.userAccountState}</td>
-                      {GetUserRole() === "ADMIN" && (
-                        <td>
-                          <i
-                            className="bi bi-pencil-square text-success"
-                            onClick={() =>
-                              navigate(`/update-merchant`, { state: item })
-                            }
-                          ></i>
-                        </td>
-                      )}
+            
+              {data && (
+                <tbody>
+                  {data &&
+                  !loading &&
+                  !error &&
+                  data?.data.content.length > 0 ? (
+                    data?.data.content.map((item) => (
+                      <tr key={item.email}>
+                        <td>{item.appId}</td>
+                        <td>{item.businessName}</td>
+                        <td>{item.firstName}</td>
+                        <td>{item.lastName}</td>
+                        <td>{item.email}</td>
+                        <td>{item.phoneNumber}</td>
+                        <td>{item.userAccountState}</td>
+                        {GetUserRole() === "ADMIN" && (
+                          <td>
+                            <i
+                              className="bi bi-pencil-square text-success"
+                              onClick={() =>
+                                navigate(`/update-merchant`, { state: item })
+                              }
+                            ></i>
+                          </td>
+                        )}
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan={6}>No Merchant available</td>
                     </tr>
-                  ))
-                ) : (
+                  )}
+                </tbody>
+              )}
+              {loading && (
+                <tbody>
                   <tr>
-                    <td colSpan={GetUserRole() === "ADMIN" ? 7 : 6}>
-                      No Merchant available
+                    <td colSpan={6} className="text-center">
+                      Merchant List loading...
                     </td>
                   </tr>
-                )}
-              </tbody>
-            )}
-            {loading && (
-              <tbody>
-                <tr>
-                  <td
-                    colSpan={GetUserRole() === "ADMIN" ? 7 : 6}
-                    className="text-center"
-                  >
-                    Merchant List loading...
-                  </td>
-                </tr>
-              </tbody>
-            )}
-            {error && (
-              <tbody>
-                <tr>
-                  <td
-                    colSpan={GetUserRole() === "ADMIN" ? 7 : 6}
-                    className="text-center"
-                  >
-                    Error fetching Merchant List.
-                  </td>
-                </tr>
-              </tbody>
-            )}
+                </tbody>
+              )}
+              {error && (
+                <tbody>
+                  <tr>
+                    <td colSpan={6} className="text-center">
+                      Error fetching Merchant List.
+                    </td>
+                  </tr>
+                </tbody>
+              )}
+            
           </table>
         </div>
-
+        
         <div className={styles.pagination}>
           <span className={styles.total}>
             Total Records: {data?.data.totalElements}

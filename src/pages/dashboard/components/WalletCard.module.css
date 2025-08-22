@@ -1,0 +1,403 @@
+.walletCard {
+  position: relative;
+  width: 100%;
+  height: 140px;
+  perspective: 1000px;
+  cursor: pointer;
+}
+
+.cardBackground {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    135deg,
+    rgba(99, 102, 241, 0.1) 0%,
+    rgba(139, 92, 246, 0.05) 50%,
+    rgba(236, 72, 153, 0.1) 100%
+  );
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transform-style: preserve-3d;
+}
+
+.walletCard:hover .cardBackground {
+  transform: translateY(-8px) rotateX(5deg) rotateY(-2deg);
+  box-shadow: 0 20px 40px rgba(99, 102, 241, 0.2),
+    0 10px 20px rgba(139, 92, 246, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.cardGlow {
+  position: absolute;
+  top: -100%;
+  left: -50%;
+  width: 200%;
+  height: 300%; 
+  background: conic-gradient(
+    from 0deg,
+    transparent,
+    rgba(99, 102, 241, 0.3),
+    transparent,
+    rgba(139, 92, 246, 0.3),
+    transparent,
+    rgba(236, 72, 153, 0.3),
+    transparent
+  );
+  opacity: 0;
+  animation: rotate 8s linear infinite;
+  transition: opacity 0.3s ease;
+}
+
+.walletCard:hover .cardGlow {
+  opacity: 1;
+}
+
+.cardContent {
+  position: relative;
+  padding: 20px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  z-index: 2;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.1) 0%,
+    rgba(255, 255, 255, 0.05) 100%
+  );
+}
+
+.headerSection {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.iconWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.iconBg {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  background: linear-gradient(
+    135deg,
+    rgba(99, 102, 241, 0.8) 0%,
+    rgba(139, 92, 246, 0.8) 50%,
+    rgba(236, 72, 153, 0.8) 100%
+  );
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  transition: all 0.3s ease;
+}
+
+.walletCard:hover .iconBg {
+  transform: scale(1.1) rotate(5deg);
+  box-shadow: 0 12px 30px rgba(99, 102, 241, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+.iconPulse {
+  position: absolute;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: linear-gradient(
+    135deg,
+    rgba(99, 102, 241, 0.4) 0%,
+    rgba(139, 92, 246, 0.4) 50%,
+    rgba(236, 72, 153, 0.4) 100%
+  );
+  animation: pulse 2s infinite;
+  z-index: -1;
+}
+
+.icon {
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
+  /* filter: brightness(0) invert(1); */
+  transition: transform 0.3s ease;
+}
+
+.walletCard:hover .icon {
+  transform: scale(1.1);
+}
+
+.textSection {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #1f2937;
+  margin: 0;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  background: linear-gradient(135deg, #1f2937 0%, #4f46e5 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.subtitle {
+  font-size: 11px;
+  color: #6b7280;
+  font-weight: 500;
+  opacity: 0.8;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.amountSection {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.amountWrapper {
+  display: flex;
+  align-items: baseline;
+  gap: 2px;
+}
+
+.currency {
+  font-size: 16px;
+  font-weight: 600;
+  color: #4f46e5;
+  opacity: 0.8;
+}
+
+.amount {
+  font-size: 22px;
+  font-weight: 800;
+  color: #1f2937;
+  letter-spacing: -0.02em;
+  background: linear-gradient(135deg, #1f2937 0%, #4f46e5 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  transition: all 0.3s ease;
+}
+
+.walletCard:hover .amount {
+  transform: scale(1.05);
+}
+
+.progressBar {
+  width: 100%;
+  height: 3px;
+  background: rgba(75, 85, 99, 0.1);
+  border-radius: 2px;
+  overflow: hidden;
+  position: relative;
+}
+
+.progressFill {
+  height: 100%;
+  background: linear-gradient(90deg, #4f46e5 0%, #7c3aed 50%, #ec4899 100%);
+  border-radius: 2px;
+  width: 0%;
+  animation: fillProgress 2s ease-out forwards;
+  animation-delay: 0.5s;
+}
+
+.decorativeElements {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.circle1,
+.circle2,
+.circle3 {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.1;
+  animation: float 6s ease-in-out infinite;
+}
+
+.circle1 {
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, #4f46e5, #7c3aed);
+  top: -30px;
+  right: -30px;
+  animation-delay: 0s;
+}
+
+.circle2 {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, #7c3aed, #ec4899);
+  bottom: -20px;
+  left: -20px;
+  animation-delay: 2s;
+}
+
+.circle3 {
+  width: 25px;
+  height: 25px;
+  background: linear-gradient(135deg, #ec4899, #f97316);
+  top: 50%;
+  right: 10px;
+  animation-delay: 4s;
+}
+
+/* Animations */
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.4;
+  }
+}
+
+@keyframes fillProgress {
+  0% {
+    width: 0%;
+  }
+  100% {
+    width: 75%;
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  33% {
+    transform: translateY(-10px) rotate(120deg);
+  }
+  66% {
+    transform: translateY(5px) rotate(240deg);
+  }
+}
+
+/* Wallet Card Variants */
+.walletCard:nth-child(2) .cardContent {
+  background: linear-gradient(
+    135deg,
+    rgba(236, 72, 153, 0.1) 0%,
+    rgba(249, 115, 22, 0.05) 100%
+  );
+}
+
+.walletCard:nth-child(2) .iconBg {
+  background: linear-gradient(
+    135deg,
+    rgba(236, 72, 153, 0.8) 0%,
+    rgba(249, 115, 22, 0.8) 100%
+  );
+  box-shadow: 0 8px 20px rgba(236, 72, 153, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+
+.walletCard:nth-child(2):hover .iconBg {
+  box-shadow: 0 12px 30px rgba(236, 72, 153, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .walletCard {
+    height: 120px;
+  }
+
+  .cardContent {
+    padding: 16px;
+  }
+
+  .iconBg {
+    width: 36px;
+    height: 36px;
+  }
+
+  .icon {
+    width: 18px;
+    height: 18px;
+  }
+
+  .title {
+    font-size: 13px;
+  }
+
+  .subtitle {
+    font-size: 10px;
+  }
+
+  .amount {
+    font-size: 18px;
+  }
+
+  .currency {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 576px) {
+  .walletCard {
+    height: 110px;
+  }
+
+  .cardContent {
+    padding: 14px;
+  }
+
+  .headerSection {
+    gap: 8px;
+  }
+
+  .iconBg {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+  }
+
+  .icon {
+    width: 16px;
+    height: 16px;
+  }
+
+  .title {
+    font-size: 12px;
+  }
+
+  .amount {
+    font-size: 16px;
+  }
+}

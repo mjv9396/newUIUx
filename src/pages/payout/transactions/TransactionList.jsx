@@ -18,6 +18,7 @@ import Filters from "../../../ui/Filter";
 import { all } from "axios";
 import Dropdown from "../../../ui/Dropdown";
 import ExpandableFilterInput from "../../../ui/TextInput";
+import { PageSizes } from "../../../utils/constants";
 // const pagesize = 25;
 const TransactionList = () => {
   const tableRef = useRef(null);
@@ -224,14 +225,7 @@ const TransactionList = () => {
           />
 
           <Dropdown
-            data={[
-              { id: "25", name: "25" },
-              { id: "1000", name: "1000" },
-              { id: "5000", name: "5000" },
-              { id: "10000", name: "10000" },
-              { id: "50000", name: "50000" },
-              { id: "100000", name: "100000" },
-            ]}
+            data={PageSizes}
             placeholder="Select Number of Transaction"
             selected={{
               id: formData.size,
@@ -266,77 +260,129 @@ const TransactionList = () => {
               <table className="table table-responsive-sm" id="settlementList">
                 <thead>
                   <tr>
-                    <th style={{ minWidth: 75, position: "sticky", left: 0, zIndex: 12 }}>View</th>
-                    <th style={{ minWidth: 150, position: "sticky", left: 75, zIndex: 11 }}>Order Id</th>
-                    <th>Transaction ID</th>
+                    <th
+                      style={{
+                        minWidth: 75,
+                        position: "sticky",
+                        left: 0,
+                        zIndex: 12,
+                      }}
+                    >
+                      View
+                    </th>
+                    <th
+                      style={{
+                        minWidth: 150,
+                        position: "sticky",
+                        left: 75,
+                        zIndex: 11,
+                      }}
+                    >
+                      Transaction ID
+                    </th>
+                    <th>Order Id</th>
                     <th>Business Name</th>
                     {GetUserRole() === "ADMIN" && <th>Acquirer</th>}
+                    <th>Transaction Status</th>
                     <th>Payout Date</th>
                     <th>Amount</th>
                     <th>Net Amount</th>
                     <th>Merchant TDR</th>
                     <th>GST</th>
-                    <th>Transaction Status</th>
-                    <th>Transaction Type</th>
-                    <th>UTR Receipt</th>
+                    <th style={{ whiteSpace: "nowrap", minWidth: "200px" }}>
+                      Transaction Status Code
+                    </th>
+
                     {GetUserRole() === "ADMIN" && (
                       <th>Transaction Recipt ID</th>
                     )}
-                    <th>Payment Mode</th>
+                    <th>UTR Receipt</th>
 
+                    <th>Payment Mode</th>
+                    <th>Transaction Type</th>
                     <th>Beneficiary Name</th>
                     <th>Account Number</th>
                     <th>IFSC Code</th>
-
-                    {/* <th>Transaction Type</th> */}
                   </tr>
                 </thead>
                 <tbody>
                   {data && data?.data.content.length > 0 ? (
                     data.data.content.map((item, index) => (
                       <tr key={item.payoutTxnId}>
-                        <td style={{ minWidth: 75, position: "sticky", left: 0, zIndex: 12}}>
+                        <td
+                          style={{
+                            minWidth: 75,
+                            position: "sticky",
+                            left: 0,
+                            zIndex: 9,
+                          }}
+                        >
                           <i
                             className="bi bi-eye-fill text-success"
                             onClick={() => handleViewDetail(item)}
                           ></i>
                         </td>
-                        <td style={{ minWidth: 150, position: "sticky", left: 75, zIndex: 11 }}>{item.orderId}</td>
-                        <td>{item.transactionId}</td>
+                        <td
+                          style={{
+                            minWidth: 150,
+                            position: "sticky",
+                            left: 75,
+                            zIndex: 9,
+                          }}
+                        >
+                          {item.transactionId}
+                        </td>
+                        <td>{item.orderId}</td>
                         <td>{item.businessName}</td>
                         {GetUserRole() === "ADMIN" && (
                           <td>{item.acquirer || "NA"}</td>
                         )}
-                        <td>{item.dateOfIssue}</td>
+                        <td>{item.transactionStatus}</td>
+                        <td>
+                          <span>
+                            <i class="bi bi-calendar3"></i>{" "}
+                            {
+                              new Date(item.dateOfIssue)
+                                .toISOString()
+                                .split("T")[0]
+                            }
+                            <br />
+                            <i class="bi bi-clock"></i>{" "}
+                            {new Date(item.dateOfIssue).toLocaleTimeString(
+                              "en-US",
+                              {
+                                hour: "2-digit",
+                                minute: "2-digit",
+                                second: "2-digit",
+                                hour12: true,
+                              }
+                            )}
+                          </span>
+                        </td>
                         <td>{roundAmount(item.transactionAmmount)}</td>
                         <td>{roundAmount(item.netAmount)}</td>
                         <td>{roundAmount(item.merchantTdr)}</td>
                         <td>{roundAmount(item.gst)}</td>
-                        <td>
-                          {item.transactionStatus}
-                          
-                        </td>
-                        <td>{item.transactionType}</td>
-                        <td>{item.bankUtr || "NA"}</td>
-                        {GetUserRole() === "ADMIN" && (
-                          <td>{item.transactionReceiptId}</td>
-                        )}
-                        <td>{item.transactionBankTransferMode}</td>
+                        <td>{item.statusSubcode}</td>
 
+                        {GetUserRole() === "ADMIN" && (
+                          <td>{item.transactionReceiptId || "-"}</td>
+                        )}
+                        <td>{item.bankUtr || "-"}</td>
+                        <td>{item.transactionBankTransferMode}</td>
+                        <td>{item.transactionType}</td>
                         <td>{item.beneficiary.name}</td>
                         <td>{item.beneficiary.accountNo}</td>
                         <td>{item.beneficiary.ifscCode}</td>
-
-                        {/* <td></td> */}
                       </tr>
                     ))
                   ) : loading ? (
                     <tr>
-                      <td colSpan={16}>Please wait while we fetch the data</td>
+                      <td colSpan={17}>Please wait while we fetch the data</td>
                     </tr>
                   ) : (
                     <tr>
-                      <td colSpan={16}>No data found</td>
+                      <td colSpan={17}>No data found</td>
                     </tr>
                   )}
                 </tbody>

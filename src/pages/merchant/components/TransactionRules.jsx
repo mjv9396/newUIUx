@@ -81,7 +81,7 @@ const TransactionRules = ({
     error: payoutPriorityError,
   } = usePost(endpoints.user.updatePayoutPriorities);
 
-  const { postData, data, error } = usePost(endpoints.user.updateUser);
+  const { postData, data, error } = usePost(endpoints.user.updatePayoutLimits);
 
   // Fetch acquirer limits on component mount
   useEffect(() => {
@@ -327,7 +327,6 @@ const TransactionRules = ({
 
   const handleUpdatePayinData = async () => {
     // Implement payin daily limit update
-    console.log("Payin data:", payinFormData);
     successMessage("Payin rules will be implemented in next version");
   };
 

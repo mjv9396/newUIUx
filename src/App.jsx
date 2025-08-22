@@ -49,6 +49,7 @@ import { Toaster } from "sonner";
 import Analytics from "./pages/analytics/Analytics";
 import ActiveUserLayout from "./layouts/ActiveUserLayout";
 import VirtualAccountList from "./pages/virtualAccount/VirtualAccountList";
+import AcquirerAccountStatement from "./pages/virtualAccount/acquirerAccountStatement/Tabs";
 import Unauthorised from "./pages/errors/Unauthorised";
 import LoginLayout from "./layouts/LoginLayout";
 import { CheckCookieTimeout } from "./services/cookieStore";
@@ -115,6 +116,17 @@ export default function App() {
             <ProtectedLayout allowedRoles={["ADMIN", "MERCHANT", "RESELLER"]}>
               <ActiveUserLayout>
                 <VirtualAccountList />
+              </ActiveUserLayout>
+            </ProtectedLayout>
+          }
+        />
+        <Route
+          exact
+          path="/check-account-balance"
+          element={
+            <ProtectedLayout allowedRoles={["ADMIN"]}>
+              <ActiveUserLayout>
+                <AcquirerAccountStatement />
               </ActiveUserLayout>
             </ProtectedLayout>
           }

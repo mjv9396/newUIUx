@@ -22,7 +22,6 @@ const Overlay = ({docUrl, docId, userId, onClose, isVerified, rejectReason }) =>
 
 
     const handleAccept = async () => {
-        console.log("Accepting document", userId, docId);
         await acceptDoc({ userId: String(userId), documentId: String(docId) });
         onClose();
     };
@@ -40,6 +39,43 @@ const Overlay = ({docUrl, docId, userId, onClose, isVerified, rejectReason }) =>
         setShowRejectModal(false);
         onClose();
     };
+
+
+    const fetchUrlAndCreateIframeUrl = async(url) => {
+        const res = await fetch(url, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+        if (!res.ok) {
+            throw new Error("Failed to fetch document");
+        }
+        const blob = await res.blob();
+        return URL.createObjectURL(blob);
+    }
+
+    useEffect(() => {
+        if (docUrl?.endsWith(".pdf")) {
+            // If the document is a PDF, create an iframe URL
+            fetchUrlAndCreateIframeUrl(docUrl)
+                .then((url) => {
+                    docUrl = url; // Update docUrl to the blob URL
+                })
+                .catch((error) => {
+                    console.error("Error fetching document:", error);
+                });
+        } else {
+            // If the document is an image, create a blob URL
+            fetchUrlAndCreateIframeUrl(docUrl)
+                .then((url) => {
+                    docUrl = url; // Update docUrl to the blob URL
+                })
+                .catch((error) => {
+                    console.error("Error fetching document:", error);
+                });
+        }
+    }, [docUrl]);
 
     return (
         <div className={styles.modal}>
@@ -79,6 +115,9 @@ const Overlay = ({docUrl, docId, userId, onClose, isVerified, rejectReason }) =>
                 </span>
             </div>
             <div className={styles.detail}>
+
+                
+                
                 {docUrl && (
                     <img
                         src={docUrl}

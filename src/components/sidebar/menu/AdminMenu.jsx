@@ -255,14 +255,47 @@ const AdminMenu = memo(({ toggle, setToggle }) => {
               </span>
             </Link>
           </li>
-          <li className={styles.menuItem}>
+          {/* <li className={styles.menuItem}>
             <Link to="/virtual-account">
               <span>
                 <img src={chargeback} alt="user" width={20} height={20} />
                 <span>Virtual Collections</span>
               </span>
             </Link>
+          </li> */}
+
+        <li className={styles.menuItem}>
+            <Link
+              to="#virtual"
+              data-bs-toggle="collapse"
+              role="button"
+              aria-expanded="false"
+              aria-controls="#virtual"
+            >
+              <span>
+                <img src={bank} alt="virtual" width={20} height={20} />
+                <span>Virtual Collections</span>
+              </span>
+              <i className="bi bi-chevron-down"></i>
+            </Link>
+
+            <ul className={`${styles.subMenu} collapse`} id="virtual">
+              <li>
+                <Link to="/virtual-account">
+                  <span>Virtual Transactions</span>
+                </Link>
+              </li>
+              <li>
+                <Link to="/check-account-balance">
+                  <span>Check Account Balance</span>
+                </Link>
+              </li>
+             
+            </ul>
           </li>
+
+
+
           <li className={styles.menuItem}>
             <Link
               to="#fraud"

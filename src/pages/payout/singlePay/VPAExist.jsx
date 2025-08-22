@@ -137,6 +137,7 @@ const VPAExist = () => {
                       --Select Mode of Transaction--
                     </option>
                     <option value="NEFT">NEFT</option>
+                    <option value="IFT">IFT</option>
                     <option value="RTGS">RTGS</option>
                     <option value="IMPS">IMPS</option>
                     <option value="UPI">UPI</option>

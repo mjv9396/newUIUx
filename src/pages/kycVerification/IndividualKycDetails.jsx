@@ -2,9 +2,11 @@ import { useEffect, useState } from "react";
 import FileUploader from "../../components/fileUploader/FileUploader";
 import styles from "../../styles/login/Form.module.css";
 import usePost from "../../hooks/usePost";
+import useFetch from "../../hooks/useFetch";
 import { endpoints } from "../../services/apiEndpoints";
 import { errorMessage, successMessage } from "../../utils/messges";
 import styles2 from "../../styles/kycVerification/KycVerification.module.css";
+import { GetUserId } from "../../services/cookieStore";
 
 export default function IndividualKycDetails({
   formData,
@@ -14,6 +16,7 @@ export default function IndividualKycDetails({
   setPanVerified,
   aadhaarVerified,
   setAadhaarVerified,
+  kycData,
 }) {
   const {
     postData: verifyPan,
@@ -22,22 +25,30 @@ export default function IndividualKycDetails({
     error: panError,
   } = usePost(endpoints.kyc.verifyPan, true);
 
-  const [aadhaarOtpSent, setAadhaarOtpSent] = useState(false);
-  const [aadhaarOtp, setAadhaarOtp] = useState("");
+  const [digilockerRequestId, setDigilockerRequestId] = useState("");
+  const [digilockerInitialized, setDigilockerInitialized] = useState(false);
 
   const {
-    postData: sendAadhaarOtp,
-    loading: aadhaarOtpLoading,
-    data: aadhaarOtpResponse,
-    error: aadhaarOtpError,
-  } = usePost(endpoints.kyc.sendAadharOtp, true);
+    postData: initializeDigilocker,
+    loading: digilockerInitLoading,
+    data: digilockerInitResponse,
+    error: digilockerInitError,
+  } = usePost(endpoints.kyc.initializeDigilocker, true);
 
   const {
-    postData: verifyAadhaarOtp,
-    loading: aadhaarVerifyLoading,
-    data: aadhaarVerifyResponse,
-    error: aadhaarVerifyError,
-  } = usePost(endpoints.kyc.verifyAadharOtp);
+    postData: verifyAadhaarDigilocker,
+    loading: digilockerVerifyLoading,
+    data: digilockerVerifyResponse,
+    error: digilockerVerifyError,
+  } = usePost(endpoints.kyc.verifyAadhaarDigilocker, true);
+
+  // Fetch user profile data
+  const {
+    data: userProfileData,
+    loading: userProfileLoading,
+    error: userProfileError,
+    fetchData: fetchUserProfile,
+  } = useFetch();
 
   const handleVerifyPan = async () => {
     if (!formData.panNumber || !formData.panFile) {
@@ -46,40 +57,36 @@ export default function IndividualKycDetails({
 
     const formDataToSend = new FormData();
     formDataToSend.append("panNumber", formData.panNumber);
-    formDataToSend.append("userId", formData.userId || "");
+    formDataToSend.append("userId", GetUserId() || "");
     formDataToSend.append("img", formData.panFile);
     formDataToSend.append("type", "P");
 
     await verifyPan(formDataToSend);
   };
 
-  const handleSendAadhaarOtp = async () => {
+  const handleInitializeDigilocker = async () => {
     if (!formData.aadhaarNumber || !formData.aadharFile) {
       return;
     }
     const formDataToSend = new FormData();
     formDataToSend.append("aadhaarNumber", formData.aadhaarNumber);
-    formDataToSend.append("userId", formData.userId || "");
+    formDataToSend.append("userId", GetUserId() || "");
     formDataToSend.append("img", formData.aadharFile);
     formDataToSend.append("type", "P");
 
-    await sendAadhaarOtp(formDataToSend);
+    await initializeDigilocker(formDataToSend);
   };
 
-  const handleVerifyAadhaarOtp = async () => {
-    if (!aadhaarOtp || !formData.aadhaarNumber) {
+  const handleVerifyAadhaarDigilocker = async () => {
+    if (!digilockerRequestId) {
+      errorMessage("Please initialize DigiLocker authentication first.");
       return;
     }
     const dataToSend = {
-      aadhaarNumber: formData.aadhaarNumber,
-      otp: aadhaarOtp,
-      userId: formData.userId || "",
+      requestId: digilockerRequestId,
+      userId: GetUserId() || "",
     };
-    await verifyAadhaarOtp(dataToSend);
-  };
-
-  const handleOtpChange = (e) => {
-    setAadhaarOtp(e.target.value);
+    await verifyAadhaarDigilocker(dataToSend);
   };
 
   // Handle PAN verification response
@@ -90,33 +97,95 @@ export default function IndividualKycDetails({
     }
   }, [panResponse, panError, setPanVerified]);
 
-  // Handle Aadhaar OTP send response
+  // Handle DigiLocker initialization response
   useEffect(() => {
     if (
-      aadhaarOtpResponse &&
-      !aadhaarOtpError &&
-      aadhaarOtpResponse.statusCode < 400
+      digilockerInitResponse &&
+      !digilockerInitError &&
+      digilockerInitResponse.statusCode < 400
     ) {
-      successMessage(aadhaarOtpResponse.data || "OTP sent successfully.");
-      setAadhaarOtpSent(true);
-    } else if( aadhaarOtpError || (aadhaarOtpResponse && aadhaarOtpResponse.statusCode >= 400)) {
+      const { authUrl, requestId } = digilockerInitResponse.data.result;
+      setDigilockerRequestId(requestId);
+      setDigilockerInitialized(true);
+      successMessage(
+        digilockerInitResponse.data.message ||
+          "DigiLocker auth URL generated successfully."
+      );
+
+      // Open the auth URL in a new tab
+      window.open(authUrl, "_blank");
+    } else if (
+      digilockerInitError ||
+      (digilockerInitResponse && digilockerInitResponse.statusCode >= 400)
+    ) {
       errorMessage(
-        aadhaarOtpResponse?.data || "Failed to send OTP. Please try again."
+        digilockerInitResponse?.data ||
+          "Failed to initialize DigiLocker. Please try again."
       );
     }
-  }, [aadhaarOtpResponse, aadhaarOtpError]);
+  }, [digilockerInitResponse, digilockerInitError]);
 
-  // Handle Aadhaar OTP verification response
+  // Handle DigiLocker verification response
   useEffect(() => {
-    if (aadhaarVerifyResponse && !aadhaarVerifyError) {
+    if (digilockerVerifyResponse?.statusCode >= 400 || digilockerVerifyError) {
+      errorMessage(
+        digilockerVerifyResponse?.data ||
+          "Failed to verify Aadhaar via DigiLocker. Please try again."
+      );
+    }
+    if (
+      digilockerVerifyResponse &&
+      !digilockerVerifyError &&
+      digilockerVerifyResponse?.statusCode < 400
+    ) {
       successMessage(
-        aadhaarVerifyResponse.message || "Aadhaar verified successfully."
+        digilockerVerifyResponse.data ||
+          "Aadhaar verified successfully via DigiLocker."
       );
       setAadhaarVerified(true);
-      setAadhaarOtpSent(false);
-      setAadhaarOtp("");
+      setDigilockerInitialized(false);
+      setDigilockerRequestId("");
     }
-  }, [aadhaarVerifyResponse, aadhaarVerifyError, setAadhaarVerified]);
+  }, [digilockerVerifyResponse, digilockerVerifyError, setAadhaarVerified]);
+
+  // Fetch user profile data on component mount
+  useEffect(() => {
+    fetchUserProfile(endpoints.user.fullProfile);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Get user profile information
+  const getUserEmail = () => {
+    if (userProfileLoading) return "Loading...";
+    return userProfileData?.data?.email || formData.email || "";
+  };
+
+  const getUserPhone = () => {
+    if (userProfileLoading) return "Loading...";
+    return userProfileData?.data?.phoneNumber || formData.phone || "";
+  };
+
+  // Get document information from kycData
+  const getDocumentInfo = (documentType) => {
+    if (kycData && kycData.data && Array.isArray(kycData.data)) {
+      return kycData.data.find((doc) => doc.documentType === documentType);
+    }
+    return null;
+  };
+
+  const aadhaarDoc = getDocumentInfo("AADHAAR_CARD");
+  const panDoc = getDocumentInfo("PAN_CARD");
+
+  // Helper function to determine document status
+  const getDocumentStatus = (doc) => {
+    if (!doc) return "none";
+    if (doc.verified) return "verified";
+    if (doc.rejectedReasion && doc.rejectedReasion.trim() !== "")
+      return "rejected";
+    return "pending";
+  };
+
+  const panStatus = getDocumentStatus(panDoc);
+  const aadhaarStatus = getDocumentStatus(aadhaarDoc);
 
   return (
     <div className="container-fluid">
@@ -134,9 +203,14 @@ export default function IndividualKycDetails({
               name="email"
               id="email"
               onChange={handleChange}
-              value={formData.email}
-              className={`${styles.input} form-control`}
+              value={getUserEmail()}
+              disabled={true}
+              className={`${styles.input} form-control bg-light`}
             />
+            <small className="text-muted d-flex align-items-center mt-1">
+              <i className="bi bi-check-circle-fill text-success me-1"></i>
+              Email verified during registration
+            </small>
             {errors.email && (
               <small className="text-danger d-block mt-1">{errors.email}</small>
             )}
@@ -156,9 +230,14 @@ export default function IndividualKycDetails({
               name="phone"
               id="phone"
               onChange={handleChange}
-              value={formData.phone}
-              className={`${styles.input} form-control`}
+              value={getUserPhone()}
+              disabled={true}
+              className={`${styles.input} form-control bg-light`}
             />
+            <small className="text-muted d-flex align-items-center mt-1">
+              <i className="bi bi-check-circle-fill text-success me-1"></i>
+              Phone verified during registration
+            </small>
             {errors.phone && (
               <small className="text-danger d-block mt-1">{errors.phone}</small>
             )}
@@ -180,18 +259,60 @@ export default function IndividualKycDetails({
                 id="panNumber"
                 onChange={handleChange}
                 value={formData.panNumber}
-                disabled={panVerified}
+                disabled={panStatus === "verified" || panStatus === "pending" || panVerified}
                 className={`${styles.input} form-control flex-grow-1 ${
-                  panVerified ? "bg-light" : ""
+                  panStatus === "verified" || panStatus === "pending"
+                    ? "bg-light"
+                    : ""
                 }`}
               />
               <FileUploader
                 name="panFile"
                 onChange={handleChange}
-                accept="application/pdf,image/*"
-                disabled={panVerified}
+                accept="image/*"
+                disabled={panStatus === "verified" || panStatus === "pending" || panVerified}
               />
             </div>
+            {/* Show document status information */}
+            {panDoc && (
+              <div
+                className={`alert ${
+                  panStatus === "verified"
+                    ? "alert-success"
+                    : panStatus === "rejected"
+                    ? "alert-danger"
+                    : "alert-warning"
+                } py-2 px-3 mb-2`}
+              >
+                <small>
+                  <i
+                    className={`bi ${
+                      panStatus === "verified"
+                        ? "bi-check-circle"
+                        : panStatus === "rejected"
+                        ? "bi-x-circle"
+                        : "bi-clock"
+                    } me-1`}
+                  ></i>
+                  Document uploaded on {panDoc.createdDate} -
+                  <strong className="ms-1">
+                    {panStatus === "verified"
+                      ? "Verified"
+                      : panStatus === "rejected"
+                      ? "Rejected"
+                      : "Pending Verification"}
+                  </strong>
+                  {panDoc.documentName && (
+                    <span className="ms-1">({panDoc.documentName})</span>
+                  )}
+                  {panStatus === "rejected" && panDoc.rejectedReasion && (
+                    <div className="mt-1">
+                      <strong>Reason:</strong> {panDoc.rejectedReasion}
+                    </div>
+                  )}
+                </small>
+              </div>
+            )}
             <div className="d-flex gap-2 align-items-center mb-2">
               <button
                 type="button"
@@ -201,7 +322,8 @@ export default function IndividualKycDetails({
                   panLoading ||
                   !formData.panNumber ||
                   !formData.panFile ||
-                  panVerified
+                  panStatus === "verified" ||
+                  panStatus === "pending" || panVerified
                 }
               >
                 {panLoading ? (
@@ -213,19 +335,24 @@ export default function IndividualKycDetails({
                     ></span>
                     Verifying...
                   </>
-                ) : panVerified ? (
+                ) : panStatus === "verified" ? (
                   <>
                     <i className="bi bi-check-circle me-1"></i>
                     Verified
                   </>
+                ) : panStatus === "pending" ? (
+                  <>
+                    <i className="bi bi-clock me-1"></i>
+                    Pending Verification
+                  </>
                 ) : (
-                  "Verify PAN"
+                  panVerified ? "Verified" : "Verify PAN"
                 )}
               </button>
             </div>
             <small className="text-muted d-flex align-items-center">
               <i className="bi bi-info-circle me-1"></i>
-              Upload a valid PAN card image or PDF file
+              Upload a valid PAN card image
             </small>
             {(errors.panNumber || errors.panFile) && (
               <small className="text-danger d-block mt-1">
@@ -250,96 +377,122 @@ export default function IndividualKycDetails({
                 id="aadhaarNumber"
                 onChange={handleChange}
                 value={formData.aadhaarNumber}
-                disabled={aadhaarVerified || aadhaarOtpSent}
+                disabled={
+                  aadhaarStatus === "verified" || aadhaarStatus === "pending"
+                }
                 className={`${styles.input} form-control flex-grow-1 ${
-                  aadhaarVerified ? "bg-light" : ""
+                  aadhaarStatus === "verified" || aadhaarStatus === "pending"
+                    ? "bg-light"
+                    : ""
                 }`}
               />
               <FileUploader
                 name="aadharFile"
                 onChange={handleChange}
-                accept="application/pdf,image/*"
-                disabled={aadhaarVerified}
+                accept="image/*"
+                disabled={
+                  aadhaarStatus === "verified" || aadhaarStatus === "pending"
+                }
               />
             </div>
 
-            {/* Show OTP input if OTP is sent but not verified */}
-            {aadhaarOtpSent && !aadhaarVerified && (
-              <div className="mb-2">
-                <input
-                  type="text"
-                  placeholder="Enter OTP"
-                  value={aadhaarOtp}
-                  onChange={handleOtpChange}
-                  className={`${styles.input} form-control`}
-                  maxLength="6"
-                />
-                <small className="text-muted">
-                  Enter the 6-digit OTP sent to your registered mobile number
+            {/* Show document status information */}
+            {aadhaarDoc && (
+              <div
+                className={`alert ${
+                  aadhaarStatus === "verified"
+                    ? "alert-success"
+                    : aadhaarStatus === "rejected"
+                    ? "alert-danger"
+                    : "alert-warning"
+                } py-2 px-3 mb-2`}
+              >
+                <small>
+                  <i
+                    className={`bi ${
+                      aadhaarStatus === "verified"
+                        ? "bi-check-circle"
+                        : aadhaarStatus === "rejected"
+                        ? "bi-x-circle"
+                        : "bi-clock"
+                    } me-1`}
+                  ></i>
+                  Document uploaded on {aadhaarDoc.createdDate} -
+                  <strong className="ms-1">
+                    {aadhaarStatus === "verified"
+                      ? "Verified"
+                      : aadhaarStatus === "rejected"
+                      ? "Rejected"
+                      : "Pending Verification"}
+                  </strong>
+                  {aadhaarDoc.documentName && (
+                    <span className="ms-1">({aadhaarDoc.documentName})</span>
+                  )}
+                  {aadhaarStatus === "rejected" &&
+                    aadhaarDoc.rejectedReasion && (
+                      <div className="mt-1">
+                        <strong>Reason:</strong> {aadhaarDoc.rejectedReasion}
+                      </div>
+                    )}
                 </small>
               </div>
             )}
 
-            <div className="d-flex gap-2 align-items-center mb-2">
-              {!aadhaarOtpSent ? (
-                <button
-                  type="button"
-                  className={styles2.button}
-                  onClick={handleSendAadhaarOtp}
-                  disabled={
-                    aadhaarOtpLoading ||
-                    !formData.aadhaarNumber ||
-                    !formData.aadharFile ||
-                    aadhaarVerified
-                  }
-                >
-                  {aadhaarOtpLoading ? (
-                    <>
-                      <span
-                        className="spinner-border spinner-border-sm me-1"
-                        role="status"
-                        aria-hidden="true"
-                      ></span>
-                      Sending OTP...
-                    </>
-                  ) : (
-                    "Send OTP"
-                  )}
-                </button>
-              ) : !aadhaarVerified ? (
+            <div className="d-flex gap-2 align-items-center mb-2 flex-wrap">
+              {aadhaarStatus !== "verified" && aadhaarStatus !== "pending" && (
                 <>
+                  {/* DigiLocker Initialize Button */}
                   <button
                     type="button"
-                    className="btn btn-success btn-sm px-4"
-                    onClick={handleVerifyAadhaarOtp}
-                    disabled={aadhaarVerifyLoading || !aadhaarOtp}
+                    className="btn btn-primary btn-sm"
+                    onClick={handleInitializeDigilocker}
+                    disabled={
+                      digilockerInitLoading ||
+                      !formData.aadhaarNumber ||
+                      !formData.aadharFile
+                    }
                   >
-                    {aadhaarVerifyLoading ? (
+                    {digilockerInitLoading ? (
                       <>
                         <span
                           className="spinner-border spinner-border-sm me-1"
                           role="status"
                           aria-hidden="true"
                         ></span>
-                        Verifying...
+                        Initializing...
                       </>
                     ) : (
-                      "Verify OTP"
+                      "Initialize DigiLocker"
                     )}
                   </button>
-                  <button
-                    type="button"
-                    className="btn btn-outline-secondary btn-sm"
-                    onClick={() => {
-                      setAadhaarOtpSent(false);
-                      setAadhaarOtp("");
-                    }}
-                    disabled={aadhaarVerifyLoading}
-                  >
-                    Cancel
-                  </button>
+
+                  {/* DigiLocker Verify Button */}
+                  {digilockerInitialized && (
+                    <button
+                      type="button"
+                      className="btn btn-success btn-sm"
+                      onClick={handleVerifyAadhaarDigilocker}
+                      disabled={digilockerVerifyLoading || !digilockerRequestId}
+                    >
+                      {digilockerVerifyLoading ? (
+                        <>
+                          <span
+                            className="spinner-border spinner-border-sm me-1"
+                            role="status"
+                            aria-hidden="true"
+                          ></span>
+                          Verifying...
+                        </>
+                      ) : (
+                        "Verify via DigiLocker"
+                      )}
+                    </button>
+                  )}
                 </>
-              ) : (
+              )}
+
+              {/* Show status for verified/pending documents */}
+              {aadhaarStatus === "verified" && (
                 <button
                   type="button"
                   className="btn btn-success btn-sm px-4"
@@ -349,11 +502,23 @@ export default function IndividualKycDetails({
                   Verified
                 </button>
               )}
+
+              {aadhaarStatus === "pending" && (
+                <button
+                  type="button"
+                  className="btn btn-warning btn-sm px-4"
+                  disabled
+                >
+                  <i className="bi bi-clock me-1"></i>
+                  Pending Verification
+                </button>
+              )}
             </div>
 
             <small className="text-muted d-flex align-items-center">
               <i className="bi bi-info-circle me-1"></i>
-              Upload a valid Aadhaar card image or PDF file
+              Upload a valid Aadhaar card image. Verify using
+              DigiLocker for secure authentication.
             </small>
             {(errors.aadhaarNumber || errors.aadharFile) && (
               <small className="text-danger d-block mt-1">

@@ -11,6 +11,77 @@ const Backdrop = () => {
 };
 const Overlay = ({ data, onClose }) => {
   const navigate = useNavigate();
+
+  // Timeline logic mapping
+
+  const statusSubcode = data?.statusSubcode;
+
+  const timeline = [
+    {
+      label: "INITIATED",
+
+      className: "text-primary",
+
+      message: "Transaction initiated",
+
+      code: "INIT",
+
+      date: data?.dateOfIssue || "N/A",
+    },
+  ];
+
+  // Pending codes
+
+  const isPending = statusSubcode === "001" || statusSubcode === "002";
+
+  // Success code
+
+  const isSuccess = statusSubcode === "000";
+
+  // Failed codes
+
+  const isFailed = statusSubcode === "007" || statusSubcode === "008";
+
+  if (isPending || isSuccess || isFailed) {
+    timeline.push({
+      label: "PENDING",
+
+      className: "text-info",
+
+      message: "Transaction processing",
+
+      code: "001/002",
+
+      date: data?.dateOfIssue || "N/A",
+    });
+  }
+
+  if (isSuccess) {
+    timeline.push({
+      label: "SUCCESS",
+
+      className: "text-success",
+
+      message: "SUCCESS",
+
+      code: "000",
+
+      date: data?.dateOfIssue || "N/A",
+    });
+  } else if (isFailed) {
+    timeline.push({
+      label: "FAILED",
+
+      className: "text-danger",
+
+      message: "Transaction failed",
+
+      code: statusSubcode,
+
+      date: data?.dateOfIssue || "N/A",
+    });
+  }
+
   return (
     <div className={styles.modal}>
       <div
@@ -210,48 +281,18 @@ const Overlay = ({ data, onClose }) => {
                     <div id={styles["timeline-container"]}>
                       <div className={styles["inner-container"]}>
                         <ul className={styles.timeline}>
-                          <li
-                            className={styles["timeline-item"]}
-                            data-date={data?.dateOfIssue || "N/A"}
-                          >
-                            <b className="text-info">PENDING</b> <br />
-                            <b>Message</b> Transaction processing <br />
-                            <b>Code</b> 001
-                          </li>
-                          {(data?.statusSubcode === "002" ||
-                            parseInt(data?.statusSubcode) >= 0) && (
+                          {timeline.map((item, idx) => (
                             <li
+                              key={idx}
                               className={styles["timeline-item"]}
-                              data-date={data?.dateOfIssue || "N/A"}
+                              data-date={item.date}
                             >
-                              <b className="text-warning">PROCESSING</b>
+                              <b className={item.className}>{item.label}</b>
                               <br />
-                              <b>Message</b> Transaction <br />
-                              pending at bank
-                              <br />
-                              <b>Code</b> 002
+                              <b>Message</b> {item.message} <br />
+                              <b>Code</b> {item.code}
                             </li>
-                          )}
-                          {data?.statusSubcode === "000" ? (
-                            <li
-                              className={styles["timeline-item"]}
-                              data-date={data?.dateOfIssue || "N/A"}
-                            >
-                              <b className="text-success">SUCCESS</b> <br />
-                              <b>Message</b> SUCCESS <br />
-                              <b>Code</b> {data?.statusSubcode || "N/A"}
-                            </li>
-                          ) : data?.statusSubcode !== "001" ||
-                            data?.statusSubcode !== "002" ? (
-                            <li
-                              className={styles["timeline-item"]}
-                              data-date={data?.dateOfIssue || "N/A"}
-                            >
-                              <b className="text-danger">FAILED</b> <br />
-                              <b>Message</b> Transaction failed <br />
-                              <b>Code</b> {data?.statusSubcode || "N/A"}
-                            </li>
-                          ) : null}
+                          ))}
                         </ul>
                       </div>
                     </div>

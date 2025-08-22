@@ -1,17 +1,22 @@
 /* eslint-disable react/prop-types */
-import { Fragment } from "react";
+import { Fragment, useState } from 'react';
 import styles from "../../../../styles/common/Modal.module.css";
 import classes from "../../../../styles/common/Add.module.css";
 import { createPortal } from "react-dom";
 import { useNavigate } from "react-router-dom";
 import { GetUserRole } from "../../../../services/cookieStore";
+import RefundModel from './RefundModel';
 const Backdrop = () => {
   return <div className={styles.backdrop}></div>;
 };
 const Overlay = ({ data, onClose }) => {
   const navigate = useNavigate();
+  const [showRefund, setShowRefund] = useState(false);
   return (
     <div className={styles.modal}>
+      {showRefund && (
+        <RefundModel data={data} onClose={() => setShowRefund(false)} />
+      )}
       <div
         className="d-flex justify-content-between mb-1 position-sticky top-0 z-2 bg-white py-4"
         id={styles.title}
@@ -28,7 +33,10 @@ const Overlay = ({ data, onClose }) => {
               >
                 Raise Dispute
               </button>
-              <button className={classes.submit + " " + classes.active}>
+              <button
+                className={classes.submit + " " + classes.active}
+                onClick={() => setShowRefund(true)}
+              >
                 Refund
               </button>
             </>
@@ -67,10 +75,10 @@ const Overlay = ({ data, onClose }) => {
                   </td>
                 </tr>
                 <tr>
-                  <td>Order Id</td>
-                  <td>{data.orderId}</td>
                   <td>Transaction Id</td>
                   <td>{data.txnId}</td>
+                  <td>Order Id</td>
+                  <td>{data.orderId}</td>
                 </tr>
                 <tr>
                   <td>Merchant Name</td>

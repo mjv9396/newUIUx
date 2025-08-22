@@ -64,3 +64,134 @@
   padding: 0;
   margin: 0;
 }
+
+/* Table styles for multiple charging details */
+.chargingTable {
+  min-width: 1400px; /* Ensures horizontal scroll on smaller screens */
+}
+
+.chargingTable th {
+  font-size: 0.75rem !important;
+  font-weight: 600 !important;
+  text-align: center !important;
+  vertical-align: middle !important;
+  padding: 8px 4px !important;
+  background-color: #f8f9fa !important;
+  border: 1px solid #dee2e6 !important;
+}
+
+.chargingTable td {
+  padding: 4px !important;
+  vertical-align: middle !important;
+  border: 1px solid #dee2e6 !important;
+}
+
+.chargingTable input,
+.chargingTable select {
+  font-size: 0.75rem !important;
+  padding: 4px 6px !important;
+  border: 1px solid #ced4da !important;
+  border-radius: 4px !important;
+  min-width: 80px;
+}
+
+.chargingTable .form-control:disabled {
+  background-color: #f8f9fa !important;
+  opacity: 0.8;
+}
+
+.chargingTable .btn-sm {
+  padding: 2px 8px !important;
+  font-size: 0.7rem !important;
+}
+
+.tableContainer {
+  max-height: 70vh;
+  overflow-y: auto;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+}
+
+.commonSection {
+  background-color: #f8f9fa;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  border: 1px solid #dee2e6;
+}
+
+.sectionTitle {
+  color: var(--secondary);
+  font-weight: 600;
+  margin-bottom: 15px;
+  font-size: 1.1rem;
+}
+
+/* Custom button styles using global colors */
+.refreshBtn {
+  padding: 8px 16px;
+  border: 2px solid var(--primary);
+  background-color: transparent;
+  color: var(--primary);
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: none;
+  letter-spacing: 0.02em;
+}
+
+.refreshBtn:hover {
+  background-color: var(--primary);
+  color: white;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(19, 102, 170, 0.2);
+}
+
+.refreshBtn:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 4px rgba(19, 102, 170, 0.3);
+}
+
+.refreshBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.refreshBtn:disabled:hover {
+  background-color: transparent;
+  color: var(--primary);
+  transform: none;
+}
+
+/* Global color utility classes */
+.primaryText {
+  color: var(--primary) !important;
+}
+
+.primarySpinner {
+  color: var(--primary) !important;
+}
+
+.dangerAlert {
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
+  color: #721c24;
+  padding: 12px 16px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+}
+
+.successAlert {
+  background-color: #d4edda;
+  border: 1px solid var(--secondary);
+  color: var(--secondary);
+  padding: 12px 16px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+}

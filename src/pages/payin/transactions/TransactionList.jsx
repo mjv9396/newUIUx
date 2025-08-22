@@ -14,6 +14,7 @@ import { errorMessage } from "../../../utils/messges";
 import ExpandableFilterInput from "../../../ui/TextInput";
 import Filters from "../../../ui/Filter";
 import Dropdown from "../../../ui/Dropdown";
+import { PageSizes } from "../../../utils/constants";
 
 const PayinTransactionList = () => {
   const tableRef = useRef(null);
@@ -201,9 +202,9 @@ const PayinTransactionList = () => {
             statusOptions={
               [
                 { id: "", name: "ALL" },
-                { id: "PENDING", name: "PENDING" },
-                { id: "REJECTED", name: "REJECTED" },
                 { id: "SUCCESS", name: "SUCCESS" },
+                { id: "PENDING", name: "PENDING" },
+                { id: "SENTTOBANK", name: "SENTTOBANK" },
                 { id: "FAILED", name: "FAILED" },
               ] || []
             }
@@ -222,14 +223,7 @@ const PayinTransactionList = () => {
           />
 
           <Dropdown
-            data={[
-              { id: "25", name: "25" },
-              { id: "1000", name: "1000" },
-              { id: "5000", name: "5000" },
-              { id: "10000", name: "10000" },
-              { id: "50000", name: "50000" },
-              { id: "100000", name: "100000" },
-            ]}
+            data={PageSizes}
             placeholder="Select Number of Transaction"
             selected={{
               id: formData.size,
@@ -280,9 +274,9 @@ const PayinTransactionList = () => {
                 >
                   <thead>
                     <tr>
-                      <th style={{ minWidth: 75, position: "sticky", left: 0, zIndex: 12 }}>View</th>
-                      <th style={{ minWidth: 100, position: "sticky", left: 75, zIndex: 12 }}>Order Id</th>
+                      <th style={{ minWidth: 75 }}>View</th>
                       <th>Transaction ID</th>
+                      <th>Order Id</th>
                       <th>Date</th>
                       <th>Business Name</th>
                       {GetUserRole() === "ADMIN" && <th>Acquirer</th>}
@@ -297,22 +291,39 @@ const PayinTransactionList = () => {
                     {data && data.data.content.length > 0 ? (
                       data.data.content.map((item) => (
                         <tr key={item.txnPayinId}>
-                          <td style={{ minWidth: 75, position: "sticky", left: 0, zIndex: 12 }}>
+                          <td>
                             <i
                               className="bi bi-eye-fill text-success"
                               onClick={() => handleViewDetail(item)}
                             ></i>
                           </td>
-                          <td style={{ minWidth: 100, position: "sticky", left: 75, zIndex: 12 }}>{item.orderId}</td>
                           <td>{item.txnId}</td>
-                          <td>{item.createdDate}</td>
+                          <td>{item.orderId}</td>
+                          <td><span>
+                            <i class="bi bi-calendar3"></i>{" "}
+                            {
+                              new Date(item.createdDate)
+                                .toISOString()
+                                .split("T")[0]
+                            }<br/>
+                            <i class="bi bi-clock"></i>{" "}
+                            {new Date(item.createdDate).toLocaleTimeString(
+                              "en-US",
+                              {
+                                hour: "2-digit",
+                                minute: "2-digit",
+                                second: "2-digit",
+                                hour12: true,
+                              }
+                            )}
+                          </span></td>
                           <td>{item.businessName || "NA"}</td>
                           {GetUserRole() === "ADMIN" && (
-                            <td>{item.pgAcqName || "NA"}</td>
+                            <td>{item.pgAcqCode || "NA"}</td>
                           )}
                           <td>{item.amount || 0.0}</td>
                           <td>{item.txnStatus}</td>
-                          <td>{item.utr || "NA"}</td>
+                          <td>{item.utr || "-"}</td>
                           <td>{item.custEmail || "NA"}</td>
                           <td>{item.custPhone || "NA"}</td>
                         </tr>

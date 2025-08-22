@@ -21,13 +21,13 @@ const PayoutAcquirerMapping = ({ userId }) => {
     loading: acquirerListLoading,
   } = useFetch();
 
-  // fetch acquirer profile list
+  // fetch acquirer profile list based on acquirer code
   const {
-    postData: getAcquirerProfileList,
+    fetchData: getAcquirerProfileByCode,
     data: acquirerProfileList,
     error: acquirerProfileListError,
     loading: acquirerProfileListLoading,
-  } = usePost(endpoints.payout.acquirerProfileList);
+  } = useFetch();
   // fetch priority and amount limit
   const {
     postData: getPriorityAndLimit,
@@ -37,7 +37,6 @@ const PayoutAcquirerMapping = ({ userId }) => {
 
   useEffect(() => {
     getAcquirerList(endpoints.payin.acquirerList);
-    getAcquirerProfileList();
   }, []);
   // form handlers
   const [formData, setFormData] = useState(() => mapAcquirerProfile(userId));
@@ -58,6 +57,13 @@ const PayoutAcquirerMapping = ({ userId }) => {
         amountLimit: "",
       }));
       setCanSubmit(false);
+
+      // Fetch acquirer profiles when acquirer is selected
+      if (name === "acqCode" && value) {
+        getAcquirerProfileByCode(
+          `${endpoints.payout.acquirerProfileByAcqCode}?acqCode=${value}`
+        );
+      }
     }
   };
 
@@ -159,12 +165,9 @@ const PayoutAcquirerMapping = ({ userId }) => {
     return <Error error="Error loading Acquirer Profile List" />;
 
   // Loading handling
-  if (acquirerListLoading || acquirerProfileListLoading)
-    return (
-      <Loading loading="Loading Merchant, Acquirer, Payment Type and Currency List" />
-    );
+  if (acquirerListLoading) return <Loading loading="Loading Acquirer List" />;
 
-  if (acquirerList && acquirerProfileList) {
+  if (acquirerList) {
     return (
       <>
         <div>
@@ -210,19 +213,25 @@ const PayoutAcquirerMapping = ({ userId }) => {
                 value={formData.acqProfileId}
                 onChange={handleChange}
                 required
+                disabled={!formData.acqCode || acquirerProfileListLoading}
               >
                 <option value="" disabled>
-                  --Select acquirer profile--
+                  {!formData.acqCode
+                    ? "--Please select acquirer first--"
+                    : acquirerProfileListLoading
+                    ? "--Loading profiles--"
+                    : "--Select acquirer profile--"}
                 </option>
-                {acquirerProfileList.data.length > 0 ? (
-                  acquirerProfileList.data.map((item) => (
-                    <option key={item.acqProfileId} value={item.acqProfileId}>
-                      {item.firstName} {item.lastName}
-                    </option>
-                  ))
-                ) : (
-                  <option>No acquirer profile added</option>
-                )}
+                {acquirerProfileList?.data?.length > 0
+                  ? acquirerProfileList.data.map((item) => (
+                      <option key={item.acqProfileId} value={item.acqProfileId}>
+                        {item.firstName} {item.lastName}
+                      </option>
+                    ))
+                  : formData.acqCode &&
+                    !acquirerProfileListLoading && (
+                      <option>No acquirer profile added</option>
+                    )}
               </select>
               {errors.acqProfileId && (
                 <span className="errors">{errors.acqProfileId}</span>
@@ -242,6 +251,7 @@ const PayoutAcquirerMapping = ({ userId }) => {
               >
                 <option value="">--Select Transfer Mode--</option>
                 <option value="IMPS">IMPS</option>
+                <option value="IFT">IFT</option>
                 <option value="NEFT">NEFT</option>
                 <option value="RTGS">RTGS</option>
                 <option value="UPI">UPI</option>

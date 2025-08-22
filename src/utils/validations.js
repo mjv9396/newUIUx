@@ -2,7 +2,7 @@ export const validateEmail = (email) => {
   // Regular Expression for validating email
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!email || email.trim() === "") return "Email is required";
-  else if (!emailRegex.test(email)) return "Invalid email format";
+  else if (!emailRegex.test(email)) return "Please enter a valid email address";
   return null;
 };
 
@@ -31,6 +31,15 @@ export const validateName = (name) => {
   }
   // Validate against the regex
   if (!nameRegex.test(name)) return "Invalid characters in name";
+  return null;
+};
+
+export const validateOrderId = (orderId) => {
+  if (!orderId || orderId.trim() === "") return "Order ID is required";
+  // Regular expression for valid order IDs (alphanumeric, underscores, hyphens)
+  const orderIdRegex = /^[a-zA-Z0-9_-]{2,100}$/;  
+  // Validate against the regex
+  if (!orderIdRegex.test(orderId)) return "Invalid characters in Order ID";
   return null;
 };
 
@@ -68,13 +77,27 @@ export const validateSSN = (ssn) => {
 //   return null;
 // };
 export const validateContact = (number) => {
-  const basicMobileRegex = /^[6-9]\d{9}$/; // India mobile numbers
-  const internationalRegex =
-    /^\+?[1-9]\d{1,2}[ -]?\(?\d{2,4}\)?[ -]?\d{3,4}[ -]?\d{4}$/;
   if (!number || number.trim() === "") return "Phone number is required";
-  if (!basicMobileRegex.test(number) && !internationalRegex.test(number)) {
-    return "Invalid phone number format";
+  
+  // Remove any spaces, hyphens, or parentheses for validation
+  const cleanNumber = number.replace(/[\s\-\(\)]/g, '');
+  
+  // Check if it contains only digits
+  if (!/^\d+$/.test(cleanNumber)) {
+    return "Phone number should contain only digits";
   }
+  
+  // Check length for Indian mobile numbers (10 digits)
+  if (cleanNumber.length !== 10) {
+    return "Phone number must be exactly 10 digits";
+  }
+  
+  // Check if it starts with valid Indian mobile number prefix
+  const basicMobileRegex = /^[6-9]\d{9}$/;
+  if (!basicMobileRegex.test(cleanNumber)) {
+    return "Phone number must start with 6, 7, 8, or 9";
+  }
+  
   return null;
 };
 export const validateIntegerNumber = (number) => {
@@ -100,7 +123,7 @@ export const validateEmpty = (data) => {
     data === null ||
     data === undefined ||
     data.length === 0 ||
-    data.trim() === ""
+    data === ""
   )
     return "Field Should not Empty";
   return null;

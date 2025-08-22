@@ -15,6 +15,7 @@ import Filters from "../../ui/Filter";
 import { GetUserRole, isMerchant } from "../../services/cookieStore";
 import Dropdown from "../../ui/Dropdown";
 import ExpandableFilterInput from "../../ui/TextInput";
+import { PageSizes } from "../../utils/constants";
 
 const PayoutTransaction = () => {
   const tableRef = useRef(null);
@@ -225,14 +226,7 @@ const PayoutTransaction = () => {
             />
 
             <Dropdown
-              data={[
-                { id: "25", name: "25" },
-                { id: "1000", name: "1000" },
-                { id: "5000", name: "5000" },
-                { id: "10000", name: "10000" },
-                { id: "50000", name: "50000" },
-                { id: "100000", name: "100000" },
-              ]}
+              data={PageSizes}
               placeholder=" Number of Transaction"
               selected={{
                 id: formData.size,
@@ -273,9 +267,12 @@ const PayoutTransaction = () => {
                     <th>Payout Date</th>
                     <th>Payment Mode</th>
                     <th>Transaction Status</th>
+                    
                     <th>Transaction Type</th>
                     <th>Amount</th>
                     <th>UTR Receipt</th>
+                    <th>Transaction Receipt Id</th>
+                    <th style={{whiteSpace:"nowrap", minWidth:"200px"}}>Transaction Status Code</th>
                     <th>Action</th>
                   </tr>
                 </thead>
@@ -286,7 +283,7 @@ const PayoutTransaction = () => {
                         <td>{item.orderId}</td>
                         <td>{item.transactionId}</td>
                         <td>{item.businessName}</td>
-                        <td>{item.acquirer || "NA"}</td>
+                        <td>{item.acquirer || "-"}</td>
                         <td>
                           <span>
                             <i class="bi bi-calendar3"></i>{" "}
@@ -309,9 +306,12 @@ const PayoutTransaction = () => {
                         </td>
                         <td>{item.transactionBankTransferMode}</td>
                         <td>{item.transactionStatus}</td>
+                        
                         <td>{item.transactionType}</td>
                         <td>{roundAmount(item.transactionAmmount)}</td>
-                        <td>{item.bankUtr || "NA"}</td>
+                        <td>{item.bankUtr || "-"}</td>
+                        <td>{item.transactionReceiptId || "-"}</td>
+                        <td>{item.statusSubcode}</td>
                         <td>
                           <select
                             name="transactionStatus"

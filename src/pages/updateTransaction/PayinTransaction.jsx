@@ -14,6 +14,7 @@ import { errorMessage, successMessage } from "../../utils/messges";
 import Filters from "../../ui/Filter";
 import Dropdown from "../../ui/Dropdown";
 import ExpandableFilterInput from "../../ui/TextInput";
+import { PageSizes } from "../../utils/constants";
 const PayinTransaction = () => {
   const tableRef = useRef(null);
   const [successAction, setSuccessAction] = useState(false);
@@ -227,14 +228,7 @@ const PayinTransaction = () => {
         />
 
         <Dropdown
-          data={[
-            { id: "25", name: "25" },
-            { id: "1000", name: "1000" },
-            { id: "5000", name: "5000" },
-            { id: "10000", name: "10000" },
-            { id: "50000", name: "50000" },
-            { id: "100000", name: "100000" },
-          ]}
+          data={PageSizes}
           placeholder=" Number of Transaction"
           selected={{
             id: formData.size,

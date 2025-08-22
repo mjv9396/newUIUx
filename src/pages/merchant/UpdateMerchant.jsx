@@ -16,7 +16,6 @@ import PayinTransactionFlag from "./components/PayinTransactionFlag";
 import PayinSettlement from "./components/PayinSettlement";
 import Webhooks from "./components/Webhooks";
 import KycDocuments from "./components/KycDocuments";
-import moonGif from "../../assets/moon.gif";
 const UpdateMerchant = () => {
   const [tab, setTab] = useState(1);
   const { state } = useLocation();
@@ -28,7 +27,7 @@ const UpdateMerchant = () => {
           <h5>APP ID: {state.appId}</h5>
         </div>
         <div className="row">
-          <div
+          <div 
             className="col-md-3 col-sm-12 px-3 "
             style={{
               borderRight: "3px dashed gray",
@@ -44,10 +43,7 @@ const UpdateMerchant = () => {
                   : styles.sidetab
               }
             >
-              <span>User Account Details</span>
-              {tab === 1 && (
-                <img src={moonGif} alt="moon" className={styles.moonIcon} />
-              )}
+              User Account Details
             </button>
             <button
               onClick={() => setTab(2)}
@@ -56,11 +52,9 @@ const UpdateMerchant = () => {
                   ? styles.sidetab + " " + styles.active
                   : styles.sidetab
               }
+              style={{ background: "lavender", color: "black" }}
             >
-              <span>Payin Acquirer Mapping</span>
-              {tab === 2 && (
-                <img src={moonGif} alt="moon" className={styles.moonIcon} />
-              )}
+              Payin Acquirer Mapping
             </button>
             <button
               onClick={() => setTab(11)}
@@ -69,11 +63,9 @@ const UpdateMerchant = () => {
                   ? styles.sidetab + " " + styles.active
                   : styles.sidetab
               }
+              style={{ background: "lavender", color: "black" }}
             >
-              <span>Payin Transaction Flag</span>
-              {tab === 11 && (
-                <img src={moonGif} alt="moon" className={styles.moonIcon} />
-              )}
+              Payin Transaction Flag
             </button>
             <button
               onClick={() => setTab(12)}
@@ -82,11 +74,9 @@ const UpdateMerchant = () => {
                   ? styles.sidetab + " " + styles.active
                   : styles.sidetab
               }
+              style={{ background: "lavender", color: "black" }}
             >
-              <span>Payin Settlement Cycle</span>
-              {tab === 12 && (
-                <img src={moonGif} alt="moon" className={styles.moonIcon} />
-              )}
+              Payin Settlement Cycle
             </button>
             <button
               onClick={() => setTab(10)}
@@ -95,11 +85,9 @@ const UpdateMerchant = () => {
                   ? styles.sidetab + " " + styles.active
                   : styles.sidetab
               }
+              style={{ background: "lightyellow", color: "black" }}
             >
-              <span>Payout Acquirer Mapping</span>
-              {tab === 10 && (
-                <img src={moonGif} alt="moon" className={styles.moonIcon} />
-              )}
+              Payout Acquirer Mapping
             </button>
             <button
               onClick={() => setTab(3)}
@@ -108,11 +96,9 @@ const UpdateMerchant = () => {
                   ? styles.sidetab + " " + styles.active
                   : styles.sidetab
               }
+              style={{ background: "lightyellow", color: "black" }}
             >
-              <span>Payout IP Whitelist</span>
-              {tab === 3 && (
-                <img src={moonGif} alt="moon" className={styles.moonIcon} />
-              )}
+              Payout IP Whitelist
             </button>
             <button
               onClick={() => setTab(9)}
@@ -121,11 +107,9 @@ const UpdateMerchant = () => {
                   ? styles.sidetab + " " + styles.active
                   : styles.sidetab
               }
+              style={{ background: "lightyellow", color: "black" }}
             >
-              <span>Transaction Rules</span>
-              {tab === 9 && (
-                <img src={moonGif} alt="moon" className={styles.moonIcon} />
-              )}
+              Transaction Rules
             </button>
             <button
               onClick={() => setTab(13)}
@@ -135,10 +119,7 @@ const UpdateMerchant = () => {
                   : styles.sidetab
               }
             >
-              <span>Webhooks</span>
-              {tab === 13 && (
-                <img src={moonGif} alt="moon" className={styles.moonIcon} />
-              )}
+              Webhooks
             </button>
             <button
               onClick={() => setTab(4)}
@@ -148,10 +129,7 @@ const UpdateMerchant = () => {
                   : styles.sidetab
               }
             >
-              <span>Personal Details</span>
-              {tab === 4 && (
-                <img src={moonGif} alt="moon" className={styles.moonIcon} />
-              )}
+              Personal Details
             </button>
             <button
               onClick={() => setTab(5)}
@@ -161,10 +139,7 @@ const UpdateMerchant = () => {
                   : styles.sidetab
               }
             >
-              <span>Verification Status</span>
-              {tab === 5 && (
-                <img src={moonGif} alt="moon" className={styles.moonIcon} />
-              )}
+              Verification Status
             </button>
             <button
               onClick={() => setTab(6)}
@@ -174,10 +149,7 @@ const UpdateMerchant = () => {
                   : styles.sidetab
               }
             >
-              <span>Bank Details</span>
-              {tab === 6 && (
-                <img src={moonGif} alt="moon" className={styles.moonIcon} />
-              )}
+              Bank Details
             </button>
             <button
               onClick={() => setTab(7)}
@@ -187,10 +159,7 @@ const UpdateMerchant = () => {
                   : styles.sidetab
               }
             >
-              <span>Company Details</span>
-              {tab === 7 && (
-                <img src={moonGif} alt="moon" className={styles.moonIcon} />
-              )}
+              Company Details
             </button>
             <button
               onClick={() => setTab(8)}
@@ -200,10 +169,7 @@ const UpdateMerchant = () => {
                   : styles.sidetab
               }
             >
-              <span>Operation Details</span>
-              {tab === 8 && (
-                <img src={moonGif} alt="moon" className={styles.moonIcon} />
-              )}
+              Operation Details
             </button>
             <button
               onClick={() => setTab(14)}
@@ -213,19 +179,13 @@ const UpdateMerchant = () => {
                   : styles.sidetab
               }
             >
-              <span>KYC Documents</span>
-              {tab === 14 && (
-                <img src={moonGif} alt="moon" className={styles.moonIcon} />
-              )}
+              KYC Documents
             </button>
           </div>
-          <div
-            style={{
+          <div style={{
               maxHeight: "60vh",
               overflow: "auto",
-            }}
-            className="col-md-9 col-sm-12 px-3"
-          >
+            }} className="col-md-9 col-sm-12 px-3">
             {tab === 1 && <UserAccount {...state} />}
             {tab === 2 && <PayinAcquirerMapping {...state} />}
             {tab === 11 && <PayinTransactionFlag {...state} />}

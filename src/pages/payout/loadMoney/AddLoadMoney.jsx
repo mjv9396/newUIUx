@@ -47,7 +47,6 @@ const AddLoadMoney = () => {
   };
 
   useEffect(() => {
-    console.log("🚀 ~ useEffect ~ data:", data)
     if (data?.statusCode < 400 && !error) {
       successMessage("Load Money Added Successfully");
       setFormData(addLoadMoney);

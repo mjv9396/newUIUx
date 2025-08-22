@@ -37,6 +37,7 @@ export default function KycForm() {
     handleChange,
     handleStepChange,
     handleSubmit,
+    processExistingDocuments,
   } = useKyc();
 
   const {
@@ -50,6 +51,50 @@ export default function KycForm() {
     // Fetch existing KYC data if available
     fetchKycData(endpoints.kyc.getAllDocument + GetUserId());
   }, []);
+
+  // Process existing KYC data and set verification states
+  useEffect(() => {
+    if (kycData && kycData.data && Array.isArray(kycData.data)) {
+      const documents = kycData.data;
+
+      // Process existing documents using the hook function
+      processExistingDocuments(documents);
+
+      // Set active step based on verification status for individual KYC
+      const aadhaarDoc = documents.find(
+        (doc) => doc.documentType === "AADHAAR_CARD"
+      );
+      const panDoc = documents.find((doc) => doc.documentType === "PAN_CARD");
+
+      // Helper function to check if document is rejected
+      const isDocumentRejected = (doc) => {
+        return doc && doc.rejectedReasion && doc.rejectedReasion.trim() !== "";
+      };
+
+      // Helper function to check if document is pending (not verified, not rejected)
+      const isDocumentPending = (doc) => {
+        return doc && !doc.verified && !isDocumentRejected(doc);
+      };
+
+      // If both documents are verified, go to final step
+      if (aadhaarDoc?.verified && panDoc?.verified) {
+        setActiveStep(4);
+        // Set KYC type to individual if both documents exist
+        setFormData((prev) => ({
+          ...prev,
+          kycType: "individual",
+        }));
+      } else if (aadhaarDoc || panDoc) {
+        // If some documents exist (verified, pending, or rejected), go to individual details step
+        setActiveStep(3);
+        // Set KYC type to individual if any individual documents exist
+        setFormData((prev) => ({
+          ...prev,
+          kycType: "individual",
+        }));
+      }
+    }
+  }, [kycData]); // Remove processExistingDocuments, setActiveStep, setFormData from dependencies
 
   return (
     <form onSubmit={handleSubmit} className={styles.wrapper}>
@@ -155,6 +200,7 @@ export default function KycForm() {
                     setPanVerified={setPanVerified}
                     aadhaarVerified={aadhaarVerified}
                     setAadhaarVerified={setAadhaarVerified}
+                    kycData={kycData}
                   />
                 </div>
                 <div className="d-flex justify-content-end gap-2 mt-3">
@@ -166,7 +212,17 @@ export default function KycForm() {
                     Back
                   </button>
                   <button
-                    type="submit"
+                    type="button"
+                    onClick={() => {
+                      // Submit individual KYC and go to final step
+                      if (aadhaarVerified && panVerified) {
+                        setActiveStep(4); // Go to "Done" step for individual KYC
+                      } else {
+                        alert(
+                          "Please verify both Aadhaar and PAN before submitting."
+                        );
+                      }
+                    }}
                     disabled={!aadhaarVerified || !panVerified}
                     className={`${styles.button} ${
                       !aadhaarVerified || !panVerified ? "disabled" : ""
@@ -446,18 +502,47 @@ export default function KycForm() {
             <div className={styles.form}>
               <div className="text-center py-4">
                 <div className="mb-3">
-                  <i
-                    className="bi bi-check-circle-fill text-success"
-                    style={{ fontSize: "3rem" }}
-                  ></i>
+                  {/* Show different icons based on verification status */}
+                  {formData.kycType === "individual" &&
+                  aadhaarVerified &&
+                  panVerified ? (
+                    <i
+                      className="bi bi-check-circle-fill text-success"
+                      style={{ fontSize: "3rem" }}
+                    ></i>
+                  ) : (
+                    <i
+                      className="bi bi-clock-fill text-warning"
+                      style={{ fontSize: "3rem" }}
+                    ></i>
+                  )}
                 </div>
-                <h3 className="text-success">
-                  Thank you for submitting your KYC details!
-                </h3>
-                <p className="text-muted">
-                  Your application is under review. We will notify you via email
-                  once the verification is complete.
-                </p>
+
+                {/* Show different messages based on verification status */}
+                {formData.kycType === "individual" &&
+                aadhaarVerified &&
+                panVerified ? (
+                  <>
+                    <h3 className="text-success">
+                      Your KYC is submitted and awaiting approval from admin!
+                    </h3>
+                    <p className="text-muted">
+                      Your documents have been verified and your application is
+                      under final review. We will activate your account once the
+                      admin approval is complete.
+                    </p>
+                  </>
+                ) : (
+                  <>
+                    <h3 className="text-warning">
+                      Thank you for submitting your KYC details!
+                    </h3>
+                    <p className="text-muted">
+                      Your application is under review. We will activate your account once the verification is complete.
+                    </p>
+                  </>
+                )}
+
                 <div className="mt-4">
                   <small className="text-muted">
                     Reference ID: KYC-{Date.now()}

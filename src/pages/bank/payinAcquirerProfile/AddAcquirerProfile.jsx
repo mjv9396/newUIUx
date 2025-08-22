@@ -47,7 +47,6 @@ const AddAcquirerProfile = () => {
     e.preventDefault();
     let buildFormData = formData;
     const validationError = validateAcquirerProfileForm(formData);
-    console.log("🚀 ~ handleSubmit ~ validationError:", validationError);
     if (!formData.dailyAmountLimit) {
       validationError.dailyAmountLimit = "Daily Amount Limit is required";
     } else if (

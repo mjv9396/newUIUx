@@ -4,6 +4,14 @@ import { useEffect } from "react";
 import useFetch from "../hooks/useFetch";
 import { endpoints } from "./apiEndpoints";
 import { useNavigate } from "react-router-dom";
+
+const cookieOptions = {
+  expires: 30 / (60 * 24), // Expires in 15 minutes
+  sameSite: "strict", // Prevents CSRF attacks
+  secure: import.meta.env.MODE === "production", // Ensures the cookie is sent over HTTPS
+};
+
+
 const encryptToken = (token) => {
   const encrypted = CryptoJS.AES.encrypt(
     token,
@@ -25,38 +33,26 @@ export const CookieStorage = (value) => {
   if (value) {
     const isProduction = import.meta.env.MODE === "production";
     Cookies.set("authToken", encryptToken(value.token), {
-      expires: 15 / (60 * 24), // Expires in 15 minutes
-      sameSite: "strict", // Prevents CSRF attacks
-      secure: isProduction, // Ensures the cookie is sent over HTTPS
+      ...cookieOptions
     });
     Cookies.set("role", encryptToken(value.authority), {
-      expires: 15 / (60 * 24), // Expires in 15 minutes
-      sameSite: "strict", // Prevents CSRF attacks
-      secure: isProduction, // Ensures the cookie is sent over HTTPS
+      ...cookieOptions
     });
     Cookies.set("username", encryptToken(value.username), {
-      expires: 15 / (60 * 24), // Expires in 15 minutes
-      sameSite: "strict", // Prevents CSRF attacks
-      secure: isProduction, // Ensures the cookie is sent over HTTPS
+      ...cookieOptions
     });
     Cookies.set("status", encryptToken(value.userAccountState), {
-      expires: 15 / (60 * 24), // Expires in 15 minutes
-      sameSite: "strict", // Prevents CSRF attacks
-      secure: isProduction, // Ensures the cookie is sent over HTTPS
+      ...cookieOptions
     });
     Cookies.set("userId", encryptToken(value.userId.toString()), {
-      expires: 15 / (60 * 24), // Expires in 15 minutes
-      sameSite: "strict", // Prevents CSRF attacks
-      secure: isProduction, // Ensures the cookie is sent over HTTPS
+      ...cookieOptions
     });
     // Set the expiry time for the authToken as session
     const expiryTime = encryptToken(
       new Date(Date.now() + 15 * 60 * 1000).toISOString()
     ); // 15 minutes from now
     Cookies.set("session", expiryTime, {
-      expires: 15 / (60 * 24), // Expires in 15 minutes
-      sameSite: "strict", // Prevents CSRF attacks
-      secure: isProduction, // Ensures the cookie is sent over HTTPS
+      ...cookieOptions
     });
 
     return true;
@@ -122,18 +118,14 @@ export const GetSession = () => {
   return null;
 };
 
-
-
 // clear cookies
 export const clearCookieStorage = () => {
- 
   Cookies.remove("authToken");
   Cookies.remove("role");
   Cookies.remove("username");
   Cookies.remove("status");
   Cookies.remove("userId");
   Cookies.remove("session");
-  
 };
 
 export const isAdmin = () => GetUserRole() === "ADMIN";
@@ -148,8 +140,8 @@ export const getVerificationStatus = () => {
 };
 
 export const CheckCookieTimeout = () => {
-  const { fetchData: LogoutUser } = useFetch();
-  const navigate = useNavigate()
+  // const { fetchData: LogoutUser } = useFetch();
+  const navigate = useNavigate();
   useEffect(() => {
     const interval = setInterval(() => {
       const token = GetAuthToken();
@@ -164,10 +156,10 @@ export const CheckCookieTimeout = () => {
       const currentTime = Date.now();
       const sessionExpiryTime = new Date(session).getTime();
 
-      if (currentTime > sessionExpiryTime) {        
-        LogoutUser(endpoints.logout);
+      if (currentTime > sessionExpiryTime) {
         clearCookieStorage();
         navigate("/");
+        LogoutUser();
       }
     }, 30000); // check every 30 seconds — adjust as needed
 
@@ -176,3 +168,15 @@ export const CheckCookieTimeout = () => {
 
   return null;
 };
+
+
+export const LogoutUser = () => {
+  const res = fetch(endpoints.logout, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${GetAuthToken()}`,
+    },
+  });
+  return res;
+}

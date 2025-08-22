@@ -1,0 +1,602 @@
+.settlementCard {
+  position: relative;
+  width: 100%;
+  height: 180px;
+  perspective: 1000px;
+  cursor: pointer;
+  margin-bottom: 16px;
+}
+
+.cardBackground {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    135deg,
+    rgba(99, 102, 241, 0.08) 0%,
+    rgba(139, 92, 246, 0.04) 50%,
+    rgba(236, 72, 153, 0.08) 100%
+  );
+  backdrop-filter: blur(25px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 24px;
+  overflow: hidden;
+  transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transform-style: preserve-3d;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1), 0 5px 15px rgba(0, 0, 0, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.settlementCard:hover .cardBackground {
+  transform: translateY(-12px) rotateX(8deg) rotateY(-3deg) scale(1.02);
+  box-shadow: 0 25px 50px rgba(99, 102, 241, 0.15),
+    0 15px 25px rgba(139, 92, 246, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.cardGlow {
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: conic-gradient(
+    from 0deg,
+    transparent,
+    rgba(99, 102, 241, 0.2),
+    transparent,
+    rgba(139, 92, 246, 0.2),
+    transparent,
+    rgba(236, 72, 153, 0.2),
+    transparent
+  );
+  opacity: 0;
+  animation: rotate 10s linear infinite;
+  transition: opacity 0.4s ease;
+}
+
+.settlementCard:hover .cardGlow {
+  opacity: 1;
+}
+
+.cardContent {
+  position: relative;
+  padding: 24px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  z-index: 2;
+}
+
+.headerSection {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.iconWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.iconBg {
+  position: relative;
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(
+    135deg,
+    rgba(99, 102, 241, 0.9) 0%,
+    rgba(139, 92, 246, 0.9) 50%,
+    rgba(236, 72, 153, 0.9) 100%
+  );
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 10px 25px rgba(99, 102, 241, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5);
+  transition: all 0.4s ease;
+}
+
+.settlementCard:hover .iconBg {
+  transform: scale(1.15) rotate(8deg);
+  box-shadow: 0 15px 35px rgba(99, 102, 241, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.7);
+}
+
+.iconPulse {
+  position: absolute;
+  width: 48px;
+  height: 48px;
+  border-radius: 16px;
+  background: linear-gradient(
+    135deg,
+    rgba(99, 102, 241, 0.3) 0%,
+    rgba(139, 92, 246, 0.3) 50%,
+    rgba(236, 72, 153, 0.3) 100%
+  );
+  animation: pulse 2.5s infinite;
+  z-index: -1;
+}
+
+.icon {
+  width: 26px;
+  height: 26px;
+  object-fit: contain;
+  filter: brightness(0) invert(1);
+  transition: transform 0.4s ease;
+}
+
+.settlementCard:hover .icon {
+  transform: scale(1.1) rotate(-8deg);
+}
+
+.cardType {
+  font-size: 12px;
+  font-weight: 700;
+  color: #4f46e5;
+  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 6px 12px;
+  background-color: rgba(99, 102, 241, 0.1);
+  border-radius: 20px;
+  border: 1px solid rgba(99, 102, 241, 0.2);
+}
+
+.dataSection {
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+  margin: 8px 0;
+}
+
+.dataItem {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.dataLabel {
+  font-size: 11px;
+  font-weight: 600;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  opacity: 0.9;
+}
+
+.amountWrapper {
+  display: flex;
+  align-items: baseline;
+  gap: 3px;
+}
+
+.currency {
+  font-size: 14px;
+  font-weight: 600;
+  color: #4f46e5;
+  opacity: 0.8;
+}
+
+.amount {
+  font-size: 18px;
+  font-weight: 800;
+  color: #1f2937;
+  letter-spacing: -0.02em;
+  background: linear-gradient(135deg, #1f2937 0%, #4f46e5 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  transition: all 0.3s ease;
+}
+
+.settlementCard:hover .amount {
+  transform: scale(1.05);
+}
+
+.divider {
+  width: 1px;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(99, 102, 241, 0.3) 50%,
+    transparent 100%
+  );
+  margin: 4px 0;
+}
+
+.progressSection {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.progressBar {
+  width: 100%;
+  height: 4px;
+  background: rgba(75, 85, 99, 0.1);
+  border-radius: 3px;
+  overflow: hidden;
+  position: relative;
+}
+
+.progressFill {
+  height: 100%;
+  background: linear-gradient(90deg, #4f46e5 0%, #7c3aed 50%, #ec4899 100%);
+  border-radius: 3px;
+  width: 0%;
+  animation: fillProgress 3s ease-out forwards;
+  animation-delay: 0.8s;
+}
+
+.progressLabel {
+  font-size: 10px;
+  font-weight: 600;
+  color: #6b7280;
+  text-align: center;
+  opacity: 0.8;
+}
+
+.decorativeElements {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.circle1,
+.circle2,
+.circle3 {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.08;
+  animation: float 8s ease-in-out infinite;
+}
+
+.circle1 {
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(135deg, #4f46e5, #7c3aed);
+  top: -40px;
+  right: -40px;
+  animation-delay: 0s;
+}
+
+.circle2 {
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, #7c3aed, #ec4899);
+  bottom: -30px;
+  left: -30px;
+  animation-delay: 3s;
+}
+
+.circle3 {
+  width: 35px;
+  height: 35px;
+  background: linear-gradient(135deg, #ec4899, #f97316);
+  top: 60%;
+  right: 15px;
+  animation-delay: 6s;
+}
+
+.mesh {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: linear-gradient(
+      rgba(99, 102, 241, 0.03) 1px,
+      transparent 1px
+    ),
+    linear-gradient(90deg, rgba(99, 102, 241, 0.03) 1px, transparent 1px);
+  background-size: 20px 20px;
+  opacity: 0.5;
+}
+
+/* SETTLED VARIANT - Green/Success Theme */
+.settledCard .cardBackground {
+  background: linear-gradient(
+    135deg,
+    rgba(34, 197, 94, 0.08) 0%,
+    rgba(16, 185, 129, 0.04) 50%,
+    rgba(5, 150, 105, 0.08) 100%
+  );
+  border: 1px solid rgba(34, 197, 94, 0.15);
+}
+
+.settledCard:hover .cardBackground {
+  box-shadow: 0 25px 50px rgba(34, 197, 94, 0.15),
+    0 15px 25px rgba(16, 185, 129, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.settledCard .cardGlow {
+  background: conic-gradient(
+    from 0deg,
+    transparent,
+    rgba(34, 197, 94, 0.2),
+    transparent,
+    rgba(16, 185, 129, 0.2),
+    transparent,
+    rgba(5, 150, 105, 0.2),
+    transparent
+  );
+}
+
+.settledCard .iconBg {
+  background: linear-gradient(
+    135deg,
+    rgba(34, 197, 94, 0.9) 0%,
+    rgba(16, 185, 129, 0.9) 50%,
+    rgba(5, 150, 105, 0.9) 100%
+  );
+  box-shadow: 0 10px 25px rgba(34, 197, 94, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+.settledCard:hover .iconBg {
+  box-shadow: 0 15px 35px rgba(34, 197, 94, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.7);
+}
+
+.settledCard .iconPulse {
+  background: linear-gradient(
+    135deg,
+    rgba(34, 197, 94, 0.3) 0%,
+    rgba(16, 185, 129, 0.3) 50%,
+    rgba(5, 150, 105, 0.3) 100%
+  );
+}
+
+.settledCard .cardType {
+  color: #059669;
+  background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  background-color: rgba(34, 197, 94, 0.1);
+  border: 1px solid rgba(34, 197, 94, 0.2);
+}
+
+.settledCard .amount {
+  background: linear-gradient(135deg, #065f46 0%, #059669 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.settledCard .currency {
+  color: #059669;
+}
+
+.settledCard .progressFill {
+  background: linear-gradient(90deg, #22c55e 0%, #10b981 50%, #059669 100%);
+  animation-duration: 2s;
+}
+
+.settledCard .divider {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(34, 197, 94, 0.3) 50%,
+    transparent 100%
+  );
+}
+
+/* UNSETTLED VARIANT - Orange/Warning Theme */
+.unsettledCard .cardBackground {
+  background: linear-gradient(
+    135deg,
+    rgba(251, 146, 60, 0.08) 0%,
+    rgba(245, 158, 11, 0.04) 50%,
+    rgba(217, 119, 6, 0.08) 100%
+  );
+  border: 1px solid rgba(251, 146, 60, 0.15);
+}
+
+.unsettledCard:hover .cardBackground {
+  box-shadow: 0 25px 50px rgba(251, 146, 60, 0.15),
+    0 15px 25px rgba(245, 158, 11, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.unsettledCard .cardGlow {
+  background: conic-gradient(
+    from 0deg,
+    transparent,
+    rgba(251, 146, 60, 0.2),
+    transparent,
+    rgba(245, 158, 11, 0.2),
+    transparent,
+    rgba(217, 119, 6, 0.2),
+    transparent
+  );
+}
+
+.unsettledCard .iconBg {
+  background: linear-gradient(
+    135deg,
+    rgba(251, 146, 60, 0.9) 0%,
+    rgba(245, 158, 11, 0.9) 50%,
+    rgba(217, 119, 6, 0.9) 100%
+  );
+  box-shadow: 0 10px 25px rgba(251, 146, 60, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+.unsettledCard:hover .iconBg {
+  box-shadow: 0 15px 35px rgba(251, 146, 60, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.7);
+}
+
+.unsettledCard .iconPulse {
+  background: linear-gradient(
+    135deg,
+    rgba(251, 146, 60, 0.3) 0%,
+    rgba(245, 158, 11, 0.3) 50%,
+    rgba(217, 119, 6, 0.3) 100%
+  );
+}
+
+.unsettledCard .cardType {
+  color: #d97706;
+  background: linear-gradient(135deg, #d97706 0%, #f59e0b 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  background-color: rgba(251, 146, 60, 0.1);
+  border: 1px solid rgba(251, 146, 60, 0.2);
+}
+
+.unsettledCard .amount {
+  background: linear-gradient(135deg, #b45309 0%, #d97706 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.unsettledCard .currency {
+  color: #d97706;
+}
+
+.unsettledCard .progressFill {
+  background: linear-gradient(90deg, #fb923c 0%, #f59e0b 50%, #d97706 100%);
+  animation-duration: 4s;
+  width: 45%;
+}
+
+.unsettledCard .divider {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(251, 146, 60, 0.3) 50%,
+    transparent 100%
+  );
+}
+
+/* Animations */
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+  50% {
+    transform: scale(1.15);
+    opacity: 0.3;
+  }
+}
+
+@keyframes fillProgress {
+  0% {
+    width: 0%;
+  }
+  100% {
+    width: 85%;
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  33% {
+    transform: translateY(-15px) rotate(120deg);
+  }
+  66% {
+    transform: translateY(8px) rotate(240deg);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .settlementCard {
+    height: 160px;
+  }
+
+  .cardContent {
+    padding: 20px;
+  }
+
+  .iconBg {
+    width: 40px;
+    height: 40px;
+  }
+
+  .icon {
+    width: 22px;
+    height: 22px;
+  }
+
+  .amount {
+    font-size: 16px;
+  }
+
+  .currency {
+    font-size: 12px;
+  }
+
+  .cardType {
+    font-size: 11px;
+    padding: 4px 8px;
+  }
+}
+
+@media (max-width: 576px) {
+  .settlementCard {
+    height: 150px;
+  }
+
+  .cardContent {
+    padding: 16px;
+  }
+
+  .headerSection {
+    margin-bottom: 12px;
+  }
+
+  .iconBg {
+    width: 36px;
+    height: 36px;
+    border-radius: 12px;
+  }
+
+  .icon {
+    width: 20px;
+    height: 20px;
+  }
+
+  .amount {
+    font-size: 14px;
+  }
+
+  .dataLabel {
+    font-size: 10px;
+  }
+
+  .cardType {
+    font-size: 10px;
+    padding: 3px 6px;
+  }
+}

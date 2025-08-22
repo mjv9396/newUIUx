@@ -12,6 +12,7 @@ import useFetch from "../../../hooks/useFetch";
 import { roundAmount } from "../../../utils/roundAmount";
 import GenerateReport from "../generateReport/GenerateReport";
 import { errorMessage } from "../../../utils/messges";
+import { PageSizes } from "../../../utils/constants";
 const SettlementList = () => {
   const tableRef = useRef(null);
 
@@ -216,11 +217,11 @@ const SettlementList = () => {
               <div className={styles.input} style={{ minWidth: "12rem" }}>
                 <label htmlFor="pagesize">Number of settlements</label>
                 <select name="size" id="size" onChange={handleChange}>
-                  <option value="25">25</option>
-                  <option value="1000">1000</option>
-                  <option value="5000">5000</option>
-                  <option value="10000">10000</option>
-                  <option value="50000">50000</option>
+                  {PageSizes.map((size) => (
+                    <option key={size.id} value={size.id}>
+                      {size.name}
+                    </option>
+                  ))}
                   <option value="100000">100000</option>
                 </select>
               </div>

@@ -1,0 +1,721 @@
+.walletCard {
+  position: relative;
+  width: 100%;
+  min-height: 140px;
+  perspective: 1000px;
+  cursor: pointer;
+}
+
+.cardBackground {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    135deg,
+    rgba(16, 185, 129, 0.1) 0%,
+    rgba(6, 182, 212, 0.05) 50%,
+    rgba(59, 130, 246, 0.1) 100%
+  );
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transform-style: preserve-3d;
+}
+
+.walletCard:hover .cardBackground {
+  transform: translateY(-8px) rotateX(5deg) rotateY(-2deg);
+  box-shadow: 0 20px 40px rgba(16, 185, 129, 0.2),
+    0 10px 20px rgba(6, 182, 212, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.cardGlow {
+  position: absolute;
+  top: -200%;
+  left: -50%;
+  width: 200%;
+  height: 500%;
+  background: conic-gradient(
+    from 0deg,
+    transparent,
+    rgba(16, 185, 129, 0.3),
+    transparent,
+    rgba(6, 182, 212, 0.3),
+    transparent,
+    rgba(59, 130, 246, 0.3),
+    transparent
+  );
+  opacity: 0;
+  animation: rotate 8s linear infinite;
+  transition: opacity 0.3s ease;
+}
+
+.walletCard:hover .cardGlow {
+  opacity: 1;
+}
+
+.cardContent {
+  position: relative;
+  padding: 20px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  z-index: 2;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.1) 0%,
+    rgba(255, 255, 255, 0.05) 100%
+  );
+}
+
+.headerSection {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.iconWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.iconBg {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  background: linear-gradient(
+    135deg,
+    rgba(16, 185, 129, 0.8) 0%,
+    rgba(6, 182, 212, 0.8) 50%,
+    rgba(59, 130, 246, 0.8) 100%
+  );
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  transition: all 0.3s ease;
+}
+
+.walletCard:hover .iconBg {
+  transform: scale(1.1) rotate(5deg);
+  box-shadow: 0 12px 30px rgba(16, 185, 129, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+.iconPulse {
+  position: absolute;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: linear-gradient(
+    135deg,
+    rgba(16, 185, 129, 0.4) 0%,
+    rgba(6, 182, 212, 0.4) 50%,
+    rgba(59, 130, 246, 0.4) 100%
+  );
+  animation: pulse 2s infinite;
+  z-index: -1;
+}
+
+.icon {
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
+  /* filter: brightness(0) invert(1); */
+  transition: transform 0.3s ease;
+}
+
+.walletCard:hover .icon {
+  transform: scale(1.1);
+}
+
+.textSection {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #065f46;
+  margin: 0;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  background: linear-gradient(135deg, #065f46 0%, #0891b2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+@media screen and (max-width: 1024px) and (min-width: 768px) {
+  .title {
+    font-size: 12px;
+  }
+
+  .subtitle {
+    font-size: 8px !important;
+    text-transform: none;
+  }
+  
+}
+
+.subtitle {
+  font-size: 11px;
+  color: #6b7280;
+  font-weight: 500;
+  opacity: 0.8;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.amountSection {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.amountWrapper {
+  display: flex;
+  align-items: baseline;
+  gap: 2px;
+}
+
+.currency {
+  font-size: 16px;
+  font-weight: 600;
+  color: #0891b2;
+  opacity: 0.8;
+}
+
+.amount {
+  font-size: 22px;
+  font-weight: 800;
+  color: #065f46;
+  letter-spacing: -0.02em;
+  background: linear-gradient(135deg, #065f46 0%, #0891b2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  transition: all 0.3s ease;
+}
+
+.walletCard:hover .amount {
+  transform: scale(1.05);
+}
+
+.progressBar {
+  width: 100%;
+  height: 3px;
+  background: rgba(75, 85, 99, 0.1);
+  border-radius: 2px;
+  overflow: hidden;
+  position: relative;
+}
+
+.progressFill {
+  height: 100%;
+  background: linear-gradient(90deg, #10b981 0%, #06b6d4 50%, #3b82f6 100%);
+  border-radius: 2px;
+  width: 0%;
+  animation: fillProgress 2s ease-out forwards;
+  animation-delay: 0.5s;
+}
+
+.decorativeElements {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.circle1,
+.circle2,
+.circle3 {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.1;
+  animation: float 6s ease-in-out infinite;
+}
+
+.circle1 {
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, #10b981, #06b6d4);
+  top: -30px;
+  right: -30px;
+  animation-delay: 0s;
+}
+
+.circle2 {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, #06b6d4, #3b82f6);
+  bottom: -20px;
+  left: -20px;
+  animation-delay: 2s;
+}
+
+.circle3 {
+  width: 25px;
+  height: 25px;
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  top: 50%;
+  right: 10px;
+  animation-delay: 4s;
+}
+
+/* Animations */
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.4;
+  }
+}
+
+@keyframes fillProgress {
+  0% {
+    width: 0%;
+  }
+  100% {
+    width: 75%;
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  33% {
+    transform: translateY(-10px) rotate(120deg);
+  }
+  66% {
+    transform: translateY(5px) rotate(240deg);
+  }
+}
+
+/* Wallet Card Variants */
+.walletCard:nth-child(2) .cardContent {
+  background: linear-gradient(
+    135deg,
+    rgba(168, 85, 247, 0.1) 0%,
+    rgba(79, 70, 229, 0.05) 100%
+  );
+}
+
+.walletCard:nth-child(2) .iconBg {
+  background: linear-gradient(
+    135deg,
+    rgba(168, 85, 247, 0.8) 0%,
+    rgba(79, 70, 229, 0.8) 100%
+  );
+  box-shadow: 0 8px 20px rgba(168, 85, 247, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+
+.walletCard:nth-child(2):hover .iconBg {
+  box-shadow: 0 12px 30px rgba(168, 85, 247, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .walletCard {
+    height: 120px;
+  }
+
+  .cardContent {
+    padding: 16px;
+  }
+
+  .iconBg {
+    width: 36px;
+    height: 36px;
+  }
+
+  .icon {
+    width: 18px;
+    height: 18px;
+  }
+
+  .title {
+    font-size: 13px;
+  }
+
+  .subtitle {
+    font-size: 10px;
+  }
+
+  .amount {
+    font-size: 18px;
+  }
+
+  .currency {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 576px) {
+  .walletCard {
+    height: 110px;
+  }
+
+  .cardContent {
+    padding: 14px;
+  }
+
+  .headerSection {
+    gap: 8px;
+  }
+
+  .iconBg {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+  }
+
+  .icon {
+    width: 16px;
+    height: 16px;
+  }
+
+  .title {
+    font-size: 12px;
+  }
+
+  .amount {
+    font-size: 16px;
+  }
+}
+
+/* Color Variants */
+
+/* SUCCESS VARIANT - Green Theme */
+.successCard .cardBackground {
+  background: linear-gradient(
+    135deg,
+    rgba(34, 197, 94, 0.1) 0%,
+    rgba(16, 185, 129, 0.05) 50%,
+    rgba(5, 150, 105, 0.1) 100%
+  );
+  border: 1px solid rgba(34, 197, 94, 0.2);
+}
+
+.successCard:hover .cardBackground {
+  box-shadow: 0 20px 40px rgba(34, 197, 94, 0.2),
+    0 10px 20px rgba(16, 185, 129, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.successCard .cardGlow {
+  background: conic-gradient(
+    from 0deg,
+    transparent,
+    rgba(34, 197, 94, 0.3),
+    transparent,
+    rgba(16, 185, 129, 0.3),
+    transparent,
+    rgba(5, 150, 105, 0.3),
+    transparent
+  );
+}
+
+.successCard .iconBg {
+  background: linear-gradient(
+    135deg,
+    rgba(34, 197, 94, 0.8) 0%,
+    rgba(16, 185, 129, 0.8) 50%,
+    rgba(5, 150, 105, 0.8) 100%
+  );
+  box-shadow: 0 8px 20px rgba(34, 197, 94, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+
+.successCard:hover .iconBg {
+  box-shadow: 0 12px 30px rgba(34, 197, 94, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+.successCard .iconPulse {
+  background: linear-gradient(
+    135deg,
+    rgba(34, 197, 94, 0.4) 0%,
+    rgba(16, 185, 129, 0.4) 50%,
+    rgba(5, 150, 105, 0.4) 100%
+  );
+}
+
+.successCard .title {
+  background: linear-gradient(135deg, #166534 0%, #059669 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.successCard .amount {
+  background: linear-gradient(135deg, #166534 0%, #059669 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.successCard .currency {
+  color: #059669;
+}
+
+.successCard .progressFill {
+  background: linear-gradient(90deg, #22c55e 0%, #10b981 50%, #059669 100%);
+}
+
+/* INFO VARIANT - Blue Theme */
+.infoCard .cardBackground {
+  background: linear-gradient(
+    135deg,
+    rgba(59, 130, 246, 0.1) 0%,
+    rgba(37, 99, 235, 0.05) 50%,
+    rgba(29, 78, 216, 0.1) 100%
+  );
+  border: 1px solid rgba(59, 130, 246, 0.2);
+}
+
+.infoCard:hover .cardBackground {
+  box-shadow: 0 20px 40px rgba(59, 130, 246, 0.2),
+    0 10px 20px rgba(37, 99, 235, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.infoCard .cardGlow {
+  background: conic-gradient(
+    from 0deg,
+    transparent,
+    rgba(59, 130, 246, 0.3),
+    transparent,
+    rgba(37, 99, 235, 0.3),
+    transparent,
+    rgba(29, 78, 216, 0.3),
+    transparent
+  );
+}
+
+.infoCard .iconBg {
+  background: linear-gradient(
+    135deg,
+    rgba(59, 130, 246, 0.8) 0%,
+    rgba(37, 99, 235, 0.8) 50%,
+    rgba(29, 78, 216, 0.8) 100%
+  );
+  box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+
+.infoCard:hover .iconBg {
+  box-shadow: 0 12px 30px rgba(59, 130, 246, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+.infoCard .iconPulse {
+  background: linear-gradient(
+    135deg,
+    rgba(59, 130, 246, 0.4) 0%,
+    rgba(37, 99, 235, 0.4) 50%,
+    rgba(29, 78, 216, 0.4) 100%
+  );
+}
+
+.infoCard .title {
+  background: linear-gradient(135deg, #1e40af 0%, #1d4ed8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.infoCard .amount {
+  background: linear-gradient(135deg, #1e40af 0%, #1d4ed8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.infoCard .currency {
+  color: #1d4ed8;
+}
+
+.infoCard .progressFill {
+  background: linear-gradient(90deg, #3b82f6 0%, #2563eb 50%, #1d4ed8 100%);
+}
+
+/* FAILED VARIANT - Red Theme */
+.failedCard .cardBackground {
+  background: linear-gradient(
+    135deg,
+    rgba(239, 68, 68, 0.1) 0%,
+    rgba(220, 38, 38, 0.05) 50%,
+    rgba(185, 28, 28, 0.1) 100%
+  );
+  border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.failedCard:hover .cardBackground {
+  box-shadow: 0 20px 40px rgba(239, 68, 68, 0.2),
+    0 10px 20px rgba(220, 38, 38, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.failedCard .cardGlow {
+  background: conic-gradient(
+    from 0deg,
+    transparent,
+    rgba(239, 68, 68, 0.3),
+    transparent,
+    rgba(220, 38, 38, 0.3),
+    transparent,
+    rgba(185, 28, 28, 0.3),
+    transparent
+  );
+}
+
+.failedCard .iconBg {
+  background: linear-gradient(
+    135deg,
+    rgba(239, 68, 68, 0.8) 0%,
+    rgba(220, 38, 38, 0.8) 50%,
+    rgba(185, 28, 28, 0.8) 100%
+  );
+  box-shadow: 0 8px 20px rgba(239, 68, 68, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+
+.failedCard:hover .iconBg {
+  box-shadow: 0 12px 30px rgba(239, 68, 68, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+.failedCard .iconPulse {
+  background: linear-gradient(
+    135deg,
+    rgba(239, 68, 68, 0.4) 0%,
+    rgba(220, 38, 38, 0.4) 50%,
+    rgba(185, 28, 28, 0.4) 100%
+  );
+}
+
+.failedCard .title {
+  background: linear-gradient(135deg, #991b1b 0%, #dc2626 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.failedCard .amount {
+  background: linear-gradient(135deg, #991b1b 0%, #dc2626 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.failedCard .currency {
+  color: #dc2626;
+}
+
+.failedCard .progressFill {
+  background: linear-gradient(90deg, #ef4444 0%, #dc2626 50%, #b91c1c 100%);
+}
+
+/* PENDING VARIANT - Orange/Amber Theme */
+.pendingCard .cardBackground {
+  background: linear-gradient(
+    135deg,
+    rgba(251, 146, 60, 0.1) 0%,
+    rgba(245, 158, 11, 0.05) 50%,
+    rgba(217, 119, 6, 0.1) 100%
+  );
+  border: 1px solid rgba(251, 146, 60, 0.2);
+}
+
+.pendingCard:hover .cardBackground {
+  box-shadow: 0 20px 40px rgba(251, 146, 60, 0.2),
+    0 10px 20px rgba(245, 158, 11, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.pendingCard .cardGlow {
+  background: conic-gradient(
+    from 0deg,
+    transparent,
+    rgba(251, 146, 60, 0.3),
+    transparent,
+    rgba(245, 158, 11, 0.3),
+    transparent,
+    rgba(217, 119, 6, 0.3),
+    transparent
+  );
+}
+
+.pendingCard .iconBg {
+  background: linear-gradient(
+    135deg,
+    rgba(251, 146, 60, 0.8) 0%,
+    rgba(245, 158, 11, 0.8) 50%,
+    rgba(217, 119, 6, 0.8) 100%
+  );
+  box-shadow: 0 8px 20px rgba(251, 146, 60, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+
+.pendingCard:hover .iconBg {
+  box-shadow: 0 12px 30px rgba(251, 146, 60, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+.pendingCard .iconPulse {
+  background: linear-gradient(
+    135deg,
+    rgba(251, 146, 60, 0.4) 0%,
+    rgba(245, 158, 11, 0.4) 50%,
+    rgba(217, 119, 6, 0.4) 100%
+  );
+}
+
+.pendingCard .title {
+  background: linear-gradient(135deg, #b45309 0%, #d97706 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.pendingCard .amount {
+  background: linear-gradient(135deg, #b45309 0%, #d97706 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.pendingCard .currency {
+  color: #d97706;
+}
+
+.pendingCard .progressFill {
+  background: linear-gradient(90deg, #fb923c 0%, #f59e0b 50%, #d97706 100%);
+}
