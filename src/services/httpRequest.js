@@ -28,6 +28,7 @@ apiClient.interceptors.response.use(
   (error) => {
     if (error.response) {
       const { status, data } = error.response;
+      if(data?.path === "/service/logout") return;
       if (status === 401) {
         if (window.location.pathname !== "/") {
           window.location.href = "/session-out";
