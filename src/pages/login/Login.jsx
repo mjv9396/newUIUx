@@ -11,9 +11,9 @@ const Login = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
 
   const carouselImages = [
-    "https://panel.atmoondps.com/static/images/carousel/atmoon/carousel2.png",
-    "https://panel.atmoondps.com/static/images/carousel/atmoon/carousel1.png",
-    "https://panel.atmoondps.com/static/images/carousel/atmoon/carousel3.png",
+    "/carousel.png",
+    // "https://panel.atmoondps.com/static/images/carousel/atmoon/carousel1.png",
+    // "https://panel.atmoondps.com/static/images/carousel/atmoon/carousel3.png",
   ];
 
   const nextSlide = () => {
