@@ -259,19 +259,26 @@ export default function IndividualKycDetails({
                 id="panNumber"
                 onChange={handleChange}
                 value={formData.panNumber}
-                disabled={panStatus === "verified" || panStatus === "pending" || panVerified}
+                disabled={
+                  panStatus === "verified" ||
+                  panStatus === "pending" ||
+                  panVerified
+                }
                 className={`${styles.input} form-control flex-grow-1 ${
                   panStatus === "verified" || panStatus === "pending"
                     ? "bg-light"
                     : ""
                 }`}
               />
-              <FileUploader
-                name="panFile"
-                onChange={handleChange}
-                accept="image/*"
-                disabled={panStatus === "verified" || panStatus === "pending" || panVerified}
-              />
+              {panStatus !== "verified" &&
+                panStatus !== "pending" &&
+                !panVerified && (
+                  <FileUploader
+                    name="panFile"
+                    onChange={handleChange}
+                    accept="image/*"
+                  />
+                )}
             </div>
             {/* Show document status information */}
             {panDoc && (
@@ -323,7 +330,8 @@ export default function IndividualKycDetails({
                   !formData.panNumber ||
                   !formData.panFile ||
                   panStatus === "verified" ||
-                  panStatus === "pending" || panVerified
+                  panStatus === "pending" ||
+                  panVerified
                 }
               >
                 {panLoading ? (
@@ -345,8 +353,10 @@ export default function IndividualKycDetails({
                     <i className="bi bi-clock me-1"></i>
                     Pending Verification
                   </>
+                ) : panVerified ? (
+                  "Verified"
                 ) : (
-                  panVerified ? "Verified" : "Verify PAN"
+                  "Verify PAN"
                 )}
               </button>
             </div>
@@ -386,14 +396,13 @@ export default function IndividualKycDetails({
                     : ""
                 }`}
               />
-              <FileUploader
-                name="aadharFile"
-                onChange={handleChange}
-                accept="image/*"
-                disabled={
-                  aadhaarStatus === "verified" || aadhaarStatus === "pending"
-                }
-              />
+              {aadhaarStatus !== "verified" && aadhaarStatus !== "pending" && (
+                <FileUploader
+                  name="aadharFile"
+                  onChange={handleChange}
+                  accept="image/*"
+                />
+              )}
             </div>
 
             {/* Show document status information */}
@@ -517,8 +526,8 @@ export default function IndividualKycDetails({
 
             <small className="text-muted d-flex align-items-center">
               <i className="bi bi-info-circle me-1"></i>
-              Upload a valid Aadhaar card image. Verify using
-              DigiLocker for secure authentication.
+              Upload a valid Aadhaar card image. Verify using DigiLocker for
+              secure authentication.
             </small>
             {(errors.aadhaarNumber || errors.aadharFile) && (
               <small className="text-danger d-block mt-1">

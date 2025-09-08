@@ -106,6 +106,40 @@ export const GetUserStatus = () => {
     }
     return null;
   }
+  return null;
+};
+
+// Check if merchant needs KYC verification
+export const merchantNeedsKyc = () => {
+  const role = GetUserRole();
+  const status = GetUserStatus();
+  
+  // If user is merchant and status is not active, they need KYC
+  return role === "MERCHANT" && status === false;
+};
+
+// Check if current route is allowed for inactive merchants
+export const isKycRoute = (pathname) => {
+  const allowedRoutes = [
+    '/kyc-verification',
+    '/login-history', 
+    '/update-password',
+    '/session-out',
+    '/unauthorised',
+    '/privacy-policy',
+    '/terms-and-conditions',
+    '/'
+  ];
+  
+  // Check exact matches first
+  if (allowedRoutes.includes(pathname)) {
+    return true;
+  }
+  
+  // Check if it's a sub-route of allowed routes
+  return allowedRoutes.some(route => 
+    route !== '/' && pathname.startsWith(route)
+  );
 };
 
 // get session
@@ -167,6 +201,17 @@ export const CheckCookieTimeout = () => {
   }, []);
 
   return null;
+};
+
+// Hook to check and redirect merchants who need KYC
+export const useMerchantKycCheck = () => {
+  const navigate = useNavigate();
+  
+  useEffect(() => {
+    if (merchantNeedsKyc() && !isKycRoute(window.location.pathname)) {
+      navigate('/kyc-verification', { replace: true });
+    }
+  }, [navigate]);
 };
 
 
