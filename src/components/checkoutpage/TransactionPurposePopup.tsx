@@ -46,15 +46,41 @@ const TransactionPurposePopup: React.FC<TransactionPurposePopupProps> = ({
             padding: "8px",
           },
         },
+        backdrop: {
+          style: {
+            backgroundColor: "rgba(0, 0, 0, 0.8)", // More opaque backdrop
+          },
+        },
       }}
     >
       <DialogTitle>
-        <Typography variant="h6" component="div" fontWeight="bold">
-          Transaction Purpose Required
-        </Typography>
-        <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
-          Please provide the purpose for this transaction before proceeding
-        </Typography>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            textAlign: "center",
+          }}
+        >
+          <Box sx={{ mb: 2 }}>
+            <img
+              src="/images/logo.png"
+              alt="ATMOON"
+              height="50"
+            />
+          </Box>
+          <Typography
+            variant="h6"
+            component="div"
+            fontWeight="bold"
+            sx={{ mb: 1 }}
+          >
+            Transaction Purpose Required
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            Please provide the purpose for this transaction before proceeding
+          </Typography>
+        </Box>
       </DialogTitle>
 
       <Formik

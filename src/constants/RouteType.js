@@ -6,4 +6,5 @@ export const RouteType = {
   PAY: "/pay",
   PAYMENT_ACTIVE: "/paymentActive",
   STATUS: "/status",
+  PURPOSE: "/transaction/purpose",
 };

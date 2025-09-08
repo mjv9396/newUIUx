@@ -15,3 +15,8 @@ code {
 img {
   object-fit: contain;
 }
+
+html, body, #root {
+  height: 100%;
+  overflow-y: auto;
+}
