@@ -33,7 +33,7 @@ export const validateRegistrationForm = (formData) => {
   if (emailEmptyError) {
     errors.email = "Email is required";
   } else if (emailFormatError) {
-    errors.email = emailFormatError;
+    errors.email = "Please enter a valid email address";
   }
 
   // Phone Number

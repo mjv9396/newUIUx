@@ -61,6 +61,8 @@ export const endpoints = {
     chargebackSummary: "/chargeback/summary",
     virtualAccountSummary: "/userAccount/",
     collectionByVirtualAccount: "/virtualCollection/account",
+    disputeSearch: "/virtualCollection/dispute/search",
+    addDispute: "/virtualCollection/dispute",
   },
   user: {
     profile: "/user/profile",
@@ -69,6 +71,7 @@ export const endpoints = {
     updatePayoutLimits: "/service/update-payout-limits",
     userList: "/user/profile-list",
     balance: "/user/account-balance",
+    balanceByUser: "/user/account-balance-by-userId",
     virtualBalance: "/virtualCollection/virtualCollectAmount",
     totalBalance: "/user/get-totalbalance",
     verifyMerchant: "/user/dtlBy-app-id",
@@ -121,6 +124,7 @@ export const endpoints = {
     remittanceReport: "/remittance-report",
     updateTransactionStatus: "/transactions/payout-update",
     getPriorityAndLimit: "/acq-payout-user-next-priority",
+    generateTransactionReport: "/reports/payout-transactions",
   },
 
   bank: {

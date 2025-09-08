@@ -6,16 +6,22 @@ import {
   validateName,
   validateVpa,
   validateIntegerNumber,
+  validateOrderId,
 } from "../utils/validations";
 
 export const validateSendMoneyForm = (formData) => {
   const errors = {};
 
   const orderIdEmptyError = validateEmpty(formData.orderId);
-  
+  const orderIdFormatError = !orderIdEmptyError
+    ? validateOrderId(formData.orderId)
+    : null;
+
   if (orderIdEmptyError) {
+    errors.orderId = "Order ID is required";
+  } else if (orderIdFormatError) {
     errors.orderId = orderIdFormatError;
-  } 
+  }
 
   const nameEmptyError = validateEmpty(formData.name);
   const nameFormatError = !nameEmptyError ? validateName(formData.name) : null;

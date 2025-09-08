@@ -6,7 +6,7 @@ import VPAAbsent from "./VPAAbsent";
 const Tabs = () => {
   const [tab, setTab] = useState(1);
   return (
-    <DashboardLayout page="Single Payout" url="/dashboard/single-pay">
+    <DashboardLayout page="Transfer Money" url="/dashboard/single-pay">
       <div className={styles.tabs}>
         <button
           className={tab === 1 ? styles.tab + " " + styles.active : styles.tab}

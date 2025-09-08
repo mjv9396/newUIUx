@@ -4,6 +4,7 @@ import styles from "../../../styles/components/Sidebar.module.css";
 import home from "../../../assets/dashboard.png";
 import payin from "../../../assets/pay.png";
 import payout from "../../../assets/payout.png";
+import fraud from "../../../assets/fraud.png";
 import login from "../../../assets/login.png";
 import merchant from "../../../assets/seller.png";
 import ledger from "../../../assets/bank-statement.png";
@@ -158,6 +159,56 @@ const ResellerMenu = ({ toggle, setToggle }) => {
               <li className={styles.subMenuItem}>
                 <Link to="/payout/transactions">
                   <span>Transactions</span>
+                </Link>
+              </li>
+            </ul>
+          </li>
+
+          <li className={styles.menuItem}>
+            <Link to="/dispute">
+              <span>
+                <img src={chargeback} alt="user" width={20} height={20} />
+                <span>Dispute</span>
+              </span>
+            </Link>
+          </li>
+
+          <li className={styles.menuItem}>
+            <Link to="/virtual-account">
+              <span>
+                <img src={chargeback} alt="user" width={20} height={20} />
+                <span>Virtual Collections</span>
+              </span>
+            </Link>
+          </li>
+
+          <li className={styles.menuItem}>
+            <Link to="/virtual-dispute">
+              <span>
+                <img src={chargeback} alt="user" width={20} height={20} />
+                <span>Virtual Dispute</span>
+              </span>
+            </Link>
+          </li>
+
+          <li className={styles.menuItem}>
+            <Link
+              to="#fraud"
+              data-bs-toggle="collapse"
+              role="button"
+              aria-expanded="false"
+              aria-controls="#fraud"
+            >
+              <span>
+                <img src={fraud} alt="fraud" width={20} height={20} />
+                <span>Fraud Preventions</span>
+              </span>
+              <i className="bi bi-chevron-down"></i>
+            </Link>
+            <ul className={`${styles.subMenu} collapse`} id="fraud">
+              <li className={styles.subMenuItem}>
+                <Link to="/fraud-prevention">
+                  <span>Fraud Prevention</span>
                 </Link>
               </li>
             </ul>

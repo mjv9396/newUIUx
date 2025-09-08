@@ -1,4 +1,4 @@
-import { validateEmail, validatePassword, validateEmpty } from "../utils/validations";
+import { validateEmail, validateEmpty } from "../utils/validations";
 
 export const validateLoginForm = (formdata) => {
   let errors = {};
@@ -9,14 +9,20 @@ export const validateLoginForm = (formdata) => {
   if (emailEmptyError) {
     errors.username = "Email is required";
   } else if (emailFormatError) {
-    errors.username = emailFormatError;
+    errors.username = "Please enter a valid email address";
   }
 
   // Password
   const passwordEmptyError = validateEmpty(formdata.password);
   if (passwordEmptyError) {
     errors.password = "Password is required";
-  } 
+  }
+
+  // Captcha
+  const captchaEmptyError = validateEmpty(formdata.captcha);
+  if (captchaEmptyError) {
+    errors.captcha = "Captcha is required";
+  }
 
   return errors;
 };

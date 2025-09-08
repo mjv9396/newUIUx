@@ -5,6 +5,7 @@ import home from "../../../assets/dashboard.png";
 import payin from "../../../assets/pay.png";
 import doc from "../../../assets/doc.png";
 import payout from "../../../assets/payout.png";
+import fraud from "../../../assets/fraud.png";
 import login from "../../../assets/login.png";
 import kyc from "../../../assets/kyc.png";
 import web from "../../../assets/world-wide-web.png";
@@ -40,8 +41,12 @@ const MerchantMenu = ({ toggle, setToggle, status }) => {
     >
       <div className={styles.sidebarHeader}>
         <div className={styles.logoContainer}>
-                      <img src={logo} alt="logo" style={{ width: 'auto', height: '35px', objectFit: 'contain' }} />
-          
+          <img
+            src={logo}
+            alt="logo"
+            style={{ width: "auto", height: "35px", objectFit: "contain" }}
+          />
+
           <button
             className={styles.toggleButton}
             onClick={() => setToggle(!toggle)}
@@ -133,6 +138,36 @@ const MerchantMenu = ({ toggle, setToggle, status }) => {
                 </Link>
               </li>
               <li className={styles.menuItem}>
+                <Link to="/virtual-dispute">
+                  <span>
+                    <img src={chargeback} alt="user" width={20} height={20} />
+                    <span>Virtual Dispute</span>
+                  </span>
+                </Link>
+              </li>
+              <li className={styles.menuItem}>
+                <Link
+                  to="#fraud"
+                  data-bs-toggle="collapse"
+                  role="button"
+                  aria-expanded="false"
+                  aria-controls="#fraud"
+                >
+                  <span>
+                    <img src={fraud} alt="fraud" width={20} height={20} />
+                    <span>Fraud Preventions</span>
+                  </span>
+                  <i className="bi bi-chevron-down"></i>
+                </Link>
+                <ul className={`${styles.subMenu} collapse`} id="fraud">
+                  <li className={styles.subMenuItem}>
+                    <Link to="/fraud-prevention">
+                      <span>Fraud Prevention</span>
+                    </Link>
+                  </li>
+                </ul>
+              </li>
+              <li className={styles.menuItem}>
                 <Link
                   to="#payout"
                   data-bs-toggle="collapse"
@@ -170,12 +205,12 @@ const MerchantMenu = ({ toggle, setToggle, status }) => {
                   </li>
                   <li className={styles.subMenuItem}>
                     <Link to="/payout/send-money">
-                      <span>Single Payout</span>
+                      <span>Transfer Money</span>
                     </Link>
                   </li>
                   <li className={styles.subMenuItem}>
                     <Link to="/payout/single-payout">
-                      <span>Save Beneficiary Payout</span>
+                      <span>Transfer to Beneficiary</span>
                     </Link>
                   </li>
                   <li className={styles.subMenuItem}>

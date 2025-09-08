@@ -55,7 +55,7 @@ const VPAExist = () => {
   if (allBeneficiary)
     return (
       <DashboardLayout
-        page="Save Beneficiary Payout"
+        page="Transfer to Beneficiary"
         url="/dashboard/save-beneficiary-payout"
       >
         <div className="container">

@@ -3,6 +3,7 @@ import styles from "../../../styles/common/Add.module.css";
 import { endpoints } from "../../../services/apiEndpoints";
 import useFetch from "../../../hooks/useFetch";
 import usePost from "../../../hooks/usePost";
+import { formatToINRCurrency } from "../../../utils/formatToINRCurrency ";
 
 const Balances = () => {
   const [selectedAcquirer, setSelectedAcquirer] = useState("");
@@ -77,6 +78,13 @@ const Balances = () => {
   };
 
   // console.log(selectedAcquirer, selectedProfile, balanceData);
+
+    const { fetchData: getTotalBalance, data: totalBalanceData } = useFetch();
+
+    useEffect(() => {
+      getTotalBalance(endpoints.user.totalBalance);
+    }, []);
+
 
   useEffect(() => {
     if (selectedProfile) {
@@ -168,7 +176,12 @@ const Balances = () => {
             <div className="col-12">
               <div className="card">
                 <div className="card-header d-flex justify-content-between align-items-center">
-                  <h5 className="mb-0">Account Balance</h5>
+                  <div className="d-flex align-items-center justify-content-between w-100">
+                    <h5 className="mb-0">Account Balance</h5>
+                    {!balanceLoading && <h6 style={{color: "var(--primary)"}} className="mb-0">
+                      Wallet Balance : {formatToINRCurrency(totalBalanceData?.data || 0)}
+                    </h6>}
+                  </div>
                   {balanceLoading && (
                     <div
                       className={`spinner-border spinner-border-sm ${styles.primarySpinner}`}
@@ -213,9 +226,8 @@ const Balances = () => {
                             Account Balance
                           </label> */}
                           <div className={`h3 mb-2 ${styles.primaryText}`}>
-                            ₹{" "}
-                            {balanceValue
-                              ? parseFloat(balanceValue).toLocaleString()
+                            {!isNaN(parseFloat(balanceValue)) && balanceValue !== null
+                              ? formatToINRCurrency(balanceValue)
                               : "0.00"}
                           </div>
                           <small className="text-muted">

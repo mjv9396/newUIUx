@@ -1,0 +1,284 @@
+.profileContainer {
+  padding: 20px;
+  background-color: #f8f9fa;
+  min-height: 100vh;
+}
+
+.profileHeader {
+  display: flex;
+  align-items: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 30px;
+  border-radius: 15px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.profileAvatar {
+  margin-right: 20px;
+}
+
+.profileAvatar i {
+  font-size: 80px;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.profileInfo {
+  flex: 1;
+}
+
+.profileInfo h2 {
+  margin: 0;
+  font-size: 2.2rem;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.profileInfo p {
+  margin: 0;
+  font-size: 1.1rem;
+  opacity: 0.9;
+  margin-bottom: 10px;
+}
+
+.profileStats {
+  display: flex;
+  gap: 30px;
+}
+
+.statItem {
+  text-align: center;
+  padding: 15px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  backdrop-filter: blur(10px);
+  min-width: 150px;
+}
+
+.statItem h4 {
+  margin: 0;
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.statItem p {
+  margin: 0;
+  font-size: 0.9rem;
+  opacity: 0.9;
+}
+
+.profileCard {
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  height: 100%;
+  animation: fadeInUp 0.3s ease forwards;
+}
+
+.profileCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 25px rgba(0, 0, 0, 0.12);
+}
+
+.cardHeader {
+  background: linear-gradient(45deg, #f8f9fa, #e9ecef);
+  padding: 20px;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.cardHeader h5 {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #495057;
+  display: flex;
+  align-items: center;
+}
+
+.cardHeader i {
+  color: #6c757d;
+  font-size: 1.1rem;
+}
+
+.cardBody {
+  padding: 20px;
+}
+
+.infoRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 12px 0;
+  border-bottom: 1px solid #f1f3f4;
+  min-height: 40px;
+}
+
+.infoRow:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.infoRow span:first-child {
+  font-weight: 600;
+  color: #495057;
+  margin-bottom: 0;
+  flex-shrink: 0;
+  width: 40%;
+  font-size: 0.95rem;
+}
+
+.infoRow span:last-child {
+  color: #6c757d;
+  text-align: right;
+  flex: 1;
+  word-break: break-word;
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+.infoRow .badge {
+  font-size: 0.8rem;
+  padding: 0.4em 0.6em;
+}
+
+.infoRow .font-monospace {
+  background: #f8f9fa;
+  padding: 0.3em 0.5em;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  border: 1px solid #e9ecef;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .profileHeader {
+    flex-direction: column;
+    text-align: center;
+    padding: 20px;
+  }
+
+  .profileAvatar {
+    margin-right: 0;
+    margin-bottom: 15px;
+  }
+
+  .profileStats {
+    margin-top: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 15px;
+  }
+
+  .statItem {
+    min-width: 120px;
+  }
+
+  .profileInfo h2 {
+    font-size: 1.8rem;
+  }
+
+  .infoRow {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+  }
+
+  .infoRow span:first-child {
+    width: 100%;
+  }
+
+  .infoRow span:last-child {
+    text-align: left;
+    width: 100%;
+  }
+}
+
+@media (max-width: 576px) {
+  .profileContainer {
+    padding: 10px;
+  }
+
+  .profileHeader {
+    padding: 15px;
+  }
+
+  .cardBody {
+    padding: 15px;
+  }
+
+  .cardHeader {
+    padding: 15px;
+  }
+
+  .profileAvatar i {
+    font-size: 60px;
+  }
+
+  .profileInfo h2 {
+    font-size: 1.5rem;
+  }
+
+  .statItem {
+    min-width: 100px;
+    padding: 10px;
+  }
+
+  .statItem h4 {
+    font-size: 1.1rem;
+  }
+}
+
+/* Custom scrollbar for better UI */
+.profileContainer::-webkit-scrollbar {
+  width: 6px;
+}
+
+.profileContainer::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.profileContainer::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+.profileContainer::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+/* Animation for cards */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Different animation delays for staggered effect */
+.col-lg-6:nth-child(1) .profileCard {
+  animation-delay: 0.1s;
+}
+.col-lg-6:nth-child(2) .profileCard {
+  animation-delay: 0.2s;
+}
+.col-lg-6:nth-child(3) .profileCard {
+  animation-delay: 0.3s;
+}
+.col-lg-6:nth-child(4) .profileCard {
+  animation-delay: 0.4s;
+}
+.col-lg-6:nth-child(5) .profileCard {
+  animation-delay: 0.5s;
+}
+.col-lg-6:nth-child(6) .profileCard {
+  animation-delay: 0.6s;
+}

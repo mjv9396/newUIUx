@@ -8,7 +8,7 @@ import { endpoints } from "../../services/apiEndpoints";
 import { dateFormatter } from "../../utils/dateFormatter";
 
 import { GetUserId, isAdmin, isMerchant } from "../../services/cookieStore";
-import { errorMessage } from "../../utils/messges";
+import { errorMessage, successMessage } from "../../utils/messges";
 import Filters from "../../ui/Filter";
 import Dropdown from "../../ui/Dropdown";
 import ExpandableFilterInput from "../../ui/TextInput";
@@ -39,6 +39,21 @@ const VirtualAccountList = () => {
   const [merchantId, setMerchantId] = useState("");
   const [selectedVirtualAccountId, setSelectedVirtualAccountId] = useState("");
 
+  // Modal state
+  const [showDisputeModal, setShowDisputeModal] = useState(false);
+  const [selectedTransaction, setSelectedTransaction] = useState(null);
+  const [disputeFormData, setDisputeFormData] = useState({
+    utrNo: "",
+    virtualAccNo: "",
+    transactionAmount: "",
+    disputeAmount: "0",
+    penaltyCharge: "0",
+    disputeType: "",
+    disputeStatus: "",
+    disputeDate: "",
+    disputeReason: "",
+  });
+
   // Handle text input changes for filters
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -47,6 +62,103 @@ const VirtualAccountList = () => {
       [name]: value,
     }));
     setCurrentPage(0); // Reset pagination when filter changes
+  };
+
+  // Handle dispute modal
+  const handleOpenDisputeModal = (transaction) => {
+    setSelectedTransaction(transaction);
+    setDisputeFormData({
+      utrNo: transaction.utrNo || "",
+      virtualAccNo: transaction.virtualAcc || "",
+      transactionAmount: transaction.txnAmount || "",
+      disputeAmount: "0",
+      penaltyCharge: "0",
+      disputeType: "",
+      disputeStatus: "",
+      disputeDate: "",
+      disputeReason: "",
+    });
+    setShowDisputeModal(true);
+  };
+
+  const handleCloseDisputeModal = () => {
+    setShowDisputeModal(false);
+    setSelectedTransaction(null);
+    setDisputeFormData({
+      utrNo: "",
+      virtualAccNo: "",
+      transactionAmount: "",
+      disputeAmount: "0",
+      penaltyCharge: "0",
+      disputeType: "",
+      disputeStatus: "",
+      disputeDate: "",
+      disputeReason: "",
+    });
+  };
+
+  const handleDisputeFormChange = (e) => {
+    const { name, value } = e.target;
+
+    // Special validation for penalty charge
+    if (name === "penaltyCharge") {
+      // Allow empty string for initial clearing
+      if (value === "") {
+        setDisputeFormData((prev) => ({
+          ...prev,
+          [name]: value,
+        }));
+        return;
+      }
+
+      // Validate that it's a valid positive number
+      const numValue = parseFloat(value);
+      if (isNaN(numValue) || numValue < 0) {
+        // Don't update state if invalid
+        return;
+      }
+
+      // Allow the value if it's valid
+      setDisputeFormData((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+    } else {
+      setDisputeFormData((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+    }
+  };
+
+  const handleDisputeSubmit = async (e) => {
+    e.preventDefault();
+
+    // Validate penalty charge
+    const penaltyChargeValue = parseFloat(disputeFormData.penaltyCharge);
+    if (isNaN(penaltyChargeValue) || penaltyChargeValue < 0) {
+      errorMessage("Penalty charge must be a positive number");
+      return;
+    }
+
+    // Validate dispute amount
+    const disputeAmountValue = parseFloat(disputeFormData.disputeAmount);
+    if (isNaN(disputeAmountValue) || disputeAmountValue < 0) {
+      errorMessage("Dispute amount must be a positive number");
+      return;
+    }
+
+    // Prepare data with only required fields for API
+    const apiData = {
+      utrNo: disputeFormData.utrNo,
+      disputeAmount: disputeFormData.disputeAmount,
+      penaltyCharge: disputeFormData.penaltyCharge,
+      disputeType: disputeFormData.disputeType,
+      disputeStatus: disputeFormData.disputeStatus,
+      disputeDate: dateFormatter(new Date(disputeFormData.disputeDate)),
+      disputeReason: disputeFormData.disputeReason,
+    };
+    await submitDispute(apiData);
   };
 
   // Get virtual accounts for selected merchant
@@ -60,6 +172,14 @@ const VirtualAccountList = () => {
     error: collectionError,
     loading: collectionLoading,
   } = usePost(endpoints.payin.collectionByVirtualAccount);
+
+  // Dispute API
+  const {
+    postData: submitDispute,
+    data: disputeData,
+    error: disputeError,
+    loading: disputeLoading,
+  } = usePost(endpoints.payin.addDispute);
 
   // Use single data source
   const data = collectionData;
@@ -139,6 +259,19 @@ const VirtualAccountList = () => {
     formData.size,
     range,
   ]);
+
+  // Handle dispute API response
+  useEffect(() => {
+    if (disputeData) {
+      successMessage("Dispute submitted successfully!");
+      handleCloseDisputeModal();
+    }
+    if (disputeError) {
+      errorMessage(
+        disputeError.message || "Error submitting dispute. Please try again."
+      );
+    }
+  }, [disputeData, disputeError]);
 
   const handlePrev = () => {
     setCurrentPage(currentPage - 1);
@@ -248,28 +381,31 @@ const VirtualAccountList = () => {
                 isCurrencyDisabled
               />
 
-              {merchantId && <Dropdown
-                data={[
-                  { id: "", name: "All Virtual Accounts" },
-                  ...(virtualAccountsData?.data?.map((item) => ({
-                    id: item.virtualAccount,
-                    name: item.virtualAccount,
-                  })) || []),
-                ]}
-                selected={{
-                  id: selectedVirtualAccountId ?? "",
-                  name:
-                    virtualAccountsData?.data?.find(
-                      (item) => item.virtualAccount === selectedVirtualAccountId
-                    )?.virtualAccount || "All Virtual Accounts",
-                }}
-                handleChange={(e) => {
-                  setSelectedVirtualAccountId(e);
-                  setCurrentPage(0); // Reset pagination when changing virtual account
-                }}
-                id="id"
-                value="name"
-              />}
+              {merchantId && (
+                <Dropdown
+                  data={[
+                    { id: "", name: "All Virtual Accounts" },
+                    ...(virtualAccountsData?.data?.map((item) => ({
+                      id: item.virtualAccount,
+                      name: item.virtualAccount,
+                    })) || []),
+                  ]}
+                  selected={{
+                    id: selectedVirtualAccountId ?? "",
+                    name:
+                      virtualAccountsData?.data?.find(
+                        (item) =>
+                          item.virtualAccount === selectedVirtualAccountId
+                      )?.virtualAccount || "All Virtual Accounts",
+                  }}
+                  handleChange={(e) => {
+                    setSelectedVirtualAccountId(e);
+                    setCurrentPage(0); // Reset pagination when changing virtual account
+                  }}
+                  id="id"
+                  value="name"
+                />
+              )}
 
               {/* Page Size Filter */}
               <Dropdown
@@ -310,7 +446,8 @@ const VirtualAccountList = () => {
               >
                 <thead>
                   <tr>
-                    <th style={{minWidth: "200px"}}>Virtual Account</th>
+                    <th style={{ minWidth: "150px" }}>Name</th>
+                    <th style={{ minWidth: "200px" }}>Virtual Account</th>
                     <th>Date</th>
                     <th>Previous Amount</th>
                     <th>TXN Amount</th>
@@ -326,12 +463,13 @@ const VirtualAccountList = () => {
                     <th>Corp Client Name</th>
                     <th>DRCR</th>
                     <th>Status</th>
+                    <th>Action</th>
                   </tr>
                 </thead>
                 <tbody>
                   {loading ? (
                     <tr>
-                      <td colSpan={16} className="text-start p-4">
+                      <td colSpan={18} className="text-start p-4">
                         <div className="d-flex align-items-center">
                           <div
                             className="spinner-border spinner-border-sm me-2"
@@ -345,7 +483,7 @@ const VirtualAccountList = () => {
                     </tr>
                   ) : error ? (
                     <tr>
-                      <td colSpan={16} className="text-start p-4">
+                      <td colSpan={18} className="text-start p-4">
                         <div className="text-danger">
                           Error loading data:{" "}
                           {error.message || "Something went wrong"}
@@ -357,20 +495,30 @@ const VirtualAccountList = () => {
                     Array.isArray(data.data.content) &&
                     data.data.content.length > 0 ? (
                     data.data.content.map((item) => (
-                      <tr key={item.utrNo}>
+                      <tr style={{ verticalAlign: "middle" }} key={item.utrNo}>
+                        <td style={{ whiteSpace: "nowrap" }}>
+                          <div>
+                            <div>{item.userFirstName}</div>
+                            <small className="text-muted">
+                              {item.businessName}
+                            </small>
+                          </div>
+                        </td>
                         <td>{item.virtualAcc}</td>
                         <td>
                           <span>
                             <i className="bi bi-calendar3"></i>{" "}
-                            {
-                              new Date(item.valueDate)
-                                .toISOString()
-                                .split("T")[0]
-                            }
+                            {new Date(item.valueDate)
+                              .toLocaleDateString("en-IN", {
+                                day: "2-digit",
+                                month: "2-digit",
+                                year: "numeric",
+                              })
+                              .replace(/\//g, "-")}
                             <br />
                             <i className="bi bi-clock"></i>{" "}
                             {new Date(item.valueDate).toLocaleTimeString(
-                              "en-US",
+                              "en-IN",
                               {
                                 hour: "2-digit",
                                 minute: "2-digit",
@@ -394,11 +542,25 @@ const VirtualAccountList = () => {
                         <td>{item.corpClientName}</td>
                         <td>{item.drcr}</td>
                         <td>{item.status}</td>
+                        <td>
+                          <button
+                            className="btn btn-sm"
+                            onClick={() => handleOpenDisputeModal(item)}
+                            style={{
+                              fontSize: "0.8rem",
+                              backgroundColor: "var(--primary)",
+                              borderColor: "var(--primary)",
+                              color: "white",
+                            }}
+                          >
+                            Dispute
+                          </button>
+                        </td>
                       </tr>
                     ))
                   ) : (
                     <tr>
-                      <td colSpan={16} className="text-start p-4">
+                      <td colSpan={18} className="text-start p-4">
                         No account data found
                       </td>
                     </tr>
@@ -457,6 +619,273 @@ const VirtualAccountList = () => {
           </div>
         </div>
       </div>
+
+      {/* Dispute Modal */}
+      {showDisputeModal && (
+        <>
+          <div
+            className="modal-backdrop fade show"
+            style={{ zIndex: 1040 }}
+            onClick={handleCloseDisputeModal}
+          ></div>
+          <div
+            className="modal fade show d-block"
+            style={{ zIndex: 1050 }}
+            tabIndex="-1"
+          >
+            <div className="modal-dialog modal-lg modal-dialog-centered">
+              <div className="modal-content">
+                <div className="modal-header">
+                  <h5 className="modal-title">Submit Dispute</h5>
+                  <button
+                    type="button"
+                    className="btn-close"
+                    onClick={handleCloseDisputeModal}
+                  ></button>
+                </div>
+                <form onSubmit={handleDisputeSubmit}>
+                  <div className="modal-body">
+                    <div className="row">
+                      <div className="col-md-6 mb-3 position-relative">
+                        <label htmlFor="utrNo" className="form-label">
+                          UTR Number
+                        </label>
+                        <input
+                          type="text"
+                          className="form-control"
+                          id="utrNo"
+                          name="utrNo"
+                          value={disputeFormData.utrNo}
+                          readOnly
+                          style={{ backgroundColor: "#f8f9fa" }}
+                        />
+                      </div>
+                      <div className="col-md-6 mb-3 position-relative">
+                        <label htmlFor="virtualAccNo" className="form-label">
+                          Virtual Account Number
+                        </label>
+                        <input
+                          type="text"
+                          className="form-control"
+                          id="virtualAccNo"
+                          name="virtualAccNo"
+                          value={disputeFormData.virtualAccNo}
+                          readOnly
+                          style={{ backgroundColor: "#f8f9fa" }}
+                        />
+                      </div>
+                      <div className="col-md-4 mb-3 position-relative">
+                        <label
+                          htmlFor="transactionAmount"
+                          className="form-label"
+                        >
+                          Transaction Amount
+                        </label>
+                        <input
+                          type="number"
+                          step="0.01"
+                          className="form-control"
+                          id="transactionAmount"
+                          name="transactionAmount"
+                          value={disputeFormData.transactionAmount}
+                          readOnly
+                          style={{ backgroundColor: "#f8f9fa" }}
+                        />
+                      </div>
+                      <div className="col-md-4 mb-3 position-relative">
+                        <label htmlFor="disputeAmount" className="form-label">
+                          Dispute Amount <span className="text-danger">*</span>
+                        </label>
+                        <input
+                          type="number"
+                          step="0.01"
+                          min="0"
+                          className="form-control"
+                          id="disputeAmount"
+                          name="disputeAmount"
+                          value={disputeFormData.disputeAmount}
+                          onChange={handleDisputeFormChange}
+                          required
+                        />
+                      </div>
+                      <div className="col-md-4 mb-3 position-relative">
+                        <label htmlFor="penaltyCharge" className="form-label">
+                          Penalty Charge <span className="text-danger">*</span>
+                        </label>
+                        <input
+                          type="number"
+                          step="0.01"
+                          min="0"
+                          className="form-control"
+                          id="penaltyCharge"
+                          name="penaltyCharge"
+                          value={disputeFormData.penaltyCharge}
+                          onChange={handleDisputeFormChange}
+                          required
+                        />
+                      </div>
+                      <div className="col-md-6 mb-3 position-relative">
+                        <label htmlFor="totalAmount" className="form-label">
+                          Total Dispute Amount{" "}
+                          <span className="text-danger">*</span>
+                        </label>
+                        <input
+                          type="number"
+                          step="0.01"
+                          className="form-control"
+                          id="totalAmount"
+                          name="totalAmount"
+                          value={(
+                            parseFloat(disputeFormData.disputeAmount || 0) +
+                            parseFloat(disputeFormData.penaltyCharge || 0)
+                          ).toFixed(2)}
+                          readOnly
+                          style={{ backgroundColor: "#f8f9fa" }}
+                        />
+                      </div>
+                      <div className="col-md-6 mb-3 position-relative">
+                        <label htmlFor="grandTotal" className="form-label">
+                          Total Amount <span className="text-danger">*</span>
+                        </label>
+                        <input
+                          type="number"
+                          step="0.01"
+                          className="form-control"
+                          id="grandTotal"
+                          name="grandTotal"
+                          value={(
+                            parseFloat(disputeFormData.transactionAmount || 0) +
+                            parseFloat(disputeFormData.disputeAmount || 0) +
+                            parseFloat(disputeFormData.penaltyCharge || 0)
+                          ).toFixed(2)}
+                          readOnly
+                          style={{ backgroundColor: "#f8f9fa" }}
+                        />
+                      </div>
+                      <div className="col-md-4 mb-3 position-relative">
+                        <label htmlFor="disputeType" className="form-label">
+                          Dispute Type <span className="text-danger">*</span>
+                        </label>
+                        <select
+                          className="form-select input "
+                          id="disputeType"
+                          name="disputeType"
+                          value={disputeFormData.disputeType}
+                          onChange={handleDisputeFormChange}
+                          required
+                          style={{
+                            padding: "0.675rem 0.75rem",
+                            border: "2px solid gray",
+                          }}
+                        >
+                          <option value="">Select Dispute Type</option>
+                          <option value="REFUND">REFUND</option>
+                          <option value="CYBER_COMPLAINT">
+                            CYBER COMPLAINT
+                          </option>
+                          <option value="LEIN">LEIN</option>
+                        </select>
+                      </div>
+                      <div className="col-md-4 mb-3 position-relative">
+                        <label htmlFor="disputeStatus" className="form-label">
+                          Dispute Status <span className="text-danger">*</span>
+                        </label>
+                        <select
+                          className="form-select"
+                          id="disputeStatus"
+                          name="disputeStatus"
+                          value={disputeFormData.disputeStatus}
+                          onChange={handleDisputeFormChange}
+                          required
+                          style={{
+                            padding: "0.675rem 0.75rem",
+                            border: "2px solid gray",
+                          }}
+                        >
+                          <option value="">Select Dispute Status</option>
+                          <option value="OPEN">OPEN</option>
+                          <option value="CLOSED">CLOSED</option>
+                          <option value="REFUNDED">REFUNDED</option>
+                        </select>
+                      </div>
+                      <div className="col-md-4 mb-3 position-relative">
+                        <label htmlFor="disputeDate" className="form-label">
+                          Dispute Date <span className="text-danger">*</span>
+                        </label>
+                        <input
+                          type="date"
+                          className="form-control"
+                          id="disputeDate"
+                          name="disputeDate"
+                          value={disputeFormData.disputeDate}
+                          onChange={handleDisputeFormChange}
+                          required
+                          style={{
+                            padding: "0.675rem 0.75rem",
+                            border: "2px solid gray",
+                          }}
+                        />
+                      </div>
+                      <div className="col-12 mb-3 position-relative">
+                        <label htmlFor="disputeReason" className="form-label">
+                          Dispute Reason <span className="text-danger">*</span>
+                        </label>
+                        <textarea
+                          className="form-control p-3"
+                          id="disputeReason"
+                          name="disputeReason"
+                          rows="3"
+                          value={disputeFormData.disputeReason}
+                          onChange={handleDisputeFormChange}
+                          placeholder="Please provide a detailed reason for the dispute"
+                          required
+                        ></textarea>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="modal-footer">
+                    <button
+                      type="button"
+                      className="btn"
+                      onClick={handleCloseDisputeModal}
+                      style={{
+                        backgroundColor: "#6c757d",
+                        borderColor: "#6c757d",
+                        color: "white",
+                      }}
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      type="submit"
+                      className="btn"
+                      disabled={disputeLoading}
+                      style={{
+                        backgroundColor: "var(--primary)",
+                        borderColor: "var(--primary)",
+                        color: "white",
+                        opacity: disputeLoading ? 0.65 : 1,
+                      }}
+                    >
+                      {disputeLoading ? (
+                        <>
+                          <span
+                            className="spinner-border spinner-border-sm me-2"
+                            role="status"
+                          ></span>
+                          Submitting...
+                        </>
+                      ) : (
+                        "Submit Dispute"
+                      )}
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
     </DashboardLayout>
   );
 };

@@ -118,6 +118,13 @@ export const remittanceReport = {
   dateTo: "",
 };
 
+export const internalTransfer = {
+  amount: "",
+  merchantAppId: "",
+  reenterMerchantAppId: "",
+  captcha: "",
+};
+
 export const addAcquirerProfile = {
   acqCode: "",
   currencyCode: "",
@@ -149,4 +156,11 @@ export const addAcquirerProfile = {
   bankCode2: "",
   virtualCode: "@",
   isActive: "true",
+};
+
+export const downloadReport = {
+  txnStatus: "",
+  dateFrom: "",
+  dateTo: "",
+  userId: "",
 };

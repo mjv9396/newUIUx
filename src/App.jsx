@@ -12,6 +12,7 @@ import PaymentType from "./pages/payin/paymentType/Tabs";
 import MopType from "./pages/payin/mopType/Tabs";
 import Acquirer from "./pages/bank/acquirer/Tabs";
 import AcquirerProfile from "./pages/bank/payinAcquirerProfile/Tabs";
+import AcquirerAccountStatement from "./pages/virtualAccount/acquirerAccountStatement/Tabs";
 import Profile from "./pages/profile/Profile";
 import ChargingDetails from "./pages/payin/chargingDetails/Tabs";
 import MerchantList from "./pages/merchant/MerchantList";
@@ -29,6 +30,7 @@ import Refund from "./pages/payin/refund/Refund";
 import ChargeBack from "./pages/payin/chargeBack/ChargeBack";
 import KycVerification from "./pages/kycVerification/KycVerification";
 import SendMoney from "./pages/payout/sendMoney/SendMoney";
+import InternalTransfer from "./pages/payout/internalTransfer/InternalTransfer";
 import VPAExist from "./pages/payout/singlePay/VPAExist";
 import FraudPrevention from "./pages/fraudPrevention/FraudPrevention";
 import SettlementList from "./pages/payin/settlement/SettlementList";
@@ -45,11 +47,12 @@ import PayinTransaction from "./pages/updateTransaction/PayinTransaction";
 import PayoutTransaction from "./pages/updateTransaction/PayoutTransaction";
 import Dispute from "./pages/payin/dispute/Dispute";
 import ReconciliationReport from "./pages/reconciliationReport/ReconciliationReport";
+import MerchantProfile from "./pages/merchantProfile/MerchantProfile";
 import { Toaster } from "sonner";
 import Analytics from "./pages/analytics/Analytics";
 import ActiveUserLayout from "./layouts/ActiveUserLayout";
 import VirtualAccountList from "./pages/virtualAccount/VirtualAccountList";
-import AcquirerAccountStatement from "./pages/virtualAccount/acquirerAccountStatement/Tabs";
+import VirtualDispute from "./pages/virtualAccount/Dispute";
 import Unauthorised from "./pages/errors/Unauthorised";
 import LoginLayout from "./layouts/LoginLayout";
 import { CheckCookieTimeout } from "./services/cookieStore";
@@ -58,7 +61,7 @@ export default function App() {
   return (
     <BrowserRouter>
       <Toaster />
-      <CheckCookieTimeout/>
+      <CheckCookieTimeout />
       <Routes>
         <Route
           exact
@@ -69,6 +72,15 @@ export default function App() {
             </LoginLayout>
           }
         />
+        {/* <Route
+          exact
+          path="/login-with-username-and-password"
+          element={
+            <LoginLayout>
+              <LoginWithUsernameAndPassword />
+            </LoginLayout>
+          }
+        /> */}
         <Route
           exact
           path="/terms-and-conditions"
@@ -122,11 +134,11 @@ export default function App() {
         />
         <Route
           exact
-          path="/check-account-balance"
+          path="/virtual-dispute"
           element={
-            <ProtectedLayout allowedRoles={["ADMIN"]}>
+            <ProtectedLayout allowedRoles={["ADMIN", "MERCHANT", "RESELLER"]}>
               <ActiveUserLayout>
-                <AcquirerAccountStatement />
+                <VirtualDispute />
               </ActiveUserLayout>
             </ProtectedLayout>
           }
@@ -180,6 +192,17 @@ export default function App() {
             </ProtectedLayout>
           }
         />
+        <Route
+          exact
+          path="/merchant-profile"
+          element={
+            <ProtectedLayout allowedRoles={["MERCHANT"]}>
+              <ActiveUserLayout>
+                <MerchantProfile />
+              </ActiveUserLayout>
+            </ProtectedLayout>
+          }
+        />
         {/* Bank Routes */}
         <Route
           exact
@@ -210,6 +233,17 @@ export default function App() {
             <ProtectedLayout allowedRoles={["ADMIN"]}>
               <ActiveUserLayout>
                 <PayoutAcquirerProfile />
+              </ActiveUserLayout>
+            </ProtectedLayout>
+          }
+        />
+        <Route
+          exact
+          path="/bank/acquirer-account-statement"
+          element={
+            <ProtectedLayout allowedRoles={["ADMIN"]}>
+              <ActiveUserLayout>
+                <AcquirerAccountStatement />
               </ActiveUserLayout>
             </ProtectedLayout>
           }
@@ -422,6 +456,17 @@ export default function App() {
             <ProtectedLayout allowedRoles={["MERCHANT"]}>
               <ActiveUserLayout>
                 <SendMoney />
+              </ActiveUserLayout>
+            </ProtectedLayout>
+          }
+        />
+        <Route
+          exact
+          path="/payout/internal-transfer"
+          element={
+            <ProtectedLayout allowedRoles={["MERCHANT"]}>
+              <ActiveUserLayout>
+                <InternalTransfer />
               </ActiveUserLayout>
             </ProtectedLayout>
           }

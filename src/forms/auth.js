@@ -1,6 +1,7 @@
 export const loginForm = {
   password: "",
   username: "",
+  captcha: "",
 };
 
 export const signupForm = {

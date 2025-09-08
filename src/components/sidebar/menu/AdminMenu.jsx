@@ -45,8 +45,12 @@ const AdminMenu = memo(({ toggle, setToggle }) => {
     >
       <div className={styles.sidebarHeader}>
         <div className={styles.logoContainer}>
-            <img src={logo} alt="logo" style={{ width: 'auto', height: '35px', objectFit: 'contain' }} />
-          
+          <img
+            src={logo}
+            alt="logo"
+            style={{ width: "auto", height: "35px", objectFit: "contain" }}
+          />
+
           <button
             className={styles.toggleButton}
             onClick={() => setToggle(!toggle)}
@@ -190,7 +194,7 @@ const AdminMenu = memo(({ toggle, setToggle }) => {
             <ul className={`${styles.subMenu} collapse`} id="tdr">
               <li>
                 <Link to="/payin/charging-detail">
-                  <span>Paying Charging Details</span>
+                  <span>Payin Charging Details</span>
                 </Link>
               </li>
               <li>
@@ -264,7 +268,7 @@ const AdminMenu = memo(({ toggle, setToggle }) => {
             </Link>
           </li> */}
 
-        <li className={styles.menuItem}>
+          <li className={styles.menuItem}>
             <Link
               to="#virtual"
               data-bs-toggle="collapse"
@@ -274,7 +278,7 @@ const AdminMenu = memo(({ toggle, setToggle }) => {
             >
               <span>
                 <img src={bank} alt="virtual" width={20} height={20} />
-                <span>Virtual Collections</span>
+                <span>Escrow Accounts</span>
               </span>
               <i className="bi bi-chevron-down"></i>
             </Link>
@@ -282,19 +286,21 @@ const AdminMenu = memo(({ toggle, setToggle }) => {
             <ul className={`${styles.subMenu} collapse`} id="virtual">
               <li>
                 <Link to="/virtual-account">
-                  <span>Virtual Transactions</span>
+                  <span>Virtual Collections</span>
+                </Link>
+              </li>
+              <li>
+                <Link to="/virtual-dispute">
+                  <span>Virtual Dispute</span>
                 </Link>
               </li>
               <li>
                 <Link to="/check-account-balance">
-                  <span>Check Account Balance</span>
+                  <span>Account Balance</span>
                 </Link>
               </li>
-             
             </ul>
           </li>
-
-
 
           <li className={styles.menuItem}>
             <Link
@@ -444,7 +450,7 @@ const AdminMenu = memo(({ toggle, setToggle }) => {
             </Link>
           </li>
           <li className={styles.menuItem}>
-            <button 
+            <button
               onClick={handleLogout}
               className={styles.logoutMenuItem}
               title="Logout"
