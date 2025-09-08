@@ -168,6 +168,14 @@ const MerchantMenu = ({ toggle, setToggle, status }) => {
                 </ul>
               </li>
               <li className={styles.menuItem}>
+                <Link to="/merchant-whitelist">
+                  <span>
+                    <img src={fraud} alt="whitelist" width={20} height={20} />
+                    <span>Whitelist</span>
+                  </span>
+                </Link>
+              </li>
+              <li className={styles.menuItem}>
                 <Link
                   to="#payout"
                   data-bs-toggle="collapse"

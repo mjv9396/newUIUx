@@ -17,6 +17,7 @@ import Profile from "./pages/profile/Profile";
 import ChargingDetails from "./pages/payin/chargingDetails/Tabs";
 import MerchantList from "./pages/merchant/MerchantList";
 import UpdateMerchant from "./pages/merchant/UpdateMerchant";
+import MerchantWhitelist from "./pages/merchant/MerchantWhitelist";
 import PayoutAcquirerProfile from "./pages/bank/payoutAcquirerProfile/Tabs";
 import PayoutChargingDetails from "./pages/payout/chargingDetails/Tabs";
 import TransactionList from "./pages/payout/transactions/TransactionList";
@@ -501,6 +502,17 @@ export default function App() {
             <ProtectedLayout allowedRoles={["ADMIN", "RESELLER"]}>
               <ActiveUserLayout>
                 <UpdateMerchant />
+              </ActiveUserLayout>
+            </ProtectedLayout>
+          }
+        />
+        <Route
+          exact
+          path="/merchant-whitelist"
+          element={
+            <ProtectedLayout allowedRoles={["ADMIN", "RESELLER", "MERCHANT"]}>
+              <ActiveUserLayout>
+                <MerchantWhitelist />
               </ActiveUserLayout>
             </ProtectedLayout>
           }

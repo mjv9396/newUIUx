@@ -111,6 +111,11 @@ const AdminMenu = memo(({ toggle, setToggle }) => {
                   <span>Merchants</span>
                 </Link>
               </li>
+              <li>
+                <Link to="/merchant-whitelist">
+                  <span>Whitelist</span>
+                </Link>
+              </li>
             </ul>
           </li>
 
