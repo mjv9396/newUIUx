@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import BusinessDetails from "./BusinessDetails";
 import BusinessRegistration from "./BusinessRegistration";
 import AuthorisedSignatory from "./AuthorisedSignatory";
@@ -15,7 +15,6 @@ import { GetUserId } from "../../services/cookieStore";
 export default function KycForm() {
   const {
     errors,
-    setErrors,
     formData,
     setFormData,
     activeStep,
@@ -38,14 +37,10 @@ export default function KycForm() {
     handleStepChange,
     handleSubmit,
     processExistingDocuments,
+    businessDetailsLoading,
   } = useKyc();
 
-  const {
-    data: kycData,
-    loading: kycLoading,
-    error: kycError,
-    fetchData: fetchKycData,
-  } = useFetch();
+  const { data: kycData, fetchData: fetchKycData } = useFetch();
 
   useEffect(() => {
     // Fetch existing KYC data if available
@@ -274,6 +269,7 @@ export default function KycForm() {
                       type="button"
                       onClick={() => handleStepChange(2)}
                       className={`${styles.button} btn-outline-secondary`}
+                      disabled={businessDetailsLoading}
                     >
                       Back
                     </button>
@@ -281,8 +277,9 @@ export default function KycForm() {
                       type="button"
                       onClick={() => handleStepChange(4)}
                       className={styles.button}
+                      disabled={businessDetailsLoading}
                     >
-                      Next
+                      {businessDetailsLoading ? "Saving..." : "Next"}
                     </button>
                   </div>
                 </>
@@ -538,7 +535,8 @@ export default function KycForm() {
                       Thank you for submitting your KYC details!
                     </h3>
                     <p className="text-muted">
-                      Your application is under review. We will activate your account once the verification is complete.
+                      Your application is under review. We will activate your
+                      account once the verification is complete.
                     </p>
                   </>
                 )}

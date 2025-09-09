@@ -73,10 +73,11 @@ const Dashboard = () => {
 
   const { postData: getVirtualBalance, data: VirtualBalanceData } = usePost(endpoints.user.virtualBalance);
   useEffect(() => {
+    if(!merchantId && isAdmin()) return;
     getVirtualBalance({
       userId: isAdmin() ? merchantId : GetUserId(),
-      startDate: dateFormatter(range[0].startDate),
-      endDate: dateFormatter(range[0].endDate),
+      dateFrom: dateFormatter(range[0].startDate),
+      dateTo: dateFormatter(range[0].endDate),
     });
   }, [
     merchantId,

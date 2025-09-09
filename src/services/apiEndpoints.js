@@ -21,6 +21,8 @@ export const endpoints = {
     verifyGst: "/kyc/verifyGst",
     verifyCin: "/kyc/verifyCin",
     getAllDocument: "/kyc/allDocumentsDetail/",
+    getBusinessDetails: "/kyc/business-details",
+    saveBusinessDetails: "/kyc/business-details",
     saveKycDocument: "/kyc/saveKycDocument",
     verifyDocument: "/kyc/verifyDocument",
     rejectDocument: "/kyc/rejectDocument",

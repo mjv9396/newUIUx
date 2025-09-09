@@ -125,7 +125,7 @@ const Overlay = ({ userId, onClose, onSuccess }) => {
       <div className={styles.detail}>
         <form onSubmit={handleSubmit}>
           <div className="row">
-            <div className="col-12 mb-3">
+            <div className="col-12 mb-3 position-relative">
               <label htmlFor="documentType" className="form-label fw-bold">
                 Document Type{" "}
                 <span style={{ color: "var(--required)" }}>*</span>
@@ -157,7 +157,7 @@ const Overlay = ({ userId, onClose, onSuccess }) => {
               )}
             </div>
 
-            <div className="col-12 mb-3">
+            <div className="col-12 mb-3 position-relative">
               <label htmlFor="documentNumber" className="form-label fw-bold">
                 Document Number{" "}
                 <span style={{ color: "var(--required)" }}>*</span>
@@ -184,7 +184,7 @@ const Overlay = ({ userId, onClose, onSuccess }) => {
               )}
             </div>
 
-            <div className="col-12 mb-3">
+            <div className="col-12 mb-3 position-relative">
               <label htmlFor="file" className="form-label fw-bold">
                 Document File{" "}
                 <span style={{ color: "var(--required)" }}>*</span>
