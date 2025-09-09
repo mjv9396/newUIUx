@@ -21,7 +21,7 @@ import BlockEmailAddr from "./components/BlockEmailAddr";
 import BlockCustomerPhn from "./components/BlockCustomerPhn";
 import BlockAmountLimit from "./components/BlockAmountLimit";
 import Filters from "../../ui/Filter";
-import { isMerchant } from "../../services/cookieStore";
+import { isAdmin, isMerchant } from "../../services/cookieStore";
 
 const FraudPrevention = () => {
   //fetch merchant, acquirer, payment type, mop type and  curreny
@@ -41,7 +41,18 @@ const FraudPrevention = () => {
   const handleTab = (id) => {
     setActive(id);
   };
-  if (allMerchant)
+
+  useEffect(() => {
+    if (isMerchant() && allMerchant) {
+      const merchantId = allMerchant?.data?.find(
+        (item) => item.userId === allMerchant?.data[0]?.userId
+      )?.userId;
+      setSelectedMerchant(merchantId);
+      getAllTypes(endpoints.fraud.allTypes);
+    }
+  }, [allMerchant]);
+
+  if (isAdmin ? allMerchant : selectedMerchant)
     return (
       <DashboardLayout
         page="Fraud Prevention"

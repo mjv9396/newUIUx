@@ -162,6 +162,44 @@ export default function BusinessDetails({ formData, handleChange, errors }) {
           <span className="errors">{errors.companyWebsite}</span>
         )}
       </div>
+
+      <div className="col-md-4 col-sm-12 mb-3 position-relative">
+        <label htmlFor="certInCompliant">
+          Cert-In Compliant <span className="required">*</span>
+        </label>
+        <select
+          name="certInCompliant"
+          id="certInCompliant"
+          required
+          onChange={handleChange}
+          value={formData.certInCompliant}
+        >
+          <option value="">Select compliance status</option>
+          <option value="yes">Yes, we are Cert-In compliant</option>
+          <option value="no">No, we are not Cert-In compliant</option>
+        </select>
+        {errors.certInCompliant && (
+          <span className="errors">{errors.certInCompliant}</span>
+        )}
+      </div>
+
+      {formData.certInCompliant === "yes" && (
+        <div className="col-md-4 col-sm-12 mb-3 position-relative">
+          <label htmlFor="certInDocument">
+            Cert-In Document <span className="required">*</span>
+          </label>
+          <input
+            type="file"
+            name="certInDocument"
+            id="certInDocument"
+            accept=".pdf,.jpg,.jpeg,.png,.doc,.docx"
+            onChange={handleChange}
+          />
+          {errors.certInDocument && (
+            <span className="errors">{errors.certInDocument}</span>
+          )}
+        </div>
+      )}
     </div>
   );
 }

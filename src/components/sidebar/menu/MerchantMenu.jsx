@@ -98,7 +98,7 @@ const MerchantMenu = ({ toggle, setToggle, status }) => {
                 <Link to="/merchant-profile">
                   <span>
                     <img src={avatar} alt="profile" width={20} height={20} />
-                    <span>Merchant Profile</span>
+                    <span> Profile</span>
                   </span>
                 </Link>
               </li>

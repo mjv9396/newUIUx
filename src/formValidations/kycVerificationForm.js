@@ -31,6 +31,19 @@ export const validateKycVerificationForm = (formdata) => {
     errors.companyWebsite = "Company website is required";
     activeStep = activeStep === 6 ? 2 : activeStep;
   }
+  
+  // Cert-In compliance validation
+  if (!formdata.certInCompliant) {
+    errors.certInCompliant = "Cert-In compliance status is required";
+    activeStep = activeStep === 6 ? 2 : activeStep;
+  }
+  
+  // If Cert-In compliant is 'yes', document is required
+  if (formdata.certInCompliant === 'yes' && !formdata.certInDocument) {
+    errors.certInDocument = "Cert-In compliance certificate is required";
+    activeStep = activeStep === 6 ? 2 : activeStep;
+  }
+  
   // registration details
   if (!formdata.companyPan) {
     errors.companyPan = "Company PAN is required";

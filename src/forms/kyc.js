@@ -49,4 +49,8 @@ export const kycFormData = {
   customerEnquiryQuestions: "", // file
   officeBuildingPhoto: "", // file
   officePhoto: "", // file
+
+  // Cert-In Compliance
+  certInCompliant: "", // 'yes' or 'no'
+  certInDocument: "", // file - only required if certInCompliant is 'yes'
 };
