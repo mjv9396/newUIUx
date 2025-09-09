@@ -97,33 +97,40 @@ export default function KycDocuments({ userId }) {
             </tr>
           </thead>
           <tbody>
-            {data?.data?.length > 0 && typeof data?.data === "object" ? (
-              data?.data?.map((item, index) => (
-                <tr key={item.documentId}>
-                  <td>{index + 1}</td>
-                  <td>{item.documentType}</td>
-                  <td>{item.documentNumber ?? "N/A"}</td>
-                  <td>{item.documentName}</td>
-                  <td>
-                    {item.verified ? (
-                      <span className="badge bg-success">Verified</span>
-                    ) : item.rejectedReasion ? (
-                      <span className="badge bg-danger">Rejected</span>
-                    ) : (
-                      <span className="badge bg-warning">Pending</span>
-                    )}
-                  </td>
-                  <td>
-                    <button
-                      className="btn btn-ghost-primary btn-sm"
-                      onClick={() => handleViewDocument(item.documentId, item)}
-                      title="View Document"
-                    >
-                      <i className="bi bi-eye"></i>
-                    </button>
-                  </td>
-                </tr>
-              ))
+            {data?.data?.filter(
+              (item) => item.documentType !== "BUSINESS_DETAILS"
+            )?.length > 0 && typeof data?.data === "object" ? (
+              data?.data?.map((item, index) => {
+                if (item.documentType === "BUSINESS_DETAILS") return null;
+                return (
+                  <tr key={item.documentId}>
+                    <td>{index + 1}</td>
+                    <td>{item.documentType}</td>
+                    <td>{item.documentNumber ?? "N/A"}</td>
+                    <td>{item.documentName}</td>
+                    <td>
+                      {item.verified ? (
+                        <span className="badge bg-success">Verified</span>
+                      ) : item.rejectedReasion ? (
+                        <span className="badge bg-danger">Rejected</span>
+                      ) : (
+                        <span className="badge bg-warning">Pending</span>
+                      )}
+                    </td>
+                    <td>
+                      <button
+                        className="btn btn-ghost-primary btn-sm"
+                        onClick={() =>
+                          handleViewDocument(item.documentId, item)
+                        }
+                        title="View Document"
+                      >
+                        <i className="bi bi-eye"></i>
+                      </button>
+                    </td>
+                  </tr>
+                );
+              })
             ) : (
               <tr>
                 <td colSpan={3}>No Documents Available</td>
