@@ -9,6 +9,7 @@ import fraud from "../../../assets/fraud.png";
 import login from "../../../assets/login.png";
 import kyc from "../../../assets/kyc.png";
 import web from "../../../assets/world-wide-web.png";
+import avatar from "../../../assets/avatar.png";
 import ledger from "../../../assets/bank-statement.png";
 import downlaodfile from "../../../assets/download-file.png";
 import remittance from "../../../assets/remittance.png";
@@ -90,6 +91,14 @@ const MerchantMenu = ({ toggle, setToggle, status }) => {
                   <span>
                     <img src={home} alt="dashboard" width={20} height={20} />
                     <span>Dashboard</span>
+                  </span>
+                </Link>
+              </li>
+              <li className={styles.menuItem}>
+                <Link to="/merchant-profile">
+                  <span>
+                    <img src={avatar} alt="profile" width={20} height={20} />
+                    <span>Merchant Profile</span>
                   </span>
                 </Link>
               </li>

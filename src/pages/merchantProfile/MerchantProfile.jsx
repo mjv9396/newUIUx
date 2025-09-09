@@ -1,15 +1,37 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import DashboardLayout from "../../layouts/DashboardLayout";
 import useFetch from "../../hooks/useFetch";
 import { endpoints } from "../../services/apiEndpoints";
+import { GetUserId } from "../../services/cookieStore";
 import styles from "../../styles/merchantProfile/MerchantProfile.module.css";
 
 const MerchantProfile = () => {
   const { fetchData, data, loading, error } = useFetch();
 
+  // KYC Documents
+  const {
+    fetchData: fetchKycDocuments,
+    data: kycDocuments,
+    loading: kycLoading,
+    error: kycError,
+  } = useFetch();
+  const [viewDocument, setViewDocument] = useState(false);
+  const [documentUrl, setDocumentUrl] = useState("");
+
   useEffect(() => {
     fetchData(endpoints.user.fullProfile);
+
+    // Fetch KYC documents for the current merchant
+    const userId = GetUserId();
+    if (userId) {
+      fetchKycDocuments(endpoints.kyc.getAllDocument + userId);
+    }
   }, []);
+
+  const handleViewDocument = (documentUrl) => {
+    setDocumentUrl(documentUrl);
+    setViewDocument(true);
+  };
 
   if (loading) {
     return (
@@ -41,6 +63,19 @@ const MerchantProfile = () => {
   }
 
   const profileData = data?.data;
+
+  // Safely get KYC documents array
+  const documentsArray =
+    kycDocuments?.data && Array.isArray(kycDocuments.data)
+      ? kycDocuments.data
+      : [];
+
+  // Debug: Log the actual structure (remove this after debugging)
+  if (kycDocuments && !kycLoading) {
+    console.log("KYC Documents API Response:", kycDocuments);
+    console.log("KYC Documents Data Type:", typeof kycDocuments.data);
+    console.log("Is KYC Data Array:", Array.isArray(kycDocuments.data));
+  }
 
   if (!profileData) {
     return (
@@ -101,15 +136,36 @@ const MerchantProfile = () => {
               {profileData.firstName} {profileData.lastName}
             </h2>
             <p className="text-muted">{profileData.businessName}</p>
-            <span
-              className={`badge ${
-                profileData.userAccountState === "ACTIVE"
-                  ? "bg-success"
-                  : "bg-warning"
-              } text-white`}
-            >
-              {profileData.userAccountState}
-            </span>
+            <div className="d-flex gap-2 flex-wrap">
+              <span
+                className={`badge ${
+                  profileData.userAccountState === "ACTIVE"
+                    ? "bg-success"
+                    : "bg-warning"
+                } text-white`}
+              >
+                {profileData.userAccountState}
+              </span>
+
+              {/* Cert-In Compliance Badge */}
+              <span
+                className={`badge ${
+                  profileData.certInCompliant === true
+                    ? "bg-info"
+                    : "bg-secondary"
+                } text-white`}
+                title={
+                  profileData.certInCompliant === true
+                    ? "This merchant is Cert-In compliant"
+                    : "This merchant is not Cert-In compliant"
+                }
+              >
+                <i className="bi bi-shield-check me-1"></i>
+                {profileData.certInCompliant === true
+                  ? "Cert-In Compliant"
+                  : "Not Cert-In Compliant"}
+              </span>
+            </div>
           </div>
           <div className={styles.profileStats}>
             <div className={styles.statItem}>
@@ -498,7 +554,174 @@ const MerchantProfile = () => {
               </div>
             </div>
           </div>
+
+          {/* KYC Documents */}
+          <div className="col-12">
+            <div className={styles.profileCard}>
+              <div className={styles.cardHeader}>
+                <h5>
+                  <i className="bi bi-file-earmark-check me-2"></i>KYC Documents
+                </h5>
+              </div>
+              <div className={styles.cardBody}>
+                {kycLoading ? (
+                  <div className="text-center py-3">
+                    <div
+                      className="spinner-border spinner-border-sm text-primary"
+                      role="status"
+                    >
+                      <span className="visually-hidden">
+                        Loading documents...
+                      </span>
+                    </div>
+                    <p className="mt-2 text-muted small">
+                      Loading KYC documents...
+                    </p>
+                  </div>
+                ) : kycError ? (
+                  <div className="alert alert-warning" role="alert">
+                    <i className="bi bi-exclamation-triangle me-2"></i>
+                    Error loading KYC documents:{" "}
+                    {kycError.message || "Something went wrong"}
+                  </div>
+                ) : documentsArray.length > 0 ? (
+                  <div className="table-responsive">
+                    <table className="table table-sm">
+                      <thead>
+                        <tr>
+                          <th>Sr. No.</th>
+                          <th>Document Type</th>
+                          <th>Document Number</th>
+                          <th>Document Name</th>
+                          <th>Status</th>
+                          <th>Action</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {documentsArray.map((doc, index) => (
+                          <tr key={doc.documentId}>
+                            <td>{index + 1}</td>
+                            <td>{doc.documentType}</td>
+                            <td>{doc.documentNumber || "N/A"}</td>
+                            <td>{doc.documentName}</td>
+                            <td>
+                              {doc.verified ? (
+                                <span className="badge bg-success">
+                                  Verified
+                                </span>
+                              ) : doc.rejectedReasion ? (
+                                <span className="badge bg-danger">
+                                  Rejected
+                                </span>
+                              ) : (
+                                <span className="badge bg-warning">
+                                  Pending
+                                </span>
+                              )}
+                              {doc.rejectedReasion && (
+                                <div className="text-danger small mt-1">
+                                  <i className="bi bi-exclamation-circle me-1"></i>
+                                  {doc.rejectedReasion}
+                                </div>
+                              )}
+                            </td>
+                            <td>
+                              <button
+                                className="btn btn-outline-primary btn-sm"
+                                onClick={() =>
+                                  handleViewDocument(doc.documentUrl)
+                                }
+                                title="View Document"
+                                disabled={!doc.documentUrl}
+                              >
+                                <i className="bi bi-eye"></i>
+                              </button>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                ) : (
+                  <div className="text-center py-4">
+                    <i className="bi bi-file-earmark-x fa-2x text-muted mb-3"></i>
+                    <p className="text-muted">No KYC documents found</p>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
         </div>
+
+        {/* Document Viewer Modal */}
+        {viewDocument && (
+          <div
+            className="modal fade show"
+            style={{ display: "block", backgroundColor: "rgba(0,0,0,0.5)" }}
+          >
+            <div className="modal-dialog modal-lg">
+              <div className="modal-content">
+                <div className="modal-header">
+                  <h5 className="modal-title">
+                    <i className="bi bi-file-earmark-text me-2"></i>
+                    Document Viewer
+                  </h5>
+                  <button
+                    type="button"
+                    className="btn-close"
+                    onClick={() => setViewDocument(false)}
+                  ></button>
+                </div>
+                <div className="modal-body text-center">
+                  {documentUrl ? (
+                    <img
+                      src={documentUrl}
+                      alt="Document"
+                      className="img-fluid"
+                      style={{ maxHeight: "70vh", width: "auto" }}
+                      onError={(e) => {
+                        e.target.style.display = "none";
+                        e.target.nextSibling.style.display = "block";
+                      }}
+                    />
+                  ) : (
+                    <div className="alert alert-warning">
+                      <i className="bi bi-exclamation-triangle me-2"></i>
+                      Document not available
+                    </div>
+                  )}
+                  <div
+                    style={{ display: "none" }}
+                    className="alert alert-danger"
+                  >
+                    <i className="bi bi-exclamation-triangle me-2"></i>
+                    Failed to load document image
+                  </div>
+                </div>
+                <div className="modal-footer">
+                  <button
+                    type="button"
+                    className="btn btn-secondary"
+                    onClick={() => setViewDocument(false)}
+                  >
+                    Close
+                  </button>
+                  {documentUrl && (
+                    <a
+                      href={documentUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="btn btn-primary"
+                    >
+                      <i className="bi bi-download me-2"></i>
+                      View Original
+                    </a>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </DashboardLayout>
   );
