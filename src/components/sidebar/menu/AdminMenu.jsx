@@ -295,6 +295,16 @@ const AdminMenu = memo(({ toggle, setToggle }) => {
                 </Link>
               </li>
               <li>
+                <Link to="/main-account-statements">
+                  <span>Main Account Statements</span>
+                </Link>
+              </li>
+              <li>
+                <Link to="/user-virtual-accounts">
+                  <span>User Virtual Accounts</span>
+                </Link>
+              </li>
+              <li>
                 <Link to="/virtual-dispute">
                   <span>Virtual Dispute</span>
                 </Link>

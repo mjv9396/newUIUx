@@ -138,6 +138,14 @@ const MerchantMenu = ({ toggle, setToggle, status }) => {
                 </Link>
               </li>
               <li className={styles.menuItem}>
+                <Link to="/user-virtual-accounts">
+                  <span>
+                    <img src={chargeback} alt="user" width={20} height={20} />
+                    <span>User Virtual Accounts</span>
+                  </span>
+                </Link>
+              </li>
+              <li className={styles.menuItem}>
                 <Link to="/virtual-dispute">
                   <span>
                     <img src={chargeback} alt="user" width={20} height={20} />

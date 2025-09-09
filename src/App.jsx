@@ -54,6 +54,8 @@ import Analytics from "./pages/analytics/Analytics";
 import ActiveUserLayout from "./layouts/ActiveUserLayout";
 import VirtualAccountList from "./pages/virtualAccount/VirtualAccountList";
 import VirtualDispute from "./pages/virtualAccount/Dispute";
+import MainAccountStatements from "./pages/virtualCollections/MainAccountStatements";
+import UserVirtualAccounts from "./pages/virtualCollections/UserVirtualAccounts";
 import Unauthorised from "./pages/errors/Unauthorised";
 import LoginLayout from "./layouts/LoginLayout";
 import { CheckCookieTimeout } from "./services/cookieStore";
@@ -140,6 +142,28 @@ export default function App() {
             <ProtectedLayout allowedRoles={["ADMIN", "MERCHANT", "RESELLER"]}>
               <ActiveUserLayout>
                 <VirtualDispute />
+              </ActiveUserLayout>
+            </ProtectedLayout>
+          }
+        />
+        <Route
+          exact
+          path="/main-account-statements"
+          element={
+            <ProtectedLayout allowedRoles={["ADMIN"]}>
+              <ActiveUserLayout>
+                <MainAccountStatements />
+              </ActiveUserLayout>
+            </ProtectedLayout>
+          }
+        />
+        <Route
+          exact
+          path="/user-virtual-accounts"
+          element={
+            <ProtectedLayout allowedRoles={["ADMIN", "MERCHANT"]}>
+              <ActiveUserLayout>
+                <UserVirtualAccounts />
               </ActiveUserLayout>
             </ProtectedLayout>
           }
