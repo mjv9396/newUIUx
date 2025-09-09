@@ -5,7 +5,7 @@ import styles from "../../../styles/common/Modal.module.css";
 import classes from "../../../styles/common/Add.module.css";
 import useFileUpload from "../../../hooks/useFileUpload";
 import { endpoints } from "../../../services/apiEndpoints";
-import { successMessage } from "../../../utils/messges";
+import { errorMessage, successMessage } from "../../../utils/messges";
 
 const Backdrop = () => {
   return <div className={styles.backdrop}></div>;
@@ -61,10 +61,10 @@ const Overlay = ({ userId, onClose, onSuccess }) => {
         "image/jpeg",
         "image/jpg",
         "image/png",
-        "application/pdf",
+        
       ];
       if (!allowedTypes.includes(formData.file.type)) {
-        newErrors.file = "Only JPEG, PNG, and PDF files are allowed";
+        newErrors.file = "Only JPEG, PNG files are allowed";
       }
 
       // Validate file size (max 5MB)
@@ -97,10 +97,13 @@ const Overlay = ({ userId, onClose, onSuccess }) => {
         formDataToSend
       );
 
-      if (response?.data) {
-        successMessage("Document uploaded successfully");
+      console.log("🚀 ~ handleSubmit ~ response?.data:", response?.data)
+      if (response?.statusCode < 400) {
+        successMessage( "Document uploaded successfully");
         onSuccess();
         onClose();
+      }else if(response?.statusCode >= 400 ){
+        errorMessage(response?.data || "Failed to upload document");
       }
     } catch (err) {
       console.error("Upload error:", err);

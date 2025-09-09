@@ -65,6 +65,7 @@ export const endpoints = {
     collectionByVirtualAccount: "/virtualCollection/account",
     disputeSearch: "/virtualCollection/dispute/search",
     addDispute: "/virtualCollection/dispute",
+    mainStatement: "/virtualCollection/mainStatement",
   },
   user: {
     profile: "/user/profile",

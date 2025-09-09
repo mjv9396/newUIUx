@@ -5,7 +5,7 @@ import useDeleteWithBody from "../../../hooks/useDeleteWithbody";
 import { endpoints } from "../../../services/apiEndpoints";
 import { successMessage, errorMessage } from "../../../utils/messges";
 import styles from "../../../styles/common/Add.module.css";
-import { GetUserRole, GetUserId } from "../../../services/cookieStore";
+import { GetUserRole, GetUserId, isAdmin } from "../../../services/cookieStore";
 
 const IPWhitelistTab = () => {
   const [selectedMerchant, setSelectedMerchant] = useState("");
@@ -159,7 +159,7 @@ const IPWhitelistTab = () => {
         </div>
       )}
       {/* Add IP Button for Merchants */}
-      {isMerchant && selectedMerchant && (
+      {isAdmin && selectedMerchant && (
         <div className="row mb-4">
           <div className="col-12">
             <button
