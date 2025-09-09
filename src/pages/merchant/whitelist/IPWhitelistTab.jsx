@@ -243,7 +243,7 @@ const IPWhitelistTab = () => {
           <div className="col-12">
             <div className="card">
               <div className="card-body">
-                <h6>IP Whitelist for Selected Merchant</h6>
+                {/* <h6>IP Whitelist for Selected Merchant</h6> */}
                 {ipListLoading ? (
                   <div className="text-center py-4">
                     <div className="spinner-border" aria-hidden="true">
