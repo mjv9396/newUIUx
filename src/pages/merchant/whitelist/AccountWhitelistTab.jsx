@@ -5,7 +5,7 @@ import { successMessage, errorMessage } from "../../../utils/messges";
 import { apiClient } from "../../../services/httpRequest";
 import styles from "../../../styles/common/Add.module.css";
 import AccountWhitelistModal from "./AccountWhitelistModal";
-import { GetUserRole, GetUserId } from "../../../services/cookieStore";
+import { GetUserRole, GetUserId, isAdmin } from "../../../services/cookieStore";
 
 const AccountWhitelistTab = () => {
   const [selectedMerchant, setSelectedMerchant] = useState("");
@@ -141,7 +141,7 @@ const AccountWhitelistTab = () => {
               )}
             </select>
           </div>
-          <div className="col-md-6 col-sm-12 mb-2 d-flex align-items-end">
+          {/* <div className="col-md-6 col-sm-12 mb-2 d-flex align-items-end">
             {selectedMerchant && (
               <button
                 className="btn btn-primary"
@@ -155,12 +155,12 @@ const AccountWhitelistTab = () => {
                 <i className="bi bi-plus"></i> Add Bank Account
               </button>
             )}
-          </div>
+          </div> */}
         </div>
       )}
 
       {/* Add Account Button for Merchants */}
-      {isMerchant && selectedMerchant && (
+      {isAdmin() && selectedMerchant && (
         <div className="row mb-4">
           <div className="col-12">
             <button
@@ -184,7 +184,7 @@ const AccountWhitelistTab = () => {
           <div className="col-12">
             <div className="card">
               <div className="card-body">
-                <h6>Bank Account Whitelist for Selected Merchant</h6>
+                {/* <h6>Bank Account Whitelist</h6> */}
                 {accountListLoading ? (
                   <div className="text-center py-4">
                     <div className="spinner-border" aria-hidden="true">

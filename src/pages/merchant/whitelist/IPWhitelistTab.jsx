@@ -141,7 +141,7 @@ const IPWhitelistTab = () => {
               )}
             </select>
           </div>
-          <div className="col-md-6 col-sm-12 mb-2 d-flex align-items-end">
+          {/* <div className="col-md-6 col-sm-12 mb-2 d-flex align-items-end">
             {selectedMerchant && (
               <button
                 className="btn btn-primary"
@@ -155,11 +155,11 @@ const IPWhitelistTab = () => {
                 <i className="bi bi-plus"></i> Add IP Address
               </button>
             )}
-          </div>
+          </div> */}
         </div>
       )}
       {/* Add IP Button for Merchants */}
-      {isAdmin && selectedMerchant && (
+      {isAdmin() && selectedMerchant && (
         <div className="row mb-4">
           <div className="col-12">
             <button
