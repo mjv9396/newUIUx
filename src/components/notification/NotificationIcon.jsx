@@ -24,13 +24,10 @@ const NotificationIcon = () => {
   }, []);
 
   useEffect(() => {
-    console.log("User profile data received:", userProfile);
     if (userProfile?.data?.otpGeneratedTime) {
-      console.log("otpGeneratedTime:", userProfile.data.otpGeneratedTime);
       const notifications = generateNotifications(
         userProfile.data.otpGeneratedTime
       );
-      console.log("Generated notifications:", notifications);
       setNotifications(notifications);
     } else {
       console.log(
