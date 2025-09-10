@@ -97,9 +97,7 @@ export default function KycDocuments({ userId }) {
             </tr>
           </thead>
           <tbody>
-            {data?.data?.filter(
-              (item) => item.documentType !== "BUSINESS_DETAILS"
-            )?.length > 0 && typeof data?.data === "object" ? (
+            { typeof data?.data === "object" ? (
               data?.data?.map((item, index) => {
                 if (item.documentType === "BUSINESS_DETAILS") return null;
                 return (
