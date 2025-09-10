@@ -303,8 +303,12 @@ const MerchantProfile = () => {
                   <span>{profileData.bankName || "N/A"}</span>
                 </div>
                 <div className={styles.infoRow}>
+                  <span>Branch Name:</span>
+                  <span>{profileData.branchName || "N/A"}</span>
+                </div>
+                <div className={styles.infoRow}>
                   <span>Account Number:</span>
-                  <span>{profileData.accountNumber || "N/A"}</span>
+                  <span>{profileData.accountNo || "N/A"}</span>
                 </div>
                 <div className={styles.infoRow}>
                   <span>IFSC Code:</span>
@@ -312,7 +316,11 @@ const MerchantProfile = () => {
                 </div>
                 <div className={styles.infoRow}>
                   <span>Account Holder Name:</span>
-                  <span>{profileData.accountHolderName || "N/A"}</span>
+                  <span>{profileData.accHolderName || "N/A"}</span>
+                </div>
+                <div className={styles.infoRow}>
+                  <span>Currency:</span>
+                  <span>{profileData.currency || "N/A"}</span>
                 </div>
               </div>
             </div>
