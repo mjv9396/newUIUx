@@ -1,0 +1,359 @@
+.cardContainer {
+  min-width: 280px;
+  min-height: 140px;
+  perspective: 1000px;
+  cursor: pointer;
+  margin-right: 16px;
+  transition: transform 0.3s ease;
+  flex-shrink: 0;
+}
+
+/* Responsive width for different card counts */
+.cardContainer:only-child {
+  width: 100%;
+  margin-right: 0;
+}
+
+.cardContainer:first-child:nth-last-child(2),
+.cardContainer:first-child:nth-last-child(2) ~ .cardContainer {
+  width: calc(50% - 8px);
+}
+
+.cardContainer:first-child:nth-last-child(2):last-child {
+  margin-right: 0;
+}
+
+/* .cardContainer:hover {
+  transform: scale(1.05);
+} */
+
+.card {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 16px;
+  padding: 16px;
+  /* box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1), 0 4px 16px rgba(0, 0, 0, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1); */
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transform-style: preserve-3d;
+}
+
+
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 8px;
+}
+
+.bankLogo {
+  display: flex;
+  align-items: center;
+}
+
+.logoShape {
+  width: 32px;
+  height: 32px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.logoText {
+  font-size: 12px;
+  font-weight: 800;
+  color: white;
+  text-transform: uppercase;
+}
+
+.cardType {
+  text-align: right;
+}
+
+.cardTypeText {
+  display: block;
+  font-size: 10px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.9);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.cardSubText {
+  display: block;
+  font-size: 8px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.7);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+
+.cardBody {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 8px 0;
+}
+
+.accountSection {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.fieldGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.fieldLabel {
+  font-size: 8px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.7);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+
+.fieldValue {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.accountText {
+  font-family: "Courier New", monospace;
+  font-size: 11px;
+  font-weight: 600;
+  color: white;
+  letter-spacing: 0.5px;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.copyButton {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(10px);
+}
+
+.copyButton:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.1);
+}
+
+.copyButton i {
+  font-size: 8px;
+  color: white;
+}
+
+.cardFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.balanceSection {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.balanceLabel {
+  font-size: 8px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.7);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.balanceAmount {
+  display: flex;
+  align-items: baseline;
+  gap: 2px;
+}
+
+.currency {
+  font-size: 10px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.amount {
+  font-size: 14px;
+  font-weight: 700;
+  color: white;
+  line-height: 1;
+  font-family: "SF Pro Display", system-ui, -apple-system, sans-serif;
+}
+
+.cardChip {
+  display: flex;
+  align-items: center;
+}
+
+.chip {
+  width: 20px;
+  height: 14px;
+  background: linear-gradient(45deg, #ffd700, #ffed4e);
+  border-radius: 3px;
+  position: relative;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.chip::before {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  right: 2px;
+  bottom: 2px;
+  background: linear-gradient(45deg, #ffed4e, #ffd700);
+  border-radius: 1px;
+}
+
+.cardPattern {
+  position: absolute;
+  top: 50%;
+  right: 16px;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  opacity: 0.1;
+}
+
+.patternDot {
+  width: 6px;
+  height: 6px;
+  background: white;
+  border-radius: 50%;
+}
+
+.cardGradient {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    45deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.05) 50%,
+    transparent 100%
+  );
+  pointer-events: none;
+  border-radius: 16px;
+}
+
+/* Unique gradient variations for different cards */
+.cardContainer:nth-child(2n) .card {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+}
+
+.cardContainer:nth-child(3n) .card {
+  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+}
+
+.cardContainer:nth-child(4n) .card {
+  background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+}
+
+.cardContainer:nth-child(5n) .card {
+  background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .cardContainer {
+    min-width: 240px;
+    height: 120px;
+    margin-right: 12px;
+  }
+
+  .cardContainer:only-child {
+    width: 100%;
+    margin-right: 0;
+  }
+
+  .cardContainer:first-child:nth-last-child(2),
+  .cardContainer:first-child:nth-last-child(2) ~ .cardContainer {
+    width: calc(50% - 6px);
+  }
+
+  .card {
+    padding: 12px;
+  }
+
+  .logoShape {
+    width: 28px;
+    height: 28px;
+  }
+
+  .logoText {
+    font-size: 10px;
+  }
+
+  .accountText {
+    font-size: 10px;
+  }
+
+  .amount {
+    font-size: 12px;
+  }
+
+  .chip {
+    width: 16px;
+    height: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .cardContainer {
+    min-width: 200px;
+    height: 100px;
+    margin-right: 8px;
+  }
+
+  .cardContainer:only-child {
+    width: 100%;
+    margin-right: 0;
+  }
+
+  .cardContainer:first-child:nth-last-child(2),
+  .cardContainer:first-child:nth-last-child(2) ~ .cardContainer {
+    width: calc(50% - 4px);
+  }
+
+  .accountText {
+    font-size: 9px;
+  }
+
+  .amount {
+    font-size: 11px;
+  }
+}

@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import useFetch from "../../hooks/useFetch";
 import DashboardLayout from "../../layouts/DashboardLayout";
 import styles from "../../styles/dashboard/Dashboard.module.css";
@@ -24,7 +25,7 @@ import pending from "../../assets/pending.png";
 import failed from "../../assets/transaction-failed.png";
 import success from "../../assets/transaction-success.png";
 import DetailCard from "./components/DetailCard";
-import VirtualAccountCard from "./components/VirtualAccountCard";
+import VirtualAccountCard3D from "./components/VirtualAccountCard3D";
 import DepositCard from "./components/DepositCard";
 import WalletCard from "./components/WalletCard";
 import SettlementCard from "./components/SettlementCard";
@@ -63,26 +64,76 @@ const Dashboard = () => {
     setRange([ranges.selection]);
     setShowPicker(false); // Hide picker after selecting dates
   };
-  const { fetchData: getTotalBalance, data: totalBalanceData } = useFetch();
+
+  // Helper function to get the appropriate balance amount
+  const getBalanceAmount = () => {
+    if (totalBalanceLoading) return "0";
+    if (totalBalanceError) return "0";
+
+    if (isAdmin()) {
+      if (merchantId) {
+        // Merchant-specific balance for admin
+        return parseFloat(totalBalanceData?.data) ?? 0;
+      } else {
+        // Total balance across all merchants for admin
+        return totalBalanceData?.data ?? 0;
+      }
+    } else {
+      // User's own balance
+      return totalBalanceData?.data?.accountBalance ?? 0;
+    }
+  };
+
+  // Helper function to get the appropriate subtitle
+  const getBalanceSubtitle = () => {
+    if (totalBalanceLoading) return "Loading...";
+    if (totalBalanceError) return "Error loading balance";
+    return "Available Balance";
+  };
+
+  const {
+    fetchData: getTotalBalance,
+    data: totalBalanceData,
+    loading: totalBalanceLoading,
+    error: totalBalanceError,
+  } = useFetch();
   useEffect(() => {
-    if (GetUserRole() === "ADMIN") getTotalBalance(endpoints.user.totalBalance);
-    else {
+    if (GetUserRole() === "ADMIN") {
+      if (merchantId) {
+        // If admin has selected a merchant, get that merchant's balance
+        console.log("Fetching merchant balance for userId:", merchantId);
+        getTotalBalance(`${endpoints.user.balanceByUser}?userId=${merchantId}`);
+      } else {
+        // If no merchant selected, get total balance across all merchants
+        console.log("Fetching total balance for admin");
+        getTotalBalance(endpoints.user.totalBalance);
+      }
+    } else {
+      // For non-admin users, get their own balance
+      console.log("Fetching user balance");
       getTotalBalance(endpoints.user.balance);
     }
-  }, []);
+  }, [merchantId]); // Added merchantId dependency
 
-  const { postData: getVirtualBalance, data: VirtualBalanceData } = usePost(endpoints.user.virtualBalance);
+  // Log the balance data when it changes
   useEffect(() => {
-    if(!merchantId && isAdmin()) return;
+    console.log("Balance data updated:", totalBalanceData);
+    if (totalBalanceError) {
+      console.error("Balance fetch error:", totalBalanceError);
+    }
+  }, [totalBalanceData, totalBalanceError]);
+
+  const { postData: getVirtualBalance, data: VirtualBalanceData } = usePost(
+    endpoints.user.virtualBalance
+  );
+  useEffect(() => {
+    // if(!merchantId && isAdmin()) return;
     getVirtualBalance({
       userId: isAdmin() ? merchantId : GetUserId(),
       dateFrom: dateFormatter(range[0].startDate),
       dateTo: dateFormatter(range[0].endDate),
     });
-  }, [
-    merchantId,
-    range
-  ]);
+  }, [merchantId, range]);
 
   const {
     error: payinDashboardError,
@@ -206,45 +257,45 @@ const Dashboard = () => {
         </div>
         <div className="row">
           <div className="col-md-6 col-sm-12 mb-3">
-            <div className={styles.card}>
-              <span className="d-flex justify-content-between">
-                <div className="d-flex gap-2 overflow-auto align-items-center justify-content-center">
-                  {!virtualAccountData ||
-                  virtualAccountData?.data?.length === 0 ? (
-                    <span className={styles.noData}>
-                      {virtualAccountDashboardLoading ? "Loading..." : null}
-                      {isAdmin() && !virtualAccountDashboardLoading
-                        ? "Select a merchant to view virtual accounts"
-                        : "No virtual accounts found"}
-                    </span>
-                  ) : (
-                    virtualAccountData?.data.map((item, index) => (
-                      <VirtualAccountCard
-                        key={index}
-                        title={item.acqCode}
-                        amt={item.balance}
-                        accountNo={item.virtualAccount}
-                        ifsc={item.ifscCode}
-                        vpa={item.userVPA}
-                      />
-                    ))
-                  )}
+            {/* <div className={styles.card}> */}
+            {/* <h6 className="mb-3">Virtual Accounts</h6> */}
+            <div className="d-flex overflow-auto pb-2" style={{ gap: "0px" }}>
+              {!virtualAccountData || virtualAccountData?.data?.length === 0 ? (
+                <div
+                  className={styles.noData}
+                  style={{
+                    width: "100%",
+                    textAlign: "center",
+                    padding: "40px 20px",
+                  }}
+                >
+                  {virtualAccountDashboardLoading ? "Loading..." : null}
+                  {isAdmin() && !virtualAccountDashboardLoading
+                    ? "Select a merchant to view virtual accounts"
+                    : "No virtual accounts found"}
                 </div>
-                {/* <button className={styles.addAccount}>+</button> */}
-              </span>
+              ) : (
+                virtualAccountData?.data.map((item, index) => (
+                  <VirtualAccountCard3D
+                    key={index}
+                    title={item.acqCode}
+                    amt={item.balance}
+                    accountNo={item.virtualAccount}
+                    ifsc={item.ifscCode}
+                    vpa={item.userVPA}
+                  />
+                ))
+              )}
             </div>
+            {/* </div> */}
           </div>
           <div className="col-md-6 col-sm-12 mb-3">
             <div className="d-flex gap-3 flex-md-row flex-column">
               <WalletCard
                 img={wallet}
                 title="Wallet Balance"
-                subtitle="Available Balance"
-                amount={
-                  isAdmin()
-                    ? totalBalanceData?.data
-                    : totalBalanceData?.data?.accountBalance
-                }
+                subtitle={getBalanceSubtitle()}
+                amount={getBalanceAmount()}
               />
               <WalletCard
                 img={transactional}
