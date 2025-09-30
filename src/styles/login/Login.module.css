@@ -1,60 +1,154 @@
-/* Modern Login Container - New UI */
+/* Modern Centered Login Container */
 .loginContainer {
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  padding: 0;
-}
-
-/* Left Side - Login Section */
-.loginSection {
-  background: #ffffff;
+  background: linear-gradient(135deg, #2d5016 0%, #4a7c59 50%, #d4af37 100%);
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 1rem;
-  min-height: 100vh;
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.loginWrapper {
+  position: relative;
+  width: 100%;
+  max-width: 450px;
+  z-index: 10;
+}
+
+.decorativeElements {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.circle1 {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background: linear-gradient(
+    45deg,
+    rgba(212, 175, 55, 0.1),
+    rgba(116, 175, 132, 0.1)
+  );
+  top: -100px;
+  right: -100px;
+  animation: float 6s ease-in-out infinite;
+}
+
+.circle2 {
+  position: absolute;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  background: linear-gradient(
+    45deg,
+    rgba(45, 80, 22, 0.1),
+    rgba(212, 175, 55, 0.1)
+  );
+  bottom: -75px;
+  left: -75px;
+  animation: float 8s ease-in-out infinite reverse;
+}
+
+.circle3 {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: linear-gradient(
+    45deg,
+    rgba(116, 175, 132, 0.15),
+    rgba(244, 233, 155, 0.15)
+  );
+  top: 50%;
+  right: -50px;
+  animation: float 7s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-20px) rotate(180deg);
+  }
 }
 
 .loginCard {
-  width: 100%;
-  max-width: 85%;
-  padding: 2rem;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border-radius: 20px;
+  padding: 3rem 2.5rem;
+  box-shadow: 0 25px 50px rgba(45, 80, 22, 0.15),
+    0 15px 35px rgba(212, 175, 55, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(212, 175, 55, 0.2);
+  position: relative;
+  z-index: 10;
+  transition: all 0.3s ease;
+}
+
+.loginCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 35px 60px rgba(45, 80, 22, 0.2),
+    0 20px 40px rgba(212, 175, 55, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.6);
 }
 
 .logoSection {
   text-align: center;
-  /* margin-bottom: 2rem; */
+  margin-bottom: 2rem;
 }
 
 .logoSection .logo {
   height: auto;
-  max-width: 200px;
+  max-width: 180px;
   width: auto;
-  position: relative;
+  filter: drop-shadow(0 4px 8px rgba(45, 80, 22, 0.1));
+  transition: all 0.3s ease;
+}
+
+.logoSection .logo:hover {
+  transform: scale(1.05);
 }
 
 .welcomeText {
   text-align: center;
-  margin-bottom: 2rem;
+  margin-bottom: 2.5rem;
 }
 
 .welcomeText h2 {
-  font-size: 1.5rem;
-  color: #333;
-  font-weight: 600;
-  line-height: 1.4;
+  font-size: 1.75rem;
+  color: var(--text-primary);
+  font-weight: 700;
+  line-height: 1.3;
   margin-bottom: 1rem;
+  background: linear-gradient(135deg, #2d5016 0%, #4a7c59 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .welcomeText p {
-  color: #666;
-  font-size: 0.95rem;
+  color: var(--text-secondary);
+  font-size: 1rem;
   margin-bottom: 0;
+  line-height: 1.5;
 }
 
 .brandName {
-  color: var(--primary, #667eea);
-  font-weight: 700;
+  background: linear-gradient(135deg, #d4af37 0%, #b8860b 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: 800;
+  display: inline-block;
 }
 
 .formContainer {
@@ -63,288 +157,62 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  
 }
 
-/* Right Side - Carousel Section */
-.carouselSection {
-  position: relative;
-  overflow: hidden;
-  background: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.carouselContainer {
-  width: 100%;
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-}
-
-.carouselWrapper {
-  position: relative;
-  width: 100%;
-  max-width: 600px;
-  height: 80vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.imageContainer {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  border-radius: 15px;
-  overflow: hidden;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-}
-
-.carouselImage {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  transition: opacity 0.5s ease-in-out;
-  box-shadow: none;
-  padding: 5%;
-}
-
-.carouselOverlay {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
-  color: white;
-  padding: 2rem;
-  text-align: center;
-}
-
-.carouselOverlay h3 {
-  font-size: 1.5rem;
-  font-weight: 600;
-  margin-bottom: 0.5rem;
-}
-
-.carouselOverlay p {
-  font-size: 1rem;
-  margin-bottom: 0;
-  opacity: 0.9;
-}
-
-.carouselControls {
-  position: absolute;
-  top: 50%;
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  padding: 0 1rem;
-  transform: translateY(-50%);
-  z-index: 4;
-}
-
-.carouselBtn {
-  background: rgba(255, 255, 255, 0.9);
-  border: none;
-  border-radius: 50%;
-  width: 50px;
-  height: 50px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #333;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-.carouselBtn:hover {
-  background: rgba(255, 255, 255, 1);
-  transform: scale(1.05);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
-}
-
-.carouselIndicators {
-  position: absolute;
-  bottom: 2rem;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  gap: 0.5rem;
-  z-index: 4;
-}
-
-.indicator {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.5);
-  border: none;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.indicator.active {
-  background: white;
-  transform: scale(1.2);
-}
-
-/* Legacy styles - Original UI */
-.wrapper {
-  width: 100vw;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
-  background: url("../../assets/9.png");
-  background-position: center;
-  background-size: cover;
-  background-repeat: no-repeat;
-}
-
-#logincard {
-  position: relative;
-  min-height: 66vh;
-  width: 55vw;
-  box-shadow: 0 25px 50px -12px #352c6b;
-  background-color: white;
-  padding: 5px;
-}
-.wrapper .logo {
-  position: absolute;
-  top: 20px;
-  left: 50px;
-  width: auto;
-  height: 80px;
-  z-index: 2;
-}
-.wrapper h1 {
-  font-size: 70px;
-  font-weight: 800;
-  color: var(--secondary);
-  margin: 0;
-  padding: 0;
-}
-.wrapper h2 {
-  font-size: 60px;
-  font-weight: 900;
-  margin: 0;
-  padding: 0;
-  color: var(--secondary);
-}
-.wrapper p {
-  color: var(--primary);
-  margin-left: 5px;
-}
-
-.wrapper .bg {
-  height: 100%;
-  width: 100%;
-  border-radius: 30px 0 0 30px;
-}
-#wrap {
-  margin-top: 50px;
-}
-@media screen and (min-width: 1550px) {
-  #logincard {
-    width: 50vw;
-    min-height: 50vh;
-  }
-}
-@media screen and (max-width: 1000px) {
-  #logincard {
-    text-align: center;
-  }
-  .wrapper h1 {
-    font-size: 50px;
-  }
-  .wrapper h2 {
-    font-size: 40px;
-  }
-  #wrap {
-    margin-top: 80px;
-  }
-  .wrapper .logo {
-    position: absolute;
-    top: 10px;
-    left: 43%;
-    width: auto;
-    height: 50px;
-  }
-}
-#form {
-  background-color: #e3e9f72f;
-}
-@media screen and (max-width: 578px) {
-  #logincard {
-    width: 90vw;
-    min-height: 80vh;
-    text-align: center;
-  }
-  .wrapper h1 {
-    font-size: 40px;
-  }
-  .wrapper h2 {
-    font-size: 25px;
-  }
-  #wrap {
-    margin-top: 60px;
-  }
-  #form {
-    margin-top: 40px;
-  }
-
-  .wrapper .logo {
-    position: absolute;
-    top: 10px;
-    left: 43%;
-    width: auto;
-    height: 50px;
-  }
-}
-
-/* Responsive Design for New UI */
+/* Responsive Design */
 @media (max-width: 768px) {
-  .loginSection {
+  .loginContainer {
     padding: 1rem;
   }
 
+  .loginWrapper {
+    max-width: 380px;
+  }
+
   .loginCard {
-    padding: 1.5rem;
-    max-width: 95%;
+    padding: 2rem 1.5rem;
+    border-radius: 15px;
   }
 
   .welcomeText h2 {
-    font-size: 1.25rem;
+    font-size: 1.5rem;
   }
 
-  .carouselOverlay h3 {
-    font-size: 1.25rem;
+  .logoSection .logo {
+    max-width: 150px;
   }
 
-  .carouselOverlay p {
-    font-size: 0.9rem;
+  .circle1 {
+    width: 120px;
+    height: 120px;
+    top: -60px;
+    right: -60px;
+  }
+
+  .circle2 {
+    width: 100px;
+    height: 100px;
+    bottom: -50px;
+    left: -50px;
+  }
+
+  .circle3 {
+    width: 80px;
+    height: 80px;
+    right: -40px;
   }
 }
 
-@media (max-width: 992px) {
-  .carouselSection {
-    display: none;
+@media (max-width: 480px) {
+  .loginCard {
+    padding: 1.5rem 1rem;
   }
 
-  .loginSection {
-    width: 100%;
+  .welcomeText h2 {
+    font-size: 1.3rem;
   }
 
-  .loginContainer {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  .welcomeText p {
+    font-size: 0.9rem;
   }
 }
