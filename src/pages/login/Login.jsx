@@ -36,7 +36,7 @@ const Login = () => {
     <div className={`${styles.loginContainer} container-fluid overflow-hidden`}>
       <div className="row min-vh-100">
         {/* Left Side - Login Form */}
-        <div className={`col-lg-5 col-md-6 ${styles.loginSection}`}>
+        <div className={`col-lg-6 col-md-6 ${styles.loginSection}`}>
           <div className={styles.loginCard}>
             <div className={styles.logoSection}>
               <img src={logo} alt="Company Logo" className={styles.logo} />
@@ -72,7 +72,7 @@ const Login = () => {
         </div>
 
         {/* Right Side - Image Carousel */}
-        <div className={`col-lg-7 col-md-6 ${styles.carouselSection}`}>
+        <div className={`col-lg-6 col-md-6 ${styles.carouselSection}`}>
           <div className={styles.carouselContainer}>
             {/* <div className={styles.carouselWrapper}> */}
               {/* <div className={styles.imageContainer}> */}
