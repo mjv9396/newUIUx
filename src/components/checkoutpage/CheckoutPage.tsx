@@ -285,7 +285,7 @@ const CheckoutPage = () => {
                       </button>
                       <div id="logo-mobile">
                         <img
-                          src="/images/logo.jpg"
+                          src="/images/logo.png"
                           alt="ATMOON"
                           height="50"
                         />
