@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { successMessage } from "../../../utils/messges";
 import { formatToINRCurrency } from "../../../utils/formatToINRCurrency ";
 import styles from "./VirtualAccountCard3D.module.css";
+import { GetUsername } from "../../../services/cookieStore";
 
 const VirtualAccountCard3D = ({
   title = "",
@@ -30,9 +31,9 @@ const VirtualAccountCard3D = ({
         {/* Card Header */}
         <div className={styles.cardHeader}>
           <div className={styles.bankLogo}>
-            <div className={styles.logoShape}>
-              <span className={styles.logoText}>{title?.substring(0, 2)}</span>
-            </div>
+            {/* <div className={styles.logoShape}> */}
+              <span style={{marginTop: '10px'}} className={styles.logoText}>{title}</span>
+            {/* </div> */}
           </div>
           <div className={styles.cardType}>
             <span className={styles.cardTypeText}>VIRTUAL</span>
@@ -66,7 +67,7 @@ const VirtualAccountCard3D = ({
                 <span className={styles.fieldLabel}>ACCOUNT</span>
                 <div className={styles.fieldValue}>
                   <span className={styles.accountText}>
-                    {accountNo?.toString().replace(/(\d{4})(?=\d)/g, "$1 ")}
+                    {accountNo}
                   </span>
                   <button
                     className={styles.copyButton}

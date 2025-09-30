@@ -42,6 +42,21 @@ const settings = {
   slidesToScroll: 1,
 };
 const Dashboard = () => {
+  const navigate = useNavigate();
+
+  // Navigation handlers for DetailCards
+  const handlePayinNavigation = (status) => {
+    navigate(`/payin/transactions?status=${status}`);
+  };
+
+  const handlePayoutNavigation = (status) => {
+    navigate(`/payout/transactions?status=${status}`);
+  };
+
+  const handleDisputeNavigation = () => {
+    navigate("/dispute");
+  };
+
   // Slider setting
 
   //fetch merchant, acquirer, payment type, mop type and  curreny
@@ -60,11 +75,6 @@ const Dashboard = () => {
   const [showPicker, setShowPicker] = useState(false);
   const [merchantId, setMerchantId] = useState("");
 
-  const handleSelect = (ranges) => {
-    setRange([ranges.selection]);
-    setShowPicker(false); // Hide picker after selecting dates
-  };
-
   // Helper function to get the appropriate balance amount
   const getBalanceAmount = () => {
     if (totalBalanceLoading) return "0";
@@ -75,7 +85,7 @@ const Dashboard = () => {
         // Merchant-specific balance for admin
         return parseFloat(totalBalanceData?.data) ?? 0;
       } else {
-        // Total balance across all merchants for admin
+        // Total balance across all merchants for admin        
         return totalBalanceData?.data ?? 0;
       }
     } else {
@@ -91,6 +101,10 @@ const Dashboard = () => {
     return "Available Balance";
   };
 
+  const handleSelect = (ranges) => {
+    setRange([ranges.selection]);
+    setShowPicker(false); // Hide picker after selecting dates
+  };
   const {
     fetchData: getTotalBalance,
     data: totalBalanceData,
@@ -127,7 +141,6 @@ const Dashboard = () => {
     endpoints.user.virtualBalance
   );
   useEffect(() => {
-    // if(!merchantId && isAdmin()) return;
     getVirtualBalance({
       userId: isAdmin() ? merchantId : GetUserId(),
       dateFrom: dateFormatter(range[0].startDate),
@@ -234,6 +247,8 @@ const Dashboard = () => {
     }
   }, [virtualAccountDashboardData, virtualAccountDashboardError]);
 
+  
+
   return (
     <DashboardLayout page="Dashboard" url="/dashboard">
       <div className={styles.dashboard}>
@@ -278,7 +293,7 @@ const Dashboard = () => {
                 virtualAccountData?.data.map((item, index) => (
                   <VirtualAccountCard3D
                     key={index}
-                    title={item.acqCode}
+                    title={item.businessName ?? item.firstName}
                     amt={item.balance}
                     accountNo={item.virtualAccount}
                     ifsc={item.ifscCode}
@@ -324,6 +339,7 @@ const Dashboard = () => {
                     // className="success"
                     img={success}
                     subtitle={`Txn Count : ${payinData?.data?.totalSuccess}`}
+                    onClick={() => handlePayinNavigation("SUCCESS")}
                   />
                 </div>
                 <div className="col-md-6 col-sm-12 mb-3">
@@ -334,6 +350,7 @@ const Dashboard = () => {
                     className="failed"
                     img={failed}
                     subtitle={`Txn Count : ${payinData?.data?.totalFailed}`}
+                    onClick={() => handlePayinNavigation("FAILED")}
                   />
                 </div>
                 <div className="col-md-6 col-sm-12 mb-3">
@@ -344,6 +361,7 @@ const Dashboard = () => {
                     className="pending"
                     img={pending}
                     subtitle={`Txn Count : ${payinData?.data?.totalPending}`}
+                    onClick={() => handlePayinNavigation("PENDING")}
                   />
                 </div>
                 <div className="col-md-6 col-sm-12 mb-3">
@@ -353,6 +371,7 @@ const Dashboard = () => {
                     type="info"
                     img={resolution}
                     subtitle={`Txn Count : ${chargebackData?.data?.count}`}
+                    onClick={handleDisputeNavigation}
                   />
                 </div>
               </div>
@@ -380,7 +399,7 @@ const Dashboard = () => {
               </div>
             </div>
           </div>
-          <div className="col-md-6 col-sm-12 ">
+          <div className="col-md-6 col-lg-12 col-xl-6 mt-xl-0 mt-2">
             <div className={styles.card}>
               <h6>Payout Details</h6>
               <div className="row mt-4">
@@ -392,6 +411,7 @@ const Dashboard = () => {
                     type="success"
                     subtitle={`Txn Count : ${payoutData?.data?.totalSuccess}`}
                     className="success"
+                    onClick={() => handlePayoutNavigation("SUCCESS")}
                   />
                 </div>
                 <div className="col-md-6 col-sm-12 mb-3">
@@ -402,6 +422,7 @@ const Dashboard = () => {
                     type="failed"
                     className="failed"
                     subtitle={`Txn Count : ${payoutData?.data?.totalFailed}`}
+                    onClick={() => handlePayoutNavigation("FAILED")}
                   />
                 </div>
                 <div className="col-md-6 col-sm-12 mb-3">
@@ -412,6 +433,7 @@ const Dashboard = () => {
                     type="pending"
                     className="pending"
                     subtitle={`Txn Count : ${payoutData?.data?.totalPending}`}
+                    onClick={() => handlePayoutNavigation("PENDING")}
                   />
                 </div>
                 <div className="col-md-6 col-sm-12 mb-3">
@@ -421,6 +443,7 @@ const Dashboard = () => {
                     title="Success Credited Amount"
                     type="success"
                     subtitle={`Txn Count : ${payoutData?.data?.totalCreditSuccess}`}
+                    
                   />
                 </div>
                 <div className="col-md-6 col-sm-12 mb-3">
@@ -430,6 +453,7 @@ const Dashboard = () => {
                     title="Rejected Credit Amount"
                     type="failed"
                     subtitle={`Txn Count : ${payoutData?.data?.totalCreditRejected}`}
+                    
                   />
                 </div>
               </div>
