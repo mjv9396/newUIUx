@@ -46,8 +46,7 @@ const AdminMenu = memo(({ toggle, setToggle }) => {
       <div className={styles.sidebarHeader}>
         <div className={styles.logoContainer}>
           <div className={styles.logoWrapper}>
-            <img src={logo} alt="logo" />
-            <span className={styles.brandText}>AtmoonPay</span>
+            <img src={logo} alt="MoneyPay" />
           </div>
 
           <button
