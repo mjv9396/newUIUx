@@ -12,8 +12,7 @@ const Login = () => {
 
   const carouselImages = [
     "/carousel.png",
-    // "https://panel.atmoondps.com/static/images/carousel/atmoon/carousel1.png",
-    // "https://panel.atmoondps.com/static/images/carousel/atmoon/carousel3.png",
+    
   ];
 
   const nextSlide = () => {

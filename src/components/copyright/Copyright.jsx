@@ -3,7 +3,7 @@ const Copyright = () => {
   return (
     <div className={styles.copyright}>
       Version : 1.0.1<br />
-      Copyright Atmoon. All Right Reserved 
+      Copyright MoneyPay. All Right Reserved 
     </div>
   );
 };
