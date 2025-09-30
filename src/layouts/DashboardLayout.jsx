@@ -10,19 +10,8 @@ const DashboardLayout = memo(({ children, page, url }) => {
     <div className="main">
       <Sidebar toggle={toggle} setToggle={setToggle} />
 
-      {/* Floating toggle button - visible when sidebar is closed */}
-      {!toggle && (
-        <button
-          className="floating-toggle-btn"
-          onClick={() => setToggle(true)}
-          title="Open Sidebar"
-        >
-          <i className="bi bi-list"></i>
-        </button>
-      )}
-
       <div className={toggle ? "section" : "section active"}>
-         <div className="d-flex justify-content-between align-items-start mb-3">
+        <div className="d-flex justify-content-between align-items-start mb-3">
           <div>
             <h4 className="pagetitle m-0">{page}</h4>
             <small style={{ marginBottom: "0px !important" }}>{url}</small>

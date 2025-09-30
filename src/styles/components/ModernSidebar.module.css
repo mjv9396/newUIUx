@@ -1,0 +1,640 @@
+/* Revolutionary Sidebar Design - Green & Golden Theme */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 280px;
+  height: 100vh;
+  background: linear-gradient(135deg, #2d5016 0%, #4a7c59 30%, #d4af37 100%);
+  backdrop-filter: blur(20px);
+  border-right: 2px solid rgba(212, 175, 55, 0.3);
+  transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+  z-index: 100;
+  overflow: hidden;
+  box-shadow: 
+    0 25px 50px rgba(45, 80, 22, 0.3),
+    inset 0 1px 0 rgba(212, 175, 55, 0.2);
+}
+
+.sidebar.active {
+  width: 70px;
+}
+
+/* Floating Header Design */
+.sidebarHeader {
+  position: relative;
+  padding: 20px 16px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(30px);
+  border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+  margin: 12px;
+  border-radius: 16px;
+  box-shadow: 
+    0 8px 32px rgba(45, 80, 22, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  transition: all 0.4s ease;
+}
+
+.sidebar.active .sidebarHeader {
+  margin: 12px 8px;
+  padding: 16px 8px;
+}
+
+.logoContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  position: relative;
+  transition: all 0.4s ease;
+}
+
+.sidebar.active .logoContainer {
+  justify-content: center;
+  margin-bottom: 12px;
+}
+
+.logoWrapper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: all 0.4s ease;
+  overflow: hidden;
+}
+
+.sidebar.active .logoWrapper {
+  gap: 0;
+  justify-content: center;
+}
+
+.logoWrapper img {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #fff 0%, #f4e99b 100%);
+  padding: 6px;
+  box-shadow: 
+    0 6px 16px rgba(212, 175, 55, 0.3),
+    inset 0 2px 4px rgba(45, 80, 22, 0.1);
+  transition: all 0.4s ease;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.sidebar.active .logoWrapper img {
+  width: 32px;
+  height: 32px;
+  padding: 4px;
+}
+
+.logoWrapper img:hover {
+  transform: rotate(360deg) scale(1.1);
+  box-shadow: 
+    0 12px 30px rgba(212, 175, 55, 0.5),
+    inset 0 2px 4px rgba(45, 80, 22, 0.1);
+}
+
+.brandText {
+  color: #fff;
+  font-size: 16px;
+  font-weight: 700;
+  text-shadow: 0 2px 8px rgba(45, 80, 22, 0.4);
+  opacity: 1;
+  transition: all 0.4s ease;
+  background: linear-gradient(135deg, #fff 0%, #f4e99b 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.sidebar.active .brandText {
+  opacity: 0;
+  width: 0;
+  transform: translateX(-20px);
+}
+
+/* Modern Toggle Button */
+.toggleButton {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, rgba(212, 175, 55, 0.2) 0%, rgba(116, 175, 132, 0.2) 100%);
+  border: 2px solid rgba(212, 175, 55, 0.3);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #fff;
+  font-size: 16px;
+  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+  backdrop-filter: blur(20px);
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.sidebar.active .toggleButton {
+  width: 36px;
+  height: 36px;
+  font-size: 14px;
+}
+
+.toggleButton::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, #d4af37 0%, #4a7c59 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  border-radius: inherit;
+}
+
+.toggleButton:hover::before {
+  opacity: 0.3;
+}
+
+.toggleButton:hover {
+  transform: scale(1.1) rotate(180deg);
+  box-shadow: 
+    0 8px 25px rgba(212, 175, 55, 0.4),
+    inset 0 2px 4px rgba(255, 255, 255, 0.1);
+}
+
+.toggleButton i {
+  position: relative;
+  z-index: 1;
+  transition: transform 0.4s ease;
+}
+
+.sidebar.active .toggleButton i {
+  transform: rotate(180deg);
+}
+
+/* Revolutionary User Card */
+.userInfo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(212, 175, 55, 0.1) 100%);
+  border-radius: 12px;
+  backdrop-filter: blur(30px);
+  border: 1px solid rgba(212, 175, 55, 0.2);
+  transition: all 0.4s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.sidebar.active .userInfo {
+  padding: 8px;
+  justify-content: center;
+  gap: 0;
+}
+
+.userInfo::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.1), transparent);
+  transition: left 0.6s ease;
+}
+
+.userInfo:hover::before {
+  left: 100%;
+}
+
+.userAvatar {
+  width: 42px;
+  height: 42px;
+  background: linear-gradient(135deg, #d4af37 0%, #4a7c59 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 700;
+  font-size: 16px;
+  box-shadow: 
+    0 6px 16px rgba(45, 80, 22, 0.3),
+    inset 0 2px 4px rgba(255, 255, 255, 0.2);
+  transition: all 0.4s ease;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.sidebar.active .userAvatar {
+  width: 36px;
+  height: 36px;
+  font-size: 14px;
+}
+
+.userAvatar::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #d4af37, #4a7c59, #d4af37);
+  z-index: -1;
+  animation: rotate 3s linear infinite;
+}
+
+@keyframes rotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.userDetails {
+  flex: 1;
+  opacity: 1;
+  transition: all 0.4s ease;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.sidebar.active .userDetails {
+  opacity: 0;
+  width: 0;
+  transform: translateX(-20px);
+}
+
+.userName {
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0;
+  text-shadow: 0 1px 3px rgba(45, 80, 22, 0.4);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.userRole {
+  color: rgba(244, 233, 155, 0.9);
+  font-size: 11px;
+  margin: 2px 0 0 0;
+  text-transform: uppercase;
+  font-weight: 500;
+  letter-spacing: 1px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.logoutButton {
+  background: linear-gradient(135deg, rgba(255, 99, 99, 0.2) 0%, rgba(255, 154, 158, 0.2) 100%);
+  border: 1px solid rgba(255, 99, 99, 0.3);
+  color: #fff;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 10px;
+  border-radius: 50%;
+  transition: all 0.4s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(10px);
+  opacity: 1;
+  flex-shrink: 0;
+}
+
+.sidebar.active .logoutButton {
+  opacity: 0;
+  width: 0;
+  padding: 0;
+  transform: scale(0);
+}
+
+.logoutButton:hover {
+  background: linear-gradient(135deg, rgba(255, 99, 99, 0.4) 0%, rgba(255, 154, 158, 0.4) 100%);
+  transform: scale(1.1);
+  box-shadow: 0 8px 20px rgba(255, 99, 99, 0.3);
+}
+
+/* Revolutionary Menu System */
+.menu {
+  margin: 0;
+  padding: 16px 12px;
+  list-style: none;
+  flex: 1;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(212, 175, 55, 0.3) transparent;
+}
+
+.sidebar.active .menu {
+  padding: 16px 8px;
+}
+
+.menu::-webkit-scrollbar {
+  width: 6px;
+}
+
+.menu::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.menu::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #d4af37 0%, #4a7c59 100%);
+  border-radius: 3px;
+}
+
+.menuHeader {
+  font-size: 10px;
+  padding: 16px 0 8px 16px;
+  font-weight: 700;
+  color: rgba(244, 233, 155, 0.8);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin: 0;
+  position: relative;
+  opacity: 1;
+  transition: all 0.4s ease;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.sidebar.active .menuHeader {
+  opacity: 0;
+  transform: translateX(-20px);
+  padding: 8px 0;
+}
+
+.menuHeader::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 2px;
+  width: 24px;
+  height: 2px;
+  background: linear-gradient(90deg, #d4af37 0%, #4a7c59 100%);
+  border-radius: 1px;
+  transition: all 0.4s ease;
+}
+
+.sidebar.active .menuHeader::before {
+  width: 0;
+  opacity: 0;
+}
+
+/* Floating Card Menu Items */
+.menuItem {
+  margin: 6px 0;
+  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+  position: relative;
+}
+
+.menuItem:hover {
+  transform: translateX(6px) scale(1.02);
+}
+
+.sidebar.active .menuItem:hover {
+  transform: translateX(0) scale(1.05);
+}
+
+.menuItem a {
+  color: rgba(255, 255, 255, 0.9);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-weight: 500;
+  font-size: 14px;
+  padding: 12px 16px;
+  border-radius: 12px;
+  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+  backdrop-filter: blur(20px);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(212, 175, 55, 0.05) 100%);
+  border: 1px solid rgba(212, 175, 55, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.sidebar.active .menuItem a {
+  justify-content: center;
+  padding: 12px 8px;
+}
+
+.menuItem a::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.1), transparent);
+  transition: left 0.6s ease;
+}
+
+.menuItem a:hover::before {
+  left: 100%;
+}
+
+.menuItem a:hover {
+  background: linear-gradient(135deg, rgba(212, 175, 55, 0.15) 0%, rgba(116, 175, 132, 0.1) 100%);
+  border-color: rgba(212, 175, 55, 0.3);
+  color: #fff;
+  box-shadow: 
+    0 8px 24px rgba(45, 80, 22, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.menuItem a span {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+  white-space: nowrap;
+  transition: all 0.4s ease;
+}
+
+.sidebar.active .menuItem a span {
+  gap: 0;
+  justify-content: center;
+}
+
+.menuItem a span img {
+  width: 20px;
+  height: 20px;
+  filter: brightness(0) invert(1);
+  transition: all 0.4s ease;
+  flex-shrink: 0;
+}
+
+.sidebar.active .menuItem a span img {
+  width: 18px;
+  height: 18px;
+}
+
+.menuItem a:hover span img {
+  filter: brightness(0) invert(1) sepia(1) saturate(3) hue-rotate(45deg);
+  transform: scale(1.1);
+}
+
+.menuItem a span span {
+  opacity: 1;
+  transition: all 0.4s ease;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sidebar.active .menuItem a span span {
+  opacity: 0;
+  width: 0;
+  transform: translateX(-20px);
+}
+
+.menuItem a i {
+  font-size: 12px;
+  transition: all 0.4s ease;
+  opacity: 1;
+  flex-shrink: 0;
+}
+
+.sidebar.active .menuItem a i {
+  opacity: 0;
+  width: 0;
+  transform: scale(0);
+}
+
+.menuItem a:hover i {
+  transform: rotate(90deg);
+}
+
+/* Sub Menu Styling */
+.subMenu {
+  list-style: none;
+  padding: 0;
+  margin: 6px 0 0 0;
+  background: linear-gradient(135deg, rgba(45, 80, 22, 0.2) 0%, rgba(212, 175, 55, 0.1) 100%);
+  border-radius: 10px;
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(212, 175, 55, 0.2);
+  overflow: hidden;
+  opacity: 1;
+  transition: all 0.4s ease;
+}
+
+.sidebar.active .subMenu {
+  opacity: 0;
+  transform: translateX(-20px);
+  margin: 0;
+}
+
+.subMenu li {
+  margin: 2px 6px;
+}
+
+.subMenu li a {
+  padding: 10px 12px;
+  font-size: 13px;
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+}
+
+.subMenu li a:hover {
+  background: linear-gradient(135deg, rgba(212, 175, 55, 0.2) 0%, rgba(116, 175, 132, 0.15) 100%);
+  transform: translateX(2px);
+}
+
+/* Active State */
+.menuItem.active a {
+  background: linear-gradient(135deg, rgba(212, 175, 55, 0.25) 0%, rgba(116, 175, 132, 0.2) 100%);
+  border-color: rgba(212, 175, 55, 0.5);
+  color: #fff;
+  box-shadow: 
+    0 12px 28px rgba(45, 80, 22, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+/* Tooltip for Collapsed State */
+.menuItem {
+  position: relative;
+}
+
+.menuItem::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  left: 70px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: linear-gradient(135deg, rgba(45, 80, 22, 0.95) 0%, rgba(212, 175, 55, 0.95) 100%);
+  color: white;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+  pointer-events: none;
+  z-index: 1000;
+  box-shadow: 0 8px 20px rgba(45, 80, 22, 0.3);
+  border: 1px solid rgba(212, 175, 55, 0.3);
+}
+
+.sidebar.active .menuItem:hover::after {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(-50%) translateX(5px);
+}
+
+.sidebar:not(.active) .menuItem::after {
+  display: none;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .sidebar {
+    width: 280px;
+    transform: translateX(-100%);
+  }
+  
+  .sidebar.active {
+    transform: translateX(0);
+    width: 280px;
+  }
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    width: 100vw;
+    transform: translateX(-100%);
+  }
+  
+  .sidebar.active {
+    transform: translateX(0);
+    width: 280px;
+  }
+}
+
+/* Copyright Section */
+.copyrightSection {
+  padding: 12px 16px;
+  border-top: 1px solid rgba(212, 175, 55, 0.2);
+  background: linear-gradient(135deg, rgba(45, 80, 22, 0.1) 0%, rgba(212, 175, 55, 0.05) 100%);
+  backdrop-filter: blur(20px);
+  margin: 12px;
+  border-radius: 12px;
+  opacity: 1;
+  transition: all 0.4s ease;
+}
+
+.sidebar.active .copyrightSection {
+  opacity: 0;
+  transform: translateY(10px);
+  margin: 8px;
+  padding: 8px;
+}

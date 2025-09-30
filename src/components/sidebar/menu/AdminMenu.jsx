@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import { Link, useNavigate } from "react-router-dom";
 import { memo } from "react";
-import styles from "../../../styles/components/Sidebar.module.css";
+import styles from "../../../styles/components/ModernSidebar.module.css";
 import home from "../../../assets/dashboard.png";
 import payin from "../../../assets/pay.png";
 import payout from "../../../assets/payout.png";
@@ -45,11 +45,10 @@ const AdminMenu = memo(({ toggle, setToggle }) => {
     >
       <div className={styles.sidebarHeader}>
         <div className={styles.logoContainer}>
-          <img
-            src={logo}
-            alt="logo"
-            style={{ width: "auto", height: "35px", objectFit: "contain" }}
-          />
+          <div className={styles.logoWrapper}>
+            <img src={logo} alt="logo" />
+            <span className={styles.brandText}>AtmoonPay</span>
+          </div>
 
           <button
             className={styles.toggleButton}
@@ -79,7 +78,7 @@ const AdminMenu = memo(({ toggle, setToggle }) => {
 
       <nav>
         <ul className={styles.menu}>
-          <li className={styles.menuItem}>
+          <li className={styles.menuItem} data-tooltip="Dashboard">
             <Link to="/dashboard">
               <span>
                 <img src={home} alt="dashboard" width={20} height={20} />
@@ -90,7 +89,7 @@ const AdminMenu = memo(({ toggle, setToggle }) => {
 
           <li className={styles.menuHeader}>MENU</li>
 
-          <li className={styles.menuItem}>
+          <li className={styles.menuItem} data-tooltip="Merchant Setup">
             <Link
               to="#user"
               data-bs-toggle="collapse"
@@ -119,7 +118,7 @@ const AdminMenu = memo(({ toggle, setToggle }) => {
             </ul>
           </li>
 
-          <li className={styles.menuItem}>
+          <li className={styles.menuItem} data-tooltip="Reseller Setup">
             <Link
               to="#reseller"
               data-bs-toggle="collapse"
@@ -148,7 +147,7 @@ const AdminMenu = memo(({ toggle, setToggle }) => {
             </ul>
           </li>
 
-          <li className={styles.menuItem}>
+          <li className={styles.menuItem} data-tooltip="Bank Settings">
             <Link
               to="#bank"
               data-bs-toggle="collapse"
@@ -478,6 +477,10 @@ const AdminMenu = memo(({ toggle, setToggle }) => {
           </li>
         </ul>
       </nav>
+
+      <div className={styles.copyrightSection}>
+        <Copyright />
+      </div>
     </div>
   );
 });

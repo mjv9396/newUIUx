@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import { Link, useNavigate } from "react-router-dom";
-import styles from "../../../styles/components/Sidebar.module.css";
+import styles from "../../../styles/components/ModernSidebar.module.css";
 import home from "../../../assets/dashboard.png";
 import payin from "../../../assets/pay.png";
 import doc from "../../../assets/doc.png";
@@ -42,11 +42,10 @@ const MerchantMenu = ({ toggle, setToggle, status }) => {
     >
       <div className={styles.sidebarHeader}>
         <div className={styles.logoContainer}>
-          <img
-            src={logo}
-            alt="logo"
-            style={{ width: "auto", height: "35px", objectFit: "contain" }}
-          />
+          <div className={styles.logoWrapper}>
+            <img src={logo} alt="logo" />
+            <span className={styles.brandText}>AtmoonPay</span>
+          </div>
 
           <button
             className={styles.toggleButton}
