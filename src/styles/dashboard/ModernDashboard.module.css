@@ -478,7 +478,7 @@
   opacity: 0.8;
 }
 
-/* Settlement Cards - Ultra Compact */
+/* Settlement Cards - Revolutionary Different Designs */
 .settlementSection {
   grid-column: span 12;
   display: grid;
@@ -487,22 +487,24 @@
   margin-bottom: 12px;
 }
 
-.settlementCard {
+/* Settled Card - Progress Bar Design */
+.settledCard {
   background: linear-gradient(
     135deg,
-    rgba(255, 255, 255, 0.9) 0%,
-    rgba(255, 255, 255, 0.7) 100%
+    rgba(255, 255, 255, 0.95) 0%,
+    rgba(16, 185, 129, 0.03) 100%
   );
   backdrop-filter: blur(15px);
-  border: 1px solid rgba(212, 175, 55, 0.2);
+  border: 1px solid rgba(16, 185, 129, 0.2);
   border-radius: 12px;
-  padding: 14px;
+  padding: 16px;
   position: relative;
   overflow: hidden;
   transition: all 0.3s ease;
+  box-shadow: 0 2px 12px rgba(16, 185, 129, 0.08);
 }
 
-.settlementCard.settled::before {
+.settledCard::before {
   content: "";
   position: absolute;
   top: 0;
@@ -513,7 +515,115 @@
   border-radius: 12px 12px 0 0;
 }
 
-.settlementCard.unsettled::before {
+.settledCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(16, 185, 129, 0.12);
+}
+
+.settledHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.settledIcon {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.settledIcon::after {
+  content: "✓";
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.settledTitle {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #065f46;
+  margin: 0;
+}
+
+.settledMetrics {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.settledMetric {
+  background: rgba(16, 185, 129, 0.05);
+  border-left: 3px solid #10b981;
+  border-radius: 6px;
+  padding: 8px 12px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.settledMetric::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 60%;
+  background: linear-gradient(
+    90deg,
+    rgba(16, 185, 129, 0.1) 0%,
+    transparent 100%
+  );
+  transition: width 0.3s ease;
+}
+
+.settledMetric:hover::before {
+  width: 100%;
+}
+
+.settledMetricLabel {
+  font-size: 0.7rem;
+  color: #065f46;
+  font-weight: 600;
+  margin: 0 0 4px 0;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.settledMetricValue {
+  font-size: 1rem;
+  font-weight: 800;
+  color: #10b981;
+  margin: 0;
+  position: relative;
+  z-index: 1;
+}
+
+/* Unsettled Card - Circular Progress Design */
+.unsettledCard {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.95) 0%,
+    rgba(245, 158, 11, 0.03) 100%
+  );
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(245, 158, 11, 0.2);
+  border-radius: 12px;
+  padding: 16px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 12px rgba(245, 158, 11, 0.08);
+}
+
+.unsettledCard::before {
   content: "";
   position: absolute;
   top: 0;
@@ -524,43 +634,103 @@
   border-radius: 12px 12px 0 0;
 }
 
-.settlementCardHeader {
-  margin-bottom: 10px;
+.unsettledCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(245, 158, 11, 0.12);
 }
 
-.settlementCardTitle {
+.unsettledHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.unsettledIcon {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.unsettledIcon::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border: 2px solid white;
+  border-top: 2px solid transparent;
+  border-radius: 50%;
+  animation: spin 2s linear infinite;
+}
+
+.unsettledTitle {
   font-size: 0.9rem;
   font-weight: 700;
-  color: #2d5016;
+  color: #92400e;
   margin: 0;
 }
 
-.settlementMetrics {
+.unsettledMetrics {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
 }
 
-.settlementMetric {
+.unsettledMetric {
+  background: rgba(245, 158, 11, 0.05);
+  border: 1px solid rgba(245, 158, 11, 0.15);
+  border-radius: 8px;
+  padding: 8px 12px;
+  position: relative;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 6px 8px;
-  background: rgba(255, 255, 255, 0.4);
-  border-radius: 6px;
-  border: 1px solid rgba(212, 175, 55, 0.1);
 }
 
-.settlementMetricLabel {
-  font-size: 0.75rem;
-  color: rgba(45, 80, 22, 0.8);
-  font-weight: 500;
+.unsettledMetric::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 8px;
+  width: 4px;
+  height: 4px;
+  background: #f59e0b;
+  border-radius: 50%;
+  transform: translateY(-50%);
+  animation: pulse 2s infinite;
 }
 
-.settlementMetricValue {
-  font-size: 0.9rem;
-  font-weight: 700;
-  color: #2d5016;
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: translateY(-50%) scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: translateY(-50%) scale(1.2);
+  }
+}
+
+.unsettledMetricLabel {
+  font-size: 0.7rem;
+  color: #92400e;
+  font-weight: 600;
+  margin: 0;
+  padding-left: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.unsettledMetricValue {
+  font-size: 1rem;
+  font-weight: 800;
+  color: #f59e0b;
+  margin: 0;
 }
 
 /* Analytics Section - Ultra Compact */
@@ -1662,5 +1832,14 @@
 
   .virtualAccountItem {
     padding: 4px;
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
   }
 }

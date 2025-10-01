@@ -491,62 +491,60 @@ const Dashboard = () => {
 
           {/* Settlement Section */}
           <div className={styles.settlementSection}>
-            <div className={`${styles.settlementCard} ${styles.settled}`}>
-              <div className={styles.settlementCardHeader}>
-                <h3 className={styles.settlementCardTitle}>
-                  Settled Transactions
-                </h3>
+            <div className={styles.settledCard}>
+              <div className={styles.settledHeader}>
+                <div className={styles.settledIcon}></div>
+                <h3 className={styles.settledTitle}>Settled Transactions</h3>
               </div>
-              <div className={styles.settlementMetrics}>
-                <div className={styles.settlementMetric}>
-                  <span className={styles.settlementMetricLabel}>
+              <div className={styles.settledMetrics}>
+                <div className={styles.settledMetric}>
+                  <p className={styles.settledMetricLabel}>
                     Total Transaction Amount
-                  </span>
-                  <span className={styles.settlementMetricValue}>
+                  </p>
+                  <p className={styles.settledMetricValue}>
                     {formatToINRCurrency(
                       settlementData?.data?.amountSettle || 0
                     )}
-                  </span>
+                  </p>
                 </div>
-                <div className={styles.settlementMetric}>
-                  <span className={styles.settlementMetricLabel}>
+                <div className={styles.settledMetric}>
+                  <p className={styles.settledMetricLabel}>
                     Net Settled Amount
-                  </span>
-                  <span className={styles.settlementMetricValue}>
+                  </p>
+                  <p className={styles.settledMetricValue}>
                     {formatToINRCurrency(
                       settlementData?.data?.netAmountSettle || 0
                     )}
-                  </span>
+                  </p>
                 </div>
               </div>
             </div>
 
-            <div className={`${styles.settlementCard} ${styles.unsettled}`}>
-              <div className={styles.settlementCardHeader}>
-                <h3 className={styles.settlementCardTitle}>
-                  Pending Settlement
-                </h3>
+            <div className={styles.unsettledCard}>
+              <div className={styles.unsettledHeader}>
+                <div className={styles.unsettledIcon}></div>
+                <h3 className={styles.unsettledTitle}>Pending Settlement</h3>
               </div>
-              <div className={styles.settlementMetrics}>
-                <div className={styles.settlementMetric}>
-                  <span className={styles.settlementMetricLabel}>
+              <div className={styles.unsettledMetrics}>
+                <div className={styles.unsettledMetric}>
+                  <p className={styles.unsettledMetricLabel}>
                     Total Transaction Amount
-                  </span>
-                  <span className={styles.settlementMetricValue}>
+                  </p>
+                  <p className={styles.unsettledMetricValue}>
                     {formatToINRCurrency(
                       settlementData?.data?.amountUnsettle || 0
                     )}
-                  </span>
+                  </p>
                 </div>
-                <div className={styles.settlementMetric}>
-                  <span className={styles.settlementMetricLabel}>
+                <div className={styles.unsettledMetric}>
+                  <p className={styles.unsettledMetricLabel}>
                     Upcoming Settlement
-                  </span>
-                  <span className={styles.settlementMetricValue}>
+                  </p>
+                  <p className={styles.unsettledMetricValue}>
                     {formatToINRCurrency(
                       settlementData?.data?.netAmountUnsettle || 0
                     )}
-                  </span>
+                  </p>
                 </div>
               </div>
             </div>
