@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useFetch from "../../hooks/useFetch";
 import DashboardLayout from "../../layouts/DashboardLayout";
-import styles from "../../styles/dashboard/Dashboard.module.css";
+import styles from "../../styles/dashboard/ModernDashboard.module.css";
 import PayinAnalytics from "./components/PayinAnalytics";
 import { endpoints } from "../../services/apiEndpoints";
 import { DateRangePicker } from "react-date-range";
@@ -24,14 +24,6 @@ import resolution from "../../assets/resolution.png";
 import pending from "../../assets/pending.png";
 import failed from "../../assets/transaction-failed.png";
 import success from "../../assets/transaction-success.png";
-import DetailCard from "./components/DetailCard";
-import VirtualAccountCard3D from "./components/VirtualAccountCard3D";
-import DepositCard from "./components/DepositCard";
-import WalletCard from "./components/WalletCard";
-import SettlementCard from "./components/SettlementCard";
-import debitcard from "../../assets/debit-card.png";
-import deposit from "../../assets/deposit.png";
-import passbook from "../../assets/passbook.png";
 import Filters from "../../ui/Filter/index.jsx";
 
 const settings = {
@@ -237,223 +229,285 @@ const Dashboard = () => {
   return (
     <DashboardLayout page="Dashboard" url="/dashboard">
       <div className={styles.dashboard}>
-        <div className={styles.user}>
-          <Filters
-            handleMerchantChange={setMerchantId}
-            selectedMerchant={{
-              id: merchantId,
-              name:
-                (allMerchant?.data?.find((item) => item.userId === merchantId)
-                  ?.firstName ?? "All") +
-                " " +
-                (allMerchant?.data?.find((item) => item.userId === merchantId)
-                  ?.lastName ?? "Merchant"),
-            }}
-            isMerchantDisabled={isMerchant()}
-            merchantOptions={allMerchant?.data}
-            setDateRange={setRange}
-            isCurrencyDisabled
-          />
+        {/* Dashboard Header */}
+        <div className={styles.dashboardHeader}>
+          <div className={styles.titleSection}>
+            <div>
+              <h1 className={styles.dashboardTitle}>MoneyPay Dashboard</h1>
+              <p className={styles.dashboardSubtitle}>
+                Your financial overview at a glance
+              </p>
+            </div>
+          </div>
+          <div className={styles.filtersSection}>
+            <Filters
+              handleMerchantChange={setMerchantId}
+              selectedMerchant={{
+                id: merchantId,
+                name:
+                  (allMerchant?.data?.find((item) => item.userId === merchantId)
+                    ?.firstName ?? "All") +
+                  " " +
+                  (allMerchant?.data?.find((item) => item.userId === merchantId)
+                    ?.lastName ?? "Merchant"),
+              }}
+              isMerchantDisabled={isMerchant()}
+              merchantOptions={allMerchant?.data}
+              setDateRange={setRange}
+              isCurrencyDisabled
+            />
+          </div>
         </div>
-        <div className="row">
-          <div className="col-md-6 col-sm-12 mb-3">
-            {/* <div className={styles.card}> */}
-            {/* <h6 className="mb-3">Virtual Accounts</h6> */}
-            <div className="d-flex overflow-auto pb-2" style={{ gap: "0px" }}>
+
+        <div className={styles.dashboardGrid}>
+          {/* Balance Overview Section - Compact */}
+          <div className={styles.balanceOverview}>
+            <div className={styles.balanceCard}>
+              <div className={styles.balanceCardIcon}>
+                <img src={wallet} alt="Wallet Balance" />
+              </div>
+              <h3 className={styles.balanceCardTitle}>Wallet Balance</h3>
+              <p className={styles.balanceCardSubtitle}>{getBalanceSubtitle()}</p>
+              <h2 className={styles.balanceCardAmount}>
+                {formatToINRCurrency(getBalanceAmount())}
+              </h2>
+            </div>
+
+            {/* Virtual Accounts + Collection Combined Card */}
+            <div className={styles.virtualCard}>
+              <div className={styles.virtualCardHeader}>
+                <h3 className={styles.virtualCardTitle}>Virtual Accounts & Collections</h3>
+                <h2 className={styles.virtualCollectionAmount}>
+                  {formatToINRCurrency(
+                    isAdmin()
+                      ? VirtualBalanceData?.data || 0
+                      : VirtualBalanceData?.data || 0
+                  )}
+                </h2>
+              </div>
+              
               {!virtualAccountData || virtualAccountData?.data?.length === 0 ? (
-                <div
-                  className={styles.noData}
-                  style={{
-                    width: "100%",
-                    textAlign: "center",
-                    padding: "40px 20px",
-                  }}
-                >
-                  {virtualAccountDashboardLoading ? "Loading..." : null}
-                  {isAdmin() && !virtualAccountDashboardLoading
-                    ? "Select a merchant to view virtual accounts"
-                    : "No virtual accounts found"}
+                <div className={styles.noData}>
+                  <div className={styles.noDataIcon}>💳</div>
+                  {virtualAccountDashboardLoading ? (
+                    <div className={styles.loading}>
+                      <div className={styles.loadingSpinner}></div>
+                      Loading accounts...
+                    </div>
+                  ) : isAdmin() && !virtualAccountDashboardLoading ? (
+                    "Select a merchant to view accounts"
+                  ) : (
+                    "No virtual accounts found"
+                  )}
                 </div>
               ) : (
-                virtualAccountData?.data.map((item, index) => (
-                  <VirtualAccountCard3D
-                    key={index}
-                    title={item.acqCode}
-                    amt={item.balance}
-                    accountNo={item.virtualAccount}
-                    ifsc={item.ifscCode}
-                    vpa={item.userVPA}
-                  />
-                ))
+                <div className={styles.virtualAccountsList}>
+                  {virtualAccountData?.data.map((item, index) => (
+                    <div key={index} className={styles.virtualAccountItem}>
+                      <div className={styles.virtualAccountItemHeader}>
+                        <h4 className={styles.virtualAccountItemTitle}>{item.acqCode}</h4>
+                        <span className={styles.virtualAccountItemBalance}>
+                          {formatToINRCurrency(item.balance)}
+                        </span>
+                      </div>
+                      <div className={styles.virtualAccountItemDetails}>
+                        <div className={styles.virtualAccountItemDetail}>
+                          <span className={styles.virtualAccountItemDetailLabel}>Account</span>
+                          <span className={styles.virtualAccountItemDetailValue}>
+                            {item.virtualAccount}
+                          </span>
+                        </div>
+                        <div className={styles.virtualAccountItemDetail}>
+                          <span className={styles.virtualAccountItemDetailLabel}>IFSC</span>
+                          <span className={styles.virtualAccountItemDetailValue}>
+                            {item.ifscCode}
+                          </span>
+                        </div>
+                        {item.userVPA && (
+                          <div className={styles.virtualAccountItemDetail}>
+                            <span className={styles.virtualAccountItemDetailLabel}>VPA</span>
+                            <span className={styles.virtualAccountItemDetailValue}>
+                              {item.userVPA}
+                            </span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
               )}
             </div>
-            {/* </div> */}
           </div>
-          <div className="col-md-6 col-sm-12 mb-3">
-            <div className="d-flex gap-3 flex-md-row flex-column">
-              <WalletCard
-                img={wallet}
-                title="Wallet Balance"
-                subtitle={getBalanceSubtitle()}
-                amount={getBalanceAmount()}
+
+          {/* Transaction Overview Section - Revolutionary Different Designs */}
+          <div className={styles.transactionOverview}>
+            {/* Payin Card - Hexagonal Metrics Design */}
+            <div className={styles.payinCard}>
+              <div className={styles.payinHeader}>
+                <div className={styles.payinIcon}>
+                  <img src={sponsor} alt="Payin" />
+                </div>
+                <h3 className={styles.payinTitle}>Payin Transactions</h3>
+              </div>
+              <div className={styles.payinMetrics}>
+                <div className={styles.payinMetric}>
+                  <p className={styles.payinMetricLabel}>Success</p>
+                  <h4 className={styles.payinMetricValue}>
+                    {formatToINRCurrency(payinData?.data?.totalSuccessAmount || 0)}
+                  </h4>
+                  <p className={styles.payinMetricCount}>
+                    {payinData?.data?.totalSuccess || 0} txns
+                  </p>
+                </div>
+                <div className={styles.payinMetric}>
+                  <p className={styles.payinMetricLabel}>Failed</p>
+                  <h4 className={styles.payinMetricValue}>
+                    {formatToINRCurrency(payinData?.data?.totalFailedAmount || 0)}
+                  </h4>
+                  <p className={styles.payinMetricCount}>
+                    {payinData?.data?.totalFailed || 0} txns
+                  </p>
+                </div>
+                <div className={styles.payinMetric}>
+                  <p className={styles.payinMetricLabel}>Pending</p>
+                  <h4 className={styles.payinMetricValue}>
+                    {formatToINRCurrency(payinData?.data?.totalPendingAmount || 0)}
+                  </h4>
+                  <p className={styles.payinMetricCount}>
+                    {payinData?.data?.totalPending || 0} txns
+                  </p>
+                </div>
+                <div className={styles.payinMetric}>
+                  <p className={styles.payinMetricLabel}>Disputes</p>
+                  <h4 className={styles.payinMetricValue}>
+                    {formatToINRCurrency(chargebackData?.data?.totalAmount || 0)}
+                  </h4>
+                  <p className={styles.payinMetricCount}>
+                    {chargebackData?.data?.count || 0} disputes
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Payout Card - Circular Progress Design */}
+            <div className={styles.payoutCard}>
+              <div className={styles.payoutHeader}>
+                <div className={styles.payoutIcon}>
+                  <img src={settlement} alt="Payout" />
+                </div>
+                <h3 className={styles.payoutTitle}>Payout Transactions</h3>
+              </div>
+              <div className={styles.payoutMetrics}>
+                <div className={styles.payoutMetric}>
+                  <p className={styles.payoutMetricLabel}>Success Debit</p>
+                  <h4 className={styles.payoutMetricValue}>
+                    {formatToINRCurrency(payoutData?.data?.totalSuccessAmount || 0)}
+                  </h4>
+                  <p className={styles.payoutMetricCount}>
+                    {payoutData?.data?.totalSuccess || 0} txns
+                  </p>
+                </div>
+                <div className={styles.payoutMetric}>
+                  <p className={styles.payoutMetricLabel}>Failed Debit</p>
+                  <h4 className={styles.payoutMetricValue}>
+                    {formatToINRCurrency(payoutData?.data?.totalFailedAmount || 0)}
+                  </h4>
+                  <p className={styles.payoutMetricCount}>
+                    {payoutData?.data?.totalFailed || 0} txns
+                  </p>
+                </div>
+                <div className={styles.payoutMetric}>
+                  <p className={styles.payoutMetricLabel}>Pending Debit</p>
+                  <h4 className={styles.payoutMetricValue}>
+                    {formatToINRCurrency(payoutData?.data?.totalPendingAmount || 0)}
+                  </h4>
+                  <p className={styles.payoutMetricCount}>
+                    {payoutData?.data?.totalPending || 0} txns
+                  </p>
+                </div>
+                <div className={styles.payoutMetric}>
+                  <p className={styles.payoutMetricLabel}>Success Credit</p>
+                  <h4 className={styles.payoutMetricValue}>
+                    {formatToINRCurrency(payoutData?.data?.totalCreditSuccessAmount || 0)}
+                  </h4>
+                  <p className={styles.payoutMetricCount}>
+                    {payoutData?.data?.totalCreditSuccess || 0} txns
+                  </p>
+                </div>
+                <div className={styles.payoutMetric}>
+                  <p className={styles.payoutMetricLabel}>Rejected Credit</p>
+                  <h4 className={styles.payoutMetricValue}>
+                    {formatToINRCurrency(payoutData?.data?.totalCreditRejectAmount || 0)}
+                  </h4>
+                  <p className={styles.payoutMetricCount}>
+                    {payoutData?.data?.totalCreditRejected || 0} txns
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Settlement Section */}
+          <div className={styles.settlementSection}>
+            <div className={`${styles.settlementCard} ${styles.settled}`}>
+              <div className={styles.settlementCardHeader}>
+                <h3 className={styles.settlementCardTitle}>Settled Transactions</h3>
+              </div>
+              <div className={styles.settlementMetrics}>
+                <div className={styles.settlementMetric}>
+                  <span className={styles.settlementMetricLabel}>Total Transaction Amount</span>
+                  <span className={styles.settlementMetricValue}>
+                    {formatToINRCurrency(settlementData?.data?.amountSettle || 0)}
+                  </span>
+                </div>
+                <div className={styles.settlementMetric}>
+                  <span className={styles.settlementMetricLabel}>Net Settled Amount</span>
+                  <span className={styles.settlementMetricValue}>
+                    {formatToINRCurrency(settlementData?.data?.netAmountSettle || 0)}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div className={`${styles.settlementCard} ${styles.unsettled}`}>
+              <div className={styles.settlementCardHeader}>
+                <h3 className={styles.settlementCardTitle}>Pending Settlement</h3>
+              </div>
+              <div className={styles.settlementMetrics}>
+                <div className={styles.settlementMetric}>
+                  <span className={styles.settlementMetricLabel}>Total Transaction Amount</span>
+                  <span className={styles.settlementMetricValue}>
+                    {formatToINRCurrency(settlementData?.data?.amountUnsettle || 0)}
+                  </span>
+                </div>
+                <div className={styles.settlementMetric}>
+                  <span className={styles.settlementMetricLabel}>Upcoming Settlement</span>
+                  <span className={styles.settlementMetricValue}>
+                    {formatToINRCurrency(settlementData?.data?.netAmountUnsettle || 0)}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Analytics Section */}
+          <div className={styles.analyticsSection}>
+            <div className={styles.analyticsCard}>
+              <PayinAnalytics
+                type="Count"
+                value="totalCount"
+                min={0}
+                max={1000}
               />
-              <WalletCard
-                img={transactional}
-                title="Virtual Collection"
-                subtitle="Virtual Collection"
-                amount={
-                  isAdmin()
-                    ? VirtualBalanceData?.data
-                    : VirtualBalanceData?.data
-                }
+            </div>
+            <div className={styles.analyticsCard}>
+              <PayinAnalytics
+                type="Amount"
+                value="totalAmount"
+                min={500}
+                max={2000000}
               />
-              {/* <DepositCard img={debitcard} title="Credit Cards" /> */}
             </div>
-          </div>
-        </div>
-        <div className="row">
-          <div className="col-md-6 col-lg-12 col-xl-6">
-            <div className={styles.card}>
-              <h6>Payin Details</h6>
-              <div className="row mt-4">
-                <div className="col-md-6 col-sm-12 mb-3">
-                  <DetailCard
-                    title="Success Amount"
-                    amount={payinData?.data?.totalSuccessAmount}
-                    type="success"
-                    // className="success"
-                    img={success}
-                    subtitle={`Txn Count : ${payinData?.data?.totalSuccess}`}
-                  />
-                </div>
-                <div className="col-md-6 col-sm-12 mb-3">
-                  <DetailCard
-                    title="Failed Amount"
-                    amount={payinData?.data?.totalFailedAmount}
-                    type="failed"
-                    className="failed"
-                    img={failed}
-                    subtitle={`Txn Count : ${payinData?.data?.totalFailed}`}
-                  />
-                </div>
-                <div className="col-md-6 col-sm-12 mb-3">
-                  <DetailCard
-                    title="Pending Amount"
-                    amount={payinData?.data?.totalPendingAmount}
-                    type="pending"
-                    className="pending"
-                    img={pending}
-                    subtitle={`Txn Count : ${payinData?.data?.totalPending}`}
-                  />
-                </div>
-                <div className="col-md-6 col-sm-12 mb-3">
-                  <DetailCard
-                    title="Total Dispute"
-                    amount={chargebackData?.data.totalAmount}
-                    type="info"
-                    img={resolution}
-                    subtitle={`Txn Count : ${chargebackData?.data?.count}`}
-                  />
-                </div>
-              </div>
-              <div className="row mb-1">
-                <div className="col-md-12 col-sm-12 mb-3">
-                  <SettlementCard
-                    img={sponsor}
-                    primaryTitle="Total Txn Amount"
-                    primaryAmount={settlementData?.data.amountSettle}
-                    secondaryTitle="Total Settled Amount"
-                    secondaryAmount={settlementData?.data.netAmountSettle}
-                    type="settled"
-                  />
-                </div>
-                <div className="col-md-12 col-sm-12">
-                  <SettlementCard
-                    img={settlement}
-                    primaryTitle="Total Txn Amount"
-                    primaryAmount={settlementData?.data.amountUnsettle}
-                    secondaryTitle="Upcoming Settle Amount"
-                    secondaryAmount={settlementData?.data.netAmountUnsettle}
-                    type="unsettled"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="col-md-6 col-sm-12 ">
-            <div className={styles.card}>
-              <h6>Payout Details</h6>
-              <div className="row mt-4">
-                <div className="col-md-6 col-sm-12 mb-3">
-                  <DetailCard
-                    img={success}
-                    amount={payoutData?.data?.totalSuccessAmount}
-                    title="Success Debit Amount"
-                    type="success"
-                    subtitle={`Txn Count : ${payoutData?.data?.totalSuccess}`}
-                    className="success"
-                  />
-                </div>
-                <div className="col-md-6 col-sm-12 mb-3">
-                  <DetailCard
-                    img={failed}
-                    amount={payoutData?.data?.totalFailedAmount}
-                    title="Failed Debit Amount"
-                    type="failed"
-                    className="failed"
-                    subtitle={`Txn Count : ${payoutData?.data?.totalFailed}`}
-                  />
-                </div>
-                <div className="col-md-6 col-sm-12 mb-3">
-                  <DetailCard
-                    img={pending}
-                    amount={payoutData?.data?.totalPendingAmount}
-                    title="Pending Debit Amount"
-                    type="pending"
-                    className="pending"
-                    subtitle={`Txn Count : ${payoutData?.data?.totalPending}`}
-                  />
-                </div>
-                <div className="col-md-6 col-sm-12 mb-3">
-                  <DetailCard
-                    img={success}
-                    amount={payoutData?.data?.totalCreditSuccessAmount}
-                    title="Success Credited Amount"
-                    type="success"
-                    subtitle={`Txn Count : ${payoutData?.data?.totalCreditSuccess}`}
-                  />
-                </div>
-                <div className="col-md-6 col-sm-12 mb-3">
-                  <DetailCard
-                    img={failed}
-                    amount={payoutData?.data?.totalCreditRejectAmount}
-                    title="Rejected Credit Amount"
-                    type="failed"
-                    subtitle={`Txn Count : ${payoutData?.data?.totalCreditRejected}`}
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="row">
-          <div className="col-12">
-            <PayinAnalytics
-              type="Count"
-              value="totalCount"
-              min={0}
-              max={1000}
-            />
-          </div>
-        </div>
-        <div className="row">
-          <div className="col-12">
-            <PayinAnalytics
-              type="Amount"
-              value="totalAmount"
-              min={500}
-              max={2000000}
-            />
           </div>
         </div>
       </div>

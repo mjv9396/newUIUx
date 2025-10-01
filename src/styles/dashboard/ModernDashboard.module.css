@@ -1,0 +1,1622 @@
+/* Modern Dashboard Design - Green & Golden Theme - ULTRA COMPACT */
+.dashboard {
+  position: relative;
+  padding: 12px;
+  background: linear-gradient(135deg, 
+    rgba(45, 80, 22, 0.02) 0%, 
+    rgba(212, 175, 55, 0.03) 50%, 
+    rgba(74, 124, 89, 0.02) 100%);
+  min-height: 100vh;
+}
+
+.dashboardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  position: relative;
+}
+
+.titleSection {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dashboardTitle {
+  font-size: 1.5rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #2d5016 0%, #4a7c59 50%, #d4af37 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin: 0;
+}
+
+.dashboardSubtitle {
+  color: rgba(45, 80, 22, 0.7);
+  font-size: 0.8rem;
+  font-weight: 500;
+  margin: 2px 0 0 0;
+}
+
+.filtersSection {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+/* Main Grid Layout */
+.dashboardGrid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+/* Balance Overview Section - Ultra Compact */
+.balanceOverview {
+  grid-column: span 12;
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.balanceCard {
+  background: linear-gradient(135deg, 
+    rgba(255, 255, 255, 0.9) 0%, 
+    rgba(255, 255, 255, 0.7) 100%);
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(212, 175, 55, 0.2);
+  border-radius: 12px;
+  padding: 14px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 12px rgba(45, 80, 22, 0.06);
+}
+
+.balanceCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #2d5016 0%, #4a7c59 50%, #d4af37 100%);
+  border-radius: 12px 12px 0 0;
+}
+
+.balanceCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(45, 80, 22, 0.1);
+}
+
+.balanceCardIcon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #2d5016 0%, #4a7c59 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 8px;
+  float: right;
+}
+
+.balanceCardIcon img {
+  width: 16px;
+  height: 16px;
+  filter: brightness(0) invert(1);
+}
+
+.balanceCardTitle {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #2d5016;
+  margin: 0 0 2px 0;
+}
+
+.balanceCardSubtitle {
+  font-size: 0.7rem;
+  color: rgba(45, 80, 22, 0.6);
+  margin: 0 0 6px 0;
+}
+
+.balanceCardAmount {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: #2d5016;
+  margin: 0;
+  letter-spacing: -0.5px;
+  clear: both;
+}
+
+/* Virtual Accounts + Collection Combined Card - Ultra Compact */
+.virtualCard {
+  background: linear-gradient(135deg, 
+    rgba(255, 255, 255, 0.95) 0%, 
+    rgba(255, 255, 255, 0.8) 100%);
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(212, 175, 55, 0.2);
+  border-radius: 12px;
+  padding: 14px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 12px rgba(45, 80, 22, 0.06);
+}
+
+.virtualCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #d4af37 0%, #4a7c59 100%);
+  border-radius: 12px 12px 0 0;
+}
+
+.virtualCardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+  padding-bottom: 8px;
+}
+
+.virtualCardTitle {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #2d5016;
+  margin: 0;
+}
+
+.virtualCollectionAmount {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #d4af37;
+  margin: 0;
+}
+
+.virtualAccountsList {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 140px;
+  overflow-y: auto;
+}
+
+.virtualAccountItem {
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(212, 175, 55, 0.1);
+  border-radius: 6px;
+  padding: 8px;
+  transition: all 0.2s ease;
+}
+
+.virtualAccountItem:hover {
+  background: rgba(255, 255, 255, 0.8);
+  transform: translateX(2px);
+}
+
+.virtualAccountItemHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.virtualAccountItemTitle {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #2d5016;
+  margin: 0;
+}
+
+.virtualAccountItemBalance {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #d4af37;
+  margin: 0;
+}
+
+.virtualAccountItemDetails {
+  display: flex;
+  gap: 8px;
+  font-size: 0.65rem;
+  color: rgba(45, 80, 22, 0.7);
+}
+
+.virtualAccountItemDetail {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.virtualAccountItemDetailLabel {
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.virtualAccountItemDetailValue {
+  font-family: 'Courier New', monospace;
+  font-weight: 600;
+  color: #2d5016;
+}
+
+/* Transaction Overview - Revolutionary Different Designs */
+.transactionOverview {
+  grid-column: span 12;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+/* Payin Card - Hexagonal Metrics Design */
+.payinCard {
+  background: linear-gradient(135deg, 
+    rgba(255, 255, 255, 0.95) 0%, 
+    rgba(16, 185, 129, 0.05) 100%);
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  border-radius: 12px;
+  padding: 16px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 12px rgba(16, 185, 129, 0.08);
+}
+
+.payinCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #10b981 0%, #34d399 100%);
+  border-radius: 12px 12px 0 0;
+}
+
+.payinCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(16, 185, 129, 0.12);
+}
+
+.payinHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.payinIcon {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.payinIcon img {
+  width: 14px;
+  height: 14px;
+  filter: brightness(0) invert(1);
+}
+
+.payinTitle {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #065f46;
+  margin: 0;
+}
+
+.payinMetrics {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.payinMetric {
+  background: rgba(16, 185, 129, 0.08);
+  border: 1px solid rgba(16, 185, 129, 0.15);
+  border-radius: 8px;
+  padding: 8px;
+  text-align: center;
+  transition: all 0.2s ease;
+}
+
+.payinMetric:hover {
+  background: rgba(16, 185, 129, 0.12);
+  transform: scale(1.02);
+}
+
+.payinMetricLabel {
+  font-size: 0.7rem;
+  color: #065f46;
+  font-weight: 600;
+  margin: 0 0 2px 0;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.payinMetricValue {
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: #10b981;
+  margin: 0 0 1px 0;
+}
+
+.payinMetricCount {
+  font-size: 0.6rem;
+  color: #065f46;
+  margin: 0;
+  opacity: 0.8;
+}
+
+/* Payout Card - Circular Progress Design */
+.payoutCard {
+  background: linear-gradient(135deg, 
+    rgba(255, 255, 255, 0.95) 0%, 
+    rgba(245, 158, 11, 0.05) 100%);
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(245, 158, 11, 0.2);
+  border-radius: 12px;
+  padding: 16px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 12px rgba(245, 158, 11, 0.08);
+}
+
+.payoutCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #f59e0b 0%, #fbbf24 100%);
+  border-radius: 12px 12px 0 0;
+}
+
+.payoutCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(245, 158, 11, 0.12);
+}
+
+.payoutHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.payoutIcon {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.payoutIcon img {
+  width: 14px;
+  height: 14px;
+  filter: brightness(0) invert(1);
+}
+
+.payoutTitle {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #92400e;
+  margin: 0;
+}
+
+.payoutMetrics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.payoutMetric {
+  background: rgba(245, 158, 11, 0.08);
+  border: 1px solid rgba(245, 158, 11, 0.15);
+  border-radius: 6px;
+  padding: 6px 8px;
+  flex: 1;
+  min-width: calc(50% - 3px);
+  transition: all 0.2s ease;
+}
+
+.payoutMetric:hover {
+  background: rgba(245, 158, 11, 0.12);
+  transform: translateY(-1px);
+}
+
+.payoutMetricLabel {
+  font-size: 0.65rem;
+  color: #92400e;
+  font-weight: 600;
+  margin: 0 0 2px 0;
+  text-transform: uppercase;
+  letter-spacing: 0.2px;
+}
+
+.payoutMetricValue {
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: #f59e0b;
+  margin: 0 0 1px 0;
+}
+
+.payoutMetricCount {
+  font-size: 0.55rem;
+  color: #92400e;
+  margin: 0;
+  opacity: 0.8;
+}
+
+/* Settlement Cards - Ultra Compact */
+.settlementSection {
+  grid-column: span 12;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.settlementCard {
+  background: linear-gradient(135deg, 
+    rgba(255, 255, 255, 0.9) 0%, 
+    rgba(255, 255, 255, 0.7) 100%);
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(212, 175, 55, 0.2);
+  border-radius: 12px;
+  padding: 14px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.settlementCard.settled::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #10b981 0%, #34d399 100%);
+  border-radius: 12px 12px 0 0;
+}
+
+.settlementCard.unsettled::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #f59e0b 0%, #fbbf24 100%);
+  border-radius: 12px 12px 0 0;
+}
+
+.settlementCardHeader {
+  margin-bottom: 10px;
+}
+
+.settlementCardTitle {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #2d5016;
+  margin: 0;
+}
+
+.settlementMetrics {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.settlementMetric {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 8px;
+  background: rgba(255, 255, 255, 0.4);
+  border-radius: 6px;
+  border: 1px solid rgba(212, 175, 55, 0.1);
+}
+
+.settlementMetricLabel {
+  font-size: 0.75rem;
+  color: rgba(45, 80, 22, 0.8);
+  font-weight: 500;
+}
+
+.settlementMetricValue {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #2d5016;
+}
+
+/* Analytics Section - Ultra Compact */
+.analyticsSection {
+  grid-column: span 12;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+.analyticsCard {
+  background: linear-gradient(135deg, 
+    rgba(255, 255, 255, 0.95) 0%, 
+    rgba(255, 255, 255, 0.8) 100%);
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(212, 175, 55, 0.2);
+  border-radius: 12px;
+  padding: 16px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 2px 12px rgba(45, 80, 22, 0.06);
+}
+
+/* No Data State */
+.noData {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 30px 16px;
+  color: rgba(45, 80, 22, 0.6);
+  font-size: 0.85rem;
+  font-weight: 500;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 8px;
+  border: 2px dashed rgba(212, 175, 55, 0.3);
+}
+
+.noDataIcon {
+  font-size: 1.5rem;
+  margin-bottom: 8px;
+  opacity: 0.5;
+}
+
+/* Loading State */
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  color: #4a7c59;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.loadingSpinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(212, 175, 55, 0.3);
+  border-top: 2px solid #d4af37;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-right: 8px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Virtual Accounts + Collection Combined Card */
+.virtualCard {
+  background: linear-gradient(135deg, 
+    rgba(255, 255, 255, 0.95) 0%, 
+    rgba(255, 255, 255, 0.8) 100%);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(212, 175, 55, 0.2);
+  border-radius: 16px;
+  padding: 20px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 20px rgba(45, 80, 22, 0.08);
+}
+
+.virtualCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #d4af37 0%, #4a7c59 100%);
+  border-radius: 16px 16px 0 0;
+}
+
+.virtualCardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+  padding-bottom: 12px;
+}
+
+.virtualCardTitle {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #2d5016;
+  margin: 0;
+}
+
+.virtualCollectionAmount {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #d4af37;
+  margin: 0;
+}
+
+.virtualAccountsList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 180px;
+  overflow-y: auto;
+}
+
+.virtualAccountItem {
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(212, 175, 55, 0.1);
+  border-radius: 8px;
+  padding: 12px;
+  transition: all 0.2s ease;
+}
+
+.virtualAccountItem:hover {
+  background: rgba(255, 255, 255, 0.8);
+  transform: translateX(4px);
+}
+
+.virtualAccountItemHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.virtualAccountItemTitle {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #2d5016;
+  margin: 0;
+}
+
+.virtualAccountItemBalance {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #d4af37;
+  margin: 0;
+}
+
+.virtualAccountItemDetails {
+  display: flex;
+  gap: 12px;
+  font-size: 0.75rem;
+  color: rgba(45, 80, 22, 0.7);
+}
+
+.virtualAccountItemDetail {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.virtualAccountItemDetailLabel {
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.virtualAccountItemDetailValue {
+  font-family: 'Courier New', monospace;
+  font-weight: 600;
+  color: #2d5016;
+}
+
+/* Transaction Overview Cards - Compact */
+.transactionOverview {
+  grid-column: span 12;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.transactionCard {
+  background: linear-gradient(135deg, 
+    rgba(255, 255, 255, 0.95) 0%, 
+    rgba(255, 255, 255, 0.8) 100%);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(212, 175, 55, 0.15);
+  border-radius: 16px;
+  padding: 20px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 20px rgba(45, 80, 22, 0.06);
+}
+
+.transactionCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 30px rgba(45, 80, 22, 0.1);
+}
+
+.transactionCardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  position: relative;
+  z-index: 1;
+}
+
+.transactionCardTitle {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #2d5016;
+  margin: 0;
+}
+
+.transactionCardIcon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #d4af37 0%, #f4e99b 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(212, 175, 55, 0.3);
+}
+
+.transactionCardIcon img {
+  width: 18px;
+  height: 18px;
+  filter: brightness(0) saturate(100%) invert(25%) sepia(14%) saturate(1923%) hue-rotate(75deg) brightness(96%) contrast(94%);
+}
+
+.transactionMetrics {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  position: relative;
+  z-index: 1;
+}
+
+.metricItem {
+  padding: 12px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.5);
+  border: 1px solid rgba(212, 175, 55, 0.1);
+  transition: all 0.2s ease;
+}
+
+.metricItem:hover {
+  background: rgba(255, 255, 255, 0.8);
+  transform: translateY(-2px);
+}
+
+.metricItemLabel {
+  font-size: 0.8rem;
+  color: rgba(45, 80, 22, 0.7);
+  margin: 0 0 4px 0;
+  font-weight: 500;
+}
+
+.metricItemValue {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin: 0 0 2px 0;
+}
+
+.metricItemCount {
+  font-size: 0.7rem;
+  color: rgba(45, 80, 22, 0.6);
+  margin: 0;
+  font-weight: 500;
+}
+
+/* Status-based colors */
+.metricItem.success .metricItemValue {
+  color: #10b981;
+}
+
+.metricItem.failed .metricItemValue {
+  color: #ef4444;
+}
+
+.metricItem.pending .metricItemValue {
+  color: #f59e0b;
+}
+
+.metricItem.info .metricItemValue {
+  color: #3b82f6;
+}
+
+/* Settlement Cards - Compact */
+.settlementSection {
+  grid-column: span 12;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.settlementCard {
+  background: linear-gradient(135deg, 
+    rgba(255, 255, 255, 0.9) 0%, 
+    rgba(255, 255, 255, 0.7) 100%);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(212, 175, 55, 0.2);
+  border-radius: 16px;
+  padding: 20px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.settlementCard.settled::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #10b981 0%, #34d399 100%);
+  border-radius: 16px 16px 0 0;
+}
+
+.settlementCard.unsettled::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #f59e0b 0%, #fbbf24 100%);
+  border-radius: 16px 16px 0 0;
+}
+
+.settlementCardHeader {
+  margin-bottom: 16px;
+}
+
+.settlementCardTitle {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #2d5016;
+  margin: 0;
+}
+
+.settlementMetrics {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.settlementMetric {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 12px;
+  background: rgba(255, 255, 255, 0.4);
+  border-radius: 8px;
+  border: 1px solid rgba(212, 175, 55, 0.1);
+}
+
+.settlementMetricLabel {
+  font-size: 0.85rem;
+  color: rgba(45, 80, 22, 0.8);
+  font-weight: 500;
+}
+
+.settlementMetricValue {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #2d5016;
+}
+
+/* Analytics Section - Compact */
+.analyticsSection {
+  grid-column: span 12;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+.analyticsCard {
+  background: linear-gradient(135deg, 
+    rgba(255, 255, 255, 0.95) 0%, 
+    rgba(255, 255, 255, 0.8) 100%);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(212, 175, 55, 0.2);
+  border-radius: 16px;
+  padding: 20px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(45, 80, 22, 0.06);
+}
+
+/* No Data State */
+.noData {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  color: rgba(45, 80, 22, 0.6);
+  font-size: 0.95rem;
+  font-weight: 500;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 12px;
+  border: 2px dashed rgba(212, 175, 55, 0.3);
+}
+
+.noDataIcon {
+  font-size: 2rem;
+  margin-bottom: 12px;
+  opacity: 0.5;
+}
+
+/* Loading State */
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 30px;
+  color: #4a7c59;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.loadingSpinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(212, 175, 55, 0.3);
+  border-top: 2px solid #d4af37;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-right: 10px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Transaction Overview Cards */
+.transactionOverview {
+  grid-column: span 12;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+.transactionCard {
+  background: linear-gradient(135deg, 
+    rgba(255, 255, 255, 0.95) 0%, 
+    rgba(255, 255, 255, 0.8) 100%);
+  backdrop-filter: blur(25px);
+  border: 1px solid rgba(212, 175, 55, 0.15);
+  border-radius: 28px;
+  padding: 32px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s ease;
+  box-shadow: 
+    0 15px 50px rgba(45, 80, 22, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.transactionCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, 
+    rgba(45, 80, 22, 0.02) 0%, 
+    rgba(212, 175, 55, 0.03) 100%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.transactionCard:hover::before {
+  opacity: 1;
+}
+
+.transactionCard:hover {
+  transform: translateY(-12px);
+  box-shadow: 
+    0 25px 70px rgba(45, 80, 22, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.transactionCardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 28px;
+  position: relative;
+  z-index: 1;
+}
+
+.transactionCardTitle {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #2d5016;
+  margin: 0;
+}
+
+.transactionCardIcon {
+  width: 48px;
+  height: 48px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #d4af37 0%, #f4e99b 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 24px rgba(212, 175, 55, 0.3);
+}
+
+.transactionCardIcon img {
+  width: 24px;
+  height: 24px;
+  filter: brightness(0) saturate(100%) invert(25%) sepia(14%) saturate(1923%) hue-rotate(75deg) brightness(96%) contrast(94%);
+}
+
+.transactionMetrics {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  position: relative;
+  z-index: 1;
+}
+
+.metricItem {
+  padding: 20px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.5);
+  border: 1px solid rgba(212, 175, 55, 0.1);
+  transition: all 0.3s ease;
+}
+
+.metricItem:hover {
+  background: rgba(255, 255, 255, 0.8);
+  transform: translateY(-4px);
+}
+
+.metricItemLabel {
+  font-size: 0.9rem;
+  color: rgba(45, 80, 22, 0.7);
+  margin: 0 0 8px 0;
+  font-weight: 500;
+}
+
+.metricItemValue {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin: 0 0 4px 0;
+}
+
+.metricItemCount {
+  font-size: 0.8rem;
+  color: rgba(45, 80, 22, 0.6);
+  margin: 0;
+  font-weight: 500;
+}
+
+/* Status-based colors */
+.metricItem.success .metricItemValue {
+  color: #10b981;
+}
+
+.metricItem.failed .metricItemValue {
+  color: #ef4444;
+}
+
+.metricItem.pending .metricItemValue {
+  color: #f59e0b;
+}
+
+.metricItem.info .metricItemValue {
+  color: #3b82f6;
+}
+
+/* Settlement Cards */
+.settlementSection {
+  grid-column: span 12;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+.settlementCard {
+  background: linear-gradient(135deg, 
+    rgba(255, 255, 255, 0.9) 0%, 
+    rgba(255, 255, 255, 0.7) 100%);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(212, 175, 55, 0.2);
+  border-radius: 24px;
+  padding: 32px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s ease;
+}
+
+.settlementCard.settled::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #10b981 0%, #34d399 100%);
+  border-radius: 24px 24px 0 0;
+}
+
+.settlementCard.unsettled::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #f59e0b 0%, #fbbf24 100%);
+  border-radius: 24px 24px 0 0;
+}
+
+.settlementCardHeader {
+  display: flex;
+  justify-content: between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.settlementCardTitle {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #2d5016;
+  margin: 0;
+}
+
+.settlementMetrics {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.settlementMetric {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  background: rgba(255, 255, 255, 0.4);
+  border-radius: 12px;
+  border: 1px solid rgba(212, 175, 55, 0.1);
+}
+
+.settlementMetricLabel {
+  font-size: 1rem;
+  color: rgba(45, 80, 22, 0.8);
+  font-weight: 500;
+}
+
+.settlementMetricValue {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #2d5016;
+}
+
+/* Virtual Accounts Section */
+.virtualAccountsSection {
+  grid-column: span 12;
+  margin-bottom: 32px;
+}
+
+.virtualAccountsHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.virtualAccountsTitle {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #2d5016;
+  margin: 0;
+}
+
+.virtualAccountsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 20px;
+}
+
+.virtualAccountCard {
+  background: linear-gradient(135deg, 
+    rgba(255, 255, 255, 0.95) 0%, 
+    rgba(45, 80, 22, 0.02) 100%);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(212, 175, 55, 0.2);
+  border-radius: 20px;
+  padding: 28px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s ease;
+  box-shadow: 0 10px 30px rgba(45, 80, 22, 0.08);
+}
+
+.virtualAccountCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #2d5016 0%, #d4af37 100%);
+  border-radius: 20px 20px 0 0;
+}
+
+.virtualAccountCard:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 50px rgba(45, 80, 22, 0.12);
+}
+
+.virtualAccountHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.virtualAccountTitle {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #2d5016;
+  margin: 0;
+}
+
+.virtualAccountBalance {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: #d4af37;
+  margin: 0;
+}
+
+.virtualAccountDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.virtualAccountDetail {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.9rem;
+}
+
+.virtualAccountDetailLabel {
+  color: rgba(45, 80, 22, 0.7);
+  font-weight: 500;
+}
+
+.virtualAccountDetailValue {
+  color: #2d5016;
+  font-weight: 600;
+  font-family: 'Courier New', monospace;
+}
+
+/* Analytics Section */
+.analyticsSection {
+  grid-column: span 12;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+}
+
+.analyticsCard {
+  background: linear-gradient(135deg, 
+    rgba(255, 255, 255, 0.95) 0%, 
+    rgba(255, 255, 255, 0.8) 100%);
+  backdrop-filter: blur(25px);
+  border: 1px solid rgba(212, 175, 55, 0.2);
+  border-radius: 24px;
+  padding: 32px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 15px 40px rgba(45, 80, 22, 0.08);
+}
+
+/* No Data State */
+.noData {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  color: rgba(45, 80, 22, 0.6);
+  font-size: 1.1rem;
+  font-weight: 500;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 16px;
+  border: 2px dashed rgba(212, 175, 55, 0.3);
+}
+
+.noDataIcon {
+  width: 64px;
+  height: 64px;
+  margin-bottom: 16px;
+  opacity: 0.5;
+}
+
+/* Loading State */
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  color: #4a7c59;
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+.loadingSpinner {
+  width: 24px;
+  height: 24px;
+  border: 2px solid rgba(212, 175, 55, 0.3);
+  border-top: 2px solid #d4af37;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-right: 12px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Responsive Design - Ultra Compact */
+@media (max-width: 1200px) {
+  .dashboardGrid {
+    gap: 10px;
+  }
+  
+  .transactionOverview {
+    grid-template-columns: 1fr;
+  }
+  
+  .settlementSection {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard {
+    padding: 8px;
+  }
+  
+  .dashboardHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+  
+  .filtersSection {
+    width: 100%;
+    justify-content: flex-start;
+    overflow-x: auto;
+    padding-bottom: 6px;
+  }
+  
+  .dashboardTitle {
+    font-size: 1.3rem;
+  }
+  
+  .dashboardSubtitle {
+    font-size: 0.7rem;
+  }
+  
+  .balanceOverview {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+  
+  .balanceCard,
+  .virtualCard {
+    padding: 12px;
+  }
+  
+  .balanceCardAmount {
+    font-size: 1.1rem;
+  }
+  
+  .virtualCollectionAmount {
+    font-size: 0.95rem;
+  }
+  
+  .payinCard,
+  .payoutCard {
+    padding: 12px;
+  }
+  
+  .payinTitle,
+  .payoutTitle {
+    font-size: 0.85rem;
+  }
+  
+  .payinMetrics {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+  
+  .payoutMetrics {
+    gap: 4px;
+  }
+  
+  .payoutMetric {
+    min-width: 100%;
+  }
+  
+  .settlementCard {
+    padding: 12px;
+  }
+  
+  .analyticsCard {
+    padding: 12px;
+  }
+  
+  .virtualAccountsList {
+    max-height: 100px;
+  }
+  
+  .virtualAccountItem {
+    padding: 6px;
+  }
+}
+
+@media (max-width: 480px) {
+  .dashboard {
+    padding: 6px;
+  }
+  
+  .dashboardHeader {
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+  
+  .dashboardTitle {
+    font-size: 1.2rem;
+    line-height: 1.2;
+  }
+  
+  .balanceCard,
+  .virtualCard,
+  .payinCard,
+  .payoutCard,
+  .settlementCard,
+  .analyticsCard {
+    padding: 10px;
+    border-radius: 8px;
+  }
+  
+  .balanceCardAmount {
+    font-size: 1rem;
+  }
+  
+  .virtualCollectionAmount {
+    font-size: 0.85rem;
+  }
+  
+  .payinTitle,
+  .payoutTitle {
+    font-size: 0.8rem;
+  }
+  
+  .payinMetricValue,
+  .payoutMetricValue {
+    font-size: 0.75rem;
+  }
+  
+  .payinMetricLabel,
+  .payoutMetricLabel {
+    font-size: 0.6rem;
+  }
+  
+  .payinMetricCount,
+  .payoutMetricCount {
+    font-size: 0.5rem;
+  }
+  
+  .settlementMetricValue {
+    font-size: 0.8rem;
+  }
+  
+  .settlementMetricLabel {
+    font-size: 0.65rem;
+  }
+  
+  .virtualAccountItemTitle {
+    font-size: 0.7rem;
+  }
+  
+  .virtualAccountItemBalance {
+    font-size: 0.65rem;
+  }
+  
+  .virtualAccountItemDetails {
+    font-size: 0.6rem;
+    gap: 6px;
+  }
+}
+
+/* Extra small devices */
+@media (max-width: 320px) {
+  .dashboard {
+    padding: 4px;
+  }
+  
+  .dashboardTitle {
+    font-size: 1.1rem;
+  }
+  
+  .balanceCard,
+  .virtualCard,
+  .payinCard,
+  .payoutCard,
+  .settlementCard {
+    padding: 8px;
+  }
+  
+  .balanceCardAmount {
+    font-size: 0.9rem;
+  }
+  
+  .virtualCollectionAmount {
+    font-size: 0.75rem;
+  }
+  
+  .payinMetricValue,
+  .payoutMetricValue {
+    font-size: 0.65rem;
+  }
+  
+  .filtersSection {
+    gap: 4px;
+  }
+  
+  .virtualAccountsList {
+    max-height: 80px;
+  }
+  
+  .virtualAccountItem {
+    padding: 4px;
+  }
+}
