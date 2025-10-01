@@ -267,7 +267,9 @@ const Dashboard = () => {
                 <img src={wallet} alt="Wallet Balance" />
               </div>
               <h3 className={styles.balanceCardTitle}>Wallet Balance</h3>
-              <p className={styles.balanceCardSubtitle}>{getBalanceSubtitle()}</p>
+              <p className={styles.balanceCardSubtitle}>
+                {getBalanceSubtitle()}
+              </p>
               <h2 className={styles.balanceCardAmount}>
                 {formatToINRCurrency(getBalanceAmount())}
               </h2>
@@ -276,7 +278,9 @@ const Dashboard = () => {
             {/* Virtual Accounts + Collection Combined Card */}
             <div className={styles.virtualCard}>
               <div className={styles.virtualCardHeader}>
-                <h3 className={styles.virtualCardTitle}>Virtual Accounts & Collections</h3>
+                <h3 className={styles.virtualCardTitle}>
+                  Virtual Accounts & Collections
+                </h3>
                 <h2 className={styles.virtualCollectionAmount}>
                   {formatToINRCurrency(
                     isAdmin()
@@ -285,7 +289,7 @@ const Dashboard = () => {
                   )}
                 </h2>
               </div>
-              
+
               {!virtualAccountData || virtualAccountData?.data?.length === 0 ? (
                 <div className={styles.noData}>
                   <div className={styles.noDataIcon}>💳</div>
@@ -305,28 +309,48 @@ const Dashboard = () => {
                   {virtualAccountData?.data.map((item, index) => (
                     <div key={index} className={styles.virtualAccountItem}>
                       <div className={styles.virtualAccountItemHeader}>
-                        <h4 className={styles.virtualAccountItemTitle}>{item.acqCode}</h4>
+                        <h4 className={styles.virtualAccountItemTitle}>
+                          {item.acqCode}
+                        </h4>
                         <span className={styles.virtualAccountItemBalance}>
                           {formatToINRCurrency(item.balance)}
                         </span>
                       </div>
                       <div className={styles.virtualAccountItemDetails}>
                         <div className={styles.virtualAccountItemDetail}>
-                          <span className={styles.virtualAccountItemDetailLabel}>Account</span>
-                          <span className={styles.virtualAccountItemDetailValue}>
+                          <span
+                            className={styles.virtualAccountItemDetailLabel}
+                          >
+                            Account
+                          </span>
+                          <span
+                            className={styles.virtualAccountItemDetailValue}
+                          >
                             {item.virtualAccount}
                           </span>
                         </div>
                         <div className={styles.virtualAccountItemDetail}>
-                          <span className={styles.virtualAccountItemDetailLabel}>IFSC</span>
-                          <span className={styles.virtualAccountItemDetailValue}>
+                          <span
+                            className={styles.virtualAccountItemDetailLabel}
+                          >
+                            IFSC
+                          </span>
+                          <span
+                            className={styles.virtualAccountItemDetailValue}
+                          >
                             {item.ifscCode}
                           </span>
                         </div>
                         {item.userVPA && (
                           <div className={styles.virtualAccountItemDetail}>
-                            <span className={styles.virtualAccountItemDetailLabel}>VPA</span>
-                            <span className={styles.virtualAccountItemDetailValue}>
+                            <span
+                              className={styles.virtualAccountItemDetailLabel}
+                            >
+                              VPA
+                            </span>
+                            <span
+                              className={styles.virtualAccountItemDetailValue}
+                            >
                               {item.userVPA}
                             </span>
                           </div>
@@ -353,7 +377,9 @@ const Dashboard = () => {
                 <div className={styles.payinMetric}>
                   <p className={styles.payinMetricLabel}>Success</p>
                   <h4 className={styles.payinMetricValue}>
-                    {formatToINRCurrency(payinData?.data?.totalSuccessAmount || 0)}
+                    {formatToINRCurrency(
+                      payinData?.data?.totalSuccessAmount || 0
+                    )}
                   </h4>
                   <p className={styles.payinMetricCount}>
                     {payinData?.data?.totalSuccess || 0} txns
@@ -362,7 +388,9 @@ const Dashboard = () => {
                 <div className={styles.payinMetric}>
                   <p className={styles.payinMetricLabel}>Failed</p>
                   <h4 className={styles.payinMetricValue}>
-                    {formatToINRCurrency(payinData?.data?.totalFailedAmount || 0)}
+                    {formatToINRCurrency(
+                      payinData?.data?.totalFailedAmount || 0
+                    )}
                   </h4>
                   <p className={styles.payinMetricCount}>
                     {payinData?.data?.totalFailed || 0} txns
@@ -371,7 +399,9 @@ const Dashboard = () => {
                 <div className={styles.payinMetric}>
                   <p className={styles.payinMetricLabel}>Pending</p>
                   <h4 className={styles.payinMetricValue}>
-                    {formatToINRCurrency(payinData?.data?.totalPendingAmount || 0)}
+                    {formatToINRCurrency(
+                      payinData?.data?.totalPendingAmount || 0
+                    )}
                   </h4>
                   <p className={styles.payinMetricCount}>
                     {payinData?.data?.totalPending || 0} txns
@@ -380,7 +410,9 @@ const Dashboard = () => {
                 <div className={styles.payinMetric}>
                   <p className={styles.payinMetricLabel}>Disputes</p>
                   <h4 className={styles.payinMetricValue}>
-                    {formatToINRCurrency(chargebackData?.data?.totalAmount || 0)}
+                    {formatToINRCurrency(
+                      chargebackData?.data?.totalAmount || 0
+                    )}
                   </h4>
                   <p className={styles.payinMetricCount}>
                     {chargebackData?.data?.count || 0} disputes
@@ -401,7 +433,9 @@ const Dashboard = () => {
                 <div className={styles.payoutMetric}>
                   <p className={styles.payoutMetricLabel}>Success Debit</p>
                   <h4 className={styles.payoutMetricValue}>
-                    {formatToINRCurrency(payoutData?.data?.totalSuccessAmount || 0)}
+                    {formatToINRCurrency(
+                      payoutData?.data?.totalSuccessAmount || 0
+                    )}
                   </h4>
                   <p className={styles.payoutMetricCount}>
                     {payoutData?.data?.totalSuccess || 0} txns
@@ -410,7 +444,9 @@ const Dashboard = () => {
                 <div className={styles.payoutMetric}>
                   <p className={styles.payoutMetricLabel}>Failed Debit</p>
                   <h4 className={styles.payoutMetricValue}>
-                    {formatToINRCurrency(payoutData?.data?.totalFailedAmount || 0)}
+                    {formatToINRCurrency(
+                      payoutData?.data?.totalFailedAmount || 0
+                    )}
                   </h4>
                   <p className={styles.payoutMetricCount}>
                     {payoutData?.data?.totalFailed || 0} txns
@@ -419,7 +455,9 @@ const Dashboard = () => {
                 <div className={styles.payoutMetric}>
                   <p className={styles.payoutMetricLabel}>Pending Debit</p>
                   <h4 className={styles.payoutMetricValue}>
-                    {formatToINRCurrency(payoutData?.data?.totalPendingAmount || 0)}
+                    {formatToINRCurrency(
+                      payoutData?.data?.totalPendingAmount || 0
+                    )}
                   </h4>
                   <p className={styles.payoutMetricCount}>
                     {payoutData?.data?.totalPending || 0} txns
@@ -428,7 +466,9 @@ const Dashboard = () => {
                 <div className={styles.payoutMetric}>
                   <p className={styles.payoutMetricLabel}>Success Credit</p>
                   <h4 className={styles.payoutMetricValue}>
-                    {formatToINRCurrency(payoutData?.data?.totalCreditSuccessAmount || 0)}
+                    {formatToINRCurrency(
+                      payoutData?.data?.totalCreditSuccessAmount || 0
+                    )}
                   </h4>
                   <p className={styles.payoutMetricCount}>
                     {payoutData?.data?.totalCreditSuccess || 0} txns
@@ -437,7 +477,9 @@ const Dashboard = () => {
                 <div className={styles.payoutMetric}>
                   <p className={styles.payoutMetricLabel}>Rejected Credit</p>
                   <h4 className={styles.payoutMetricValue}>
-                    {formatToINRCurrency(payoutData?.data?.totalCreditRejectAmount || 0)}
+                    {formatToINRCurrency(
+                      payoutData?.data?.totalCreditRejectAmount || 0
+                    )}
                   </h4>
                   <p className={styles.payoutMetricCount}>
                     {payoutData?.data?.totalCreditRejected || 0} txns
@@ -451,19 +493,29 @@ const Dashboard = () => {
           <div className={styles.settlementSection}>
             <div className={`${styles.settlementCard} ${styles.settled}`}>
               <div className={styles.settlementCardHeader}>
-                <h3 className={styles.settlementCardTitle}>Settled Transactions</h3>
+                <h3 className={styles.settlementCardTitle}>
+                  Settled Transactions
+                </h3>
               </div>
               <div className={styles.settlementMetrics}>
                 <div className={styles.settlementMetric}>
-                  <span className={styles.settlementMetricLabel}>Total Transaction Amount</span>
+                  <span className={styles.settlementMetricLabel}>
+                    Total Transaction Amount
+                  </span>
                   <span className={styles.settlementMetricValue}>
-                    {formatToINRCurrency(settlementData?.data?.amountSettle || 0)}
+                    {formatToINRCurrency(
+                      settlementData?.data?.amountSettle || 0
+                    )}
                   </span>
                 </div>
                 <div className={styles.settlementMetric}>
-                  <span className={styles.settlementMetricLabel}>Net Settled Amount</span>
+                  <span className={styles.settlementMetricLabel}>
+                    Net Settled Amount
+                  </span>
                   <span className={styles.settlementMetricValue}>
-                    {formatToINRCurrency(settlementData?.data?.netAmountSettle || 0)}
+                    {formatToINRCurrency(
+                      settlementData?.data?.netAmountSettle || 0
+                    )}
                   </span>
                 </div>
               </div>
@@ -471,19 +523,29 @@ const Dashboard = () => {
 
             <div className={`${styles.settlementCard} ${styles.unsettled}`}>
               <div className={styles.settlementCardHeader}>
-                <h3 className={styles.settlementCardTitle}>Pending Settlement</h3>
+                <h3 className={styles.settlementCardTitle}>
+                  Pending Settlement
+                </h3>
               </div>
               <div className={styles.settlementMetrics}>
                 <div className={styles.settlementMetric}>
-                  <span className={styles.settlementMetricLabel}>Total Transaction Amount</span>
+                  <span className={styles.settlementMetricLabel}>
+                    Total Transaction Amount
+                  </span>
                   <span className={styles.settlementMetricValue}>
-                    {formatToINRCurrency(settlementData?.data?.amountUnsettle || 0)}
+                    {formatToINRCurrency(
+                      settlementData?.data?.amountUnsettle || 0
+                    )}
                   </span>
                 </div>
                 <div className={styles.settlementMetric}>
-                  <span className={styles.settlementMetricLabel}>Upcoming Settlement</span>
+                  <span className={styles.settlementMetricLabel}>
+                    Upcoming Settlement
+                  </span>
                   <span className={styles.settlementMetricValue}>
-                    {formatToINRCurrency(settlementData?.data?.netAmountUnsettle || 0)}
+                    {formatToINRCurrency(
+                      settlementData?.data?.netAmountUnsettle || 0
+                    )}
                   </span>
                 </div>
               </div>

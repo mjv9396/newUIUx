@@ -33,8 +33,8 @@ const PayinAnalytics = ({ type, value, min, max }) => {
       ...state.options,
       chart: {
         ...state.options.chart,
-        background: 'transparent',
-        fontFamily: 'Inter, system-ui, sans-serif',
+        background: "transparent",
+        fontFamily: "Inter, system-ui, sans-serif",
         toolbar: {
           show: true,
           tools: {
@@ -44,122 +44,130 @@ const PayinAnalytics = ({ type, value, min, max }) => {
             zoomin: true,
             zoomout: true,
             pan: true,
-            reset: true
+            reset: true,
           },
-          theme: 'light'
+          theme: "light",
         },
         animations: {
           enabled: true,
-          easing: 'easeinout',
+          easing: "easeinout",
           speed: 800,
-        }
+        },
       },
-      colors: ['#2d5016', '#4a7c59', '#d4af37', '#10b981', '#f59e0b'],
+      colors: ["#2d5016", "#4a7c59", "#d4af37", "#10b981", "#f59e0b"],
       stroke: {
         width: 3,
-        curve: 'smooth'
+        curve: "smooth",
       },
       grid: {
         show: true,
-        borderColor: 'rgba(212, 175, 55, 0.1)',
+        borderColor: "rgba(212, 175, 55, 0.1)",
         strokeDashArray: 4,
         xaxis: {
           lines: {
-            show: true
-          }
+            show: true,
+          },
         },
         yaxis: {
           lines: {
-            show: true
-          }
-        }
+            show: true,
+          },
+        },
       },
       xaxis: {
         ...state.options.xaxis,
         labels: {
           style: {
-            colors: '#2d5016',
-            fontSize: '12px',
-            fontWeight: 500
-          }
+            colors: "#2d5016",
+            fontSize: "12px",
+            fontWeight: 500,
+          },
         },
         axisBorder: {
-          color: 'rgba(212, 175, 55, 0.2)'
+          color: "rgba(212, 175, 55, 0.2)",
         },
         axisTicks: {
-          color: 'rgba(212, 175, 55, 0.2)'
-        }
+          color: "rgba(212, 175, 55, 0.2)",
+        },
       },
       yaxis: {
         ...state.options.yaxis,
         labels: {
           style: {
-            colors: '#2d5016',
-            fontSize: '12px',
-            fontWeight: 500
-          }
-        }
+            colors: "#2d5016",
+            fontSize: "12px",
+            fontWeight: 500,
+          },
+        },
       },
       legend: {
         ...state.options.legend,
         labels: {
-          colors: '#2d5016'
-        }
+          colors: "#2d5016",
+        },
       },
       tooltip: {
-        theme: 'light',
+        theme: "light",
         style: {
-          fontSize: '12px',
-          backgroundColor: 'rgba(255, 255, 255, 0.95)'
+          fontSize: "12px",
+          backgroundColor: "rgba(255, 255, 255, 0.95)",
         },
         marker: {
-          show: true
-        }
+          show: true,
+        },
       },
       dataLabels: {
-        enabled: false
+        enabled: false,
       },
       markers: {
         size: 5,
-        colors: ['#2d5016', '#4a7c59', '#d4af37'],
-        strokeColors: '#fff',
+        colors: ["#2d5016", "#4a7c59", "#d4af37"],
+        strokeColors: "#fff",
         strokeWidth: 2,
         hover: {
-          size: 7
-        }
-      }
+          size: 7,
+        },
+      },
     };
 
     return (
-      <div style={{ 
-        padding: '14px', 
-        background: 'rgba(255, 255, 255, 0.5)',
-        borderRadius: '8px',
-        border: '1px solid rgba(212, 175, 55, 0.1)',
-        backdropFilter: 'blur(10px)'
-      }}>
-        <div style={{ 
-          marginBottom: '12px',
-          borderBottom: '1px solid rgba(212, 175, 55, 0.1)',
-          paddingBottom: '8px'
-        }}>
-          <h3 style={{
-            margin: '0',
-            fontSize: '0.95rem',
-            fontWeight: '700',
-            color: '#2d5016',
-            textAlign: 'center'
-          }}>
-            {type === 'Count' ? 'Transaction Count' : 'Transaction Amount'}
+      <div
+        style={{
+          padding: "14px",
+          background: "rgba(255, 255, 255, 0.5)",
+          borderRadius: "8px",
+          border: "1px solid rgba(212, 175, 55, 0.1)",
+          backdropFilter: "blur(10px)",
+        }}
+      >
+        <div
+          style={{
+            marginBottom: "12px",
+            borderBottom: "1px solid rgba(212, 175, 55, 0.1)",
+            paddingBottom: "8px",
+          }}
+        >
+          <h3
+            style={{
+              margin: "0",
+              fontSize: "0.95rem",
+              fontWeight: "700",
+              color: "#2d5016",
+              textAlign: "center",
+            }}
+          >
+            {type === "Count" ? "Transaction Count" : "Transaction Amount"}
           </h3>
-          <p style={{
-            margin: '2px 0 0 0',
-            fontSize: '0.7rem',
-            color: 'rgba(45, 80, 22, 0.7)',
-            textAlign: 'center',
-            fontWeight: '500'
-          }}>
-            {type === 'Count' ? 'Daily volume trends' : 'Daily value trends'}
+          <p
+            style={{
+              margin: "2px 0 0 0",
+              fontSize: "0.7rem",
+              color: "rgba(45, 80, 22, 0.7)",
+              textAlign: "center",
+              fontWeight: "500",
+            }}
+          >
+            {type === "Count" ? "Daily volume trends" : "Daily value trends"}
           </p>
         </div>
         <div id="chart">
