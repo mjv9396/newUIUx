@@ -756,6 +756,21 @@
   box-shadow: 0 2px 12px rgba(45, 80, 22, 0.06);
 }
 
+.singleAnalyticsCard {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.95) 0%,
+    rgba(255, 255, 255, 0.8) 100%
+  );
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(212, 175, 55, 0.2);
+  border-radius: 12px;
+  padding: 0;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 2px 12px rgba(45, 80, 22, 0.06);
+}
+
 /* No Data State */
 .noData {
   display: flex;

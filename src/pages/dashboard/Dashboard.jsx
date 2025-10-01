@@ -5,6 +5,7 @@ import useFetch from "../../hooks/useFetch";
 import DashboardLayout from "../../layouts/DashboardLayout";
 import styles from "../../styles/dashboard/ModernDashboard.module.css";
 import PayinAnalytics from "./components/PayinAnalytics";
+import PayinMultiAnalytics from "./components/PayinMultiAnalytics";
 import { endpoints } from "../../services/apiEndpoints";
 import { DateRangePicker } from "react-date-range";
 import usePost from "../../hooks/usePost";
@@ -552,21 +553,8 @@ const Dashboard = () => {
 
           {/* Analytics Section */}
           <div className={styles.analyticsSection}>
-            <div className={styles.analyticsCard}>
-              <PayinAnalytics
-                type="Count"
-                value="totalCount"
-                min={0}
-                max={1000}
-              />
-            </div>
-            <div className={styles.analyticsCard}>
-              <PayinAnalytics
-                type="Amount"
-                value="totalAmount"
-                min={500}
-                max={2000000}
-              />
+            <div className={styles.singleAnalyticsCard}>
+              <PayinMultiAnalytics />
             </div>
           </div>
         </div>
