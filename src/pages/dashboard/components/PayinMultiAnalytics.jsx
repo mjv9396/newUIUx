@@ -8,6 +8,14 @@ import Error from "../../errors/Error";
 import usePost from "../../../hooks/usePost";
 
 const PayinMultiAnalytics = () => {
+  // Helper function to safely handle null/NaN values
+  const safeNumber = (value, defaultValue = 0) => {
+    if (value === null || value === undefined || isNaN(value)) {
+      return defaultValue;
+    }
+    return Number(value) || defaultValue;
+  };
+
   // fetch chart data
   const { postData, data, error, loading } = usePost(
     endpoints.user.transactionChart
@@ -27,33 +35,33 @@ const PayinMultiAnalytics = () => {
       // Format data for count
       const countSuccessData = keys.map((key) => {
         const item = rawData[key];
-        return [new Date(key).getTime(), item.SUCCESS?.totalCount || 0];
+        return [new Date(key).getTime(), safeNumber(item.SUCCESS?.totalCount)];
       });
 
       const countFailedData = keys.map((key) => {
         const item = rawData[key];
-        return [new Date(key).getTime(), item.FAILED?.totalCount || 0];
+        return [new Date(key).getTime(), safeNumber(item.FAILED?.totalCount)];
       });
 
       const countPendingData = keys.map((key) => {
         const item = rawData[key];
-        return [new Date(key).getTime(), item.PENDING?.totalCount || 0];
+        return [new Date(key).getTime(), safeNumber(item.PENDING?.totalCount)];
       });
 
       // Format data for amount
       const amountSuccessData = keys.map((key) => {
         const item = rawData[key];
-        return [new Date(key).getTime(), item.SUCCESS?.totalAmount || 0];
+        return [new Date(key).getTime(), safeNumber(item.SUCCESS?.totalAmount)];
       });
 
       const amountFailedData = keys.map((key) => {
         const item = rawData[key];
-        return [new Date(key).getTime(), item.FAILED?.totalAmount || 0];
+        return [new Date(key).getTime(), safeNumber(item.FAILED?.totalAmount)];
       });
 
       const amountPendingData = keys.map((key) => {
         const item = rawData[key];
-        return [new Date(key).getTime(), item.PENDING?.totalAmount || 0];
+        return [new Date(key).getTime(), safeNumber(item.PENDING?.totalAmount)];
       });
 
       const chartData = {

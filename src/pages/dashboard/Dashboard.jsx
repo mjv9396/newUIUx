@@ -35,6 +35,14 @@ const settings = {
   slidesToScroll: 1,
 };
 const Dashboard = () => {
+  // Helper function to safely handle null/NaN values
+  const safeNumber = (value, defaultValue = 0) => {
+    if (value === null || value === undefined || isNaN(value)) {
+      return defaultValue;
+    }
+    return Number(value) || defaultValue;
+  };
+
   // Slider setting
 
   //fetch merchant, acquirer, payment type, mop type and  curreny
@@ -60,20 +68,20 @@ const Dashboard = () => {
 
   // Helper function to get the appropriate balance amount
   const getBalanceAmount = () => {
-    if (totalBalanceLoading) return "0";
-    if (totalBalanceError) return "0";
+    if (totalBalanceLoading) return 0;
+    if (totalBalanceError) return 0;
 
     if (isAdmin()) {
       if (merchantId) {
         // Merchant-specific balance for admin
-        return parseFloat(totalBalanceData?.data) ?? 0;
+        return safeNumber(totalBalanceData?.data);
       } else {
         // Total balance across all merchants for admin
-        return totalBalanceData?.data ?? 0;
+        return safeNumber(totalBalanceData?.data);
       }
     } else {
       // User's own balance
-      return totalBalanceData?.data?.accountBalance ?? 0;
+      return safeNumber(totalBalanceData?.data?.accountBalance);
     }
   };
 
@@ -284,9 +292,11 @@ const Dashboard = () => {
                 </h3>
                 <h2 className={styles.virtualCollectionAmount}>
                   {formatToINRCurrency(
-                    isAdmin()
-                      ? VirtualBalanceData?.data || 0
-                      : VirtualBalanceData?.data || 0
+                    safeNumber(
+                      isAdmin()
+                        ? VirtualBalanceData?.data
+                        : VirtualBalanceData?.data
+                    )
                   )}
                 </h2>
               </div>
@@ -314,7 +324,7 @@ const Dashboard = () => {
                           {item.acqCode}
                         </h4>
                         <span className={styles.virtualAccountItemBalance}>
-                          {formatToINRCurrency(item.balance)}
+                          {formatToINRCurrency(safeNumber(item.balance))}
                         </span>
                       </div>
                       <div className={styles.virtualAccountItemDetails}>
@@ -379,44 +389,44 @@ const Dashboard = () => {
                   <p className={styles.payinMetricLabel}>Success</p>
                   <h4 className={styles.payinMetricValue}>
                     {formatToINRCurrency(
-                      payinData?.data?.totalSuccessAmount || 0
+                      safeNumber(payinData?.data?.totalSuccessAmount)
                     )}
                   </h4>
                   <p className={styles.payinMetricCount}>
-                    {payinData?.data?.totalSuccess || 0} txns
+                    {safeNumber(payinData?.data?.totalSuccess)} txns
                   </p>
                 </div>
                 <div className={styles.payinMetric}>
                   <p className={styles.payinMetricLabel}>Failed</p>
                   <h4 className={styles.payinMetricValue}>
                     {formatToINRCurrency(
-                      payinData?.data?.totalFailedAmount || 0
+                      safeNumber(payinData?.data?.totalFailedAmount)
                     )}
                   </h4>
                   <p className={styles.payinMetricCount}>
-                    {payinData?.data?.totalFailed || 0} txns
+                    {safeNumber(payinData?.data?.totalFailed)} txns
                   </p>
                 </div>
                 <div className={styles.payinMetric}>
                   <p className={styles.payinMetricLabel}>Pending</p>
                   <h4 className={styles.payinMetricValue}>
                     {formatToINRCurrency(
-                      payinData?.data?.totalPendingAmount || 0
+                      safeNumber(payinData?.data?.totalPendingAmount)
                     )}
                   </h4>
                   <p className={styles.payinMetricCount}>
-                    {payinData?.data?.totalPending || 0} txns
+                    {safeNumber(payinData?.data?.totalPending)} txns
                   </p>
                 </div>
                 <div className={styles.payinMetric}>
                   <p className={styles.payinMetricLabel}>Disputes</p>
                   <h4 className={styles.payinMetricValue}>
                     {formatToINRCurrency(
-                      chargebackData?.data?.totalAmount || 0
+                      safeNumber(chargebackData?.data?.totalAmount)
                     )}
                   </h4>
                   <p className={styles.payinMetricCount}>
-                    {chargebackData?.data?.count || 0} disputes
+                    {safeNumber(chargebackData?.data?.count)} disputes
                   </p>
                 </div>
               </div>
@@ -435,55 +445,55 @@ const Dashboard = () => {
                   <p className={styles.payoutMetricLabel}>Success Debit</p>
                   <h4 className={styles.payoutMetricValue}>
                     {formatToINRCurrency(
-                      payoutData?.data?.totalSuccessAmount || 0
+                      safeNumber(payoutData?.data?.totalSuccessAmount)
                     )}
                   </h4>
                   <p className={styles.payoutMetricCount}>
-                    {payoutData?.data?.totalSuccess || 0} txns
+                    {safeNumber(payoutData?.data?.totalSuccess)} txns
                   </p>
                 </div>
                 <div className={styles.payoutMetric}>
                   <p className={styles.payoutMetricLabel}>Failed Debit</p>
                   <h4 className={styles.payoutMetricValue}>
                     {formatToINRCurrency(
-                      payoutData?.data?.totalFailedAmount || 0
+                      safeNumber(payoutData?.data?.totalFailedAmount)
                     )}
                   </h4>
                   <p className={styles.payoutMetricCount}>
-                    {payoutData?.data?.totalFailed || 0} txns
+                    {safeNumber(payoutData?.data?.totalFailed)} txns
                   </p>
                 </div>
                 <div className={styles.payoutMetric}>
                   <p className={styles.payoutMetricLabel}>Pending Debit</p>
                   <h4 className={styles.payoutMetricValue}>
                     {formatToINRCurrency(
-                      payoutData?.data?.totalPendingAmount || 0
+                      safeNumber(payoutData?.data?.totalPendingAmount)
                     )}
                   </h4>
                   <p className={styles.payoutMetricCount}>
-                    {payoutData?.data?.totalPending || 0} txns
+                    {safeNumber(payoutData?.data?.totalPending)} txns
                   </p>
                 </div>
                 <div className={styles.payoutMetric}>
                   <p className={styles.payoutMetricLabel}>Success Credit</p>
                   <h4 className={styles.payoutMetricValue}>
                     {formatToINRCurrency(
-                      payoutData?.data?.totalCreditSuccessAmount || 0
+                      safeNumber(payoutData?.data?.totalCreditSuccessAmount)
                     )}
                   </h4>
                   <p className={styles.payoutMetricCount}>
-                    {payoutData?.data?.totalCreditSuccess || 0} txns
+                    {safeNumber(payoutData?.data?.totalCreditSuccess)} txns
                   </p>
                 </div>
                 <div className={styles.payoutMetric}>
                   <p className={styles.payoutMetricLabel}>Rejected Credit</p>
                   <h4 className={styles.payoutMetricValue}>
                     {formatToINRCurrency(
-                      payoutData?.data?.totalCreditRejectAmount || 0
+                      safeNumber(payoutData?.data?.totalCreditRejectAmount)
                     )}
                   </h4>
                   <p className={styles.payoutMetricCount}>
-                    {payoutData?.data?.totalCreditRejected || 0} txns
+                    {safeNumber(payoutData?.data?.totalCreditRejected)} txns
                   </p>
                 </div>
               </div>
@@ -504,7 +514,7 @@ const Dashboard = () => {
                   </p>
                   <p className={styles.settledMetricValue}>
                     {formatToINRCurrency(
-                      settlementData?.data?.amountSettle || 0
+                      safeNumber(settlementData?.data?.amountSettle)
                     )}
                   </p>
                 </div>
@@ -514,7 +524,7 @@ const Dashboard = () => {
                   </p>
                   <p className={styles.settledMetricValue}>
                     {formatToINRCurrency(
-                      settlementData?.data?.netAmountSettle || 0
+                      safeNumber(settlementData?.data?.netAmountSettle)
                     )}
                   </p>
                 </div>
@@ -533,7 +543,7 @@ const Dashboard = () => {
                   </p>
                   <p className={styles.unsettledMetricValue}>
                     {formatToINRCurrency(
-                      settlementData?.data?.amountUnsettle || 0
+                      safeNumber(settlementData?.data?.amountUnsettle)
                     )}
                   </p>
                 </div>
@@ -543,7 +553,7 @@ const Dashboard = () => {
                   </p>
                   <p className={styles.unsettledMetricValue}>
                     {formatToINRCurrency(
-                      settlementData?.data?.netAmountUnsettle || 0
+                      safeNumber(settlementData?.data?.netAmountUnsettle)
                     )}
                   </p>
                 </div>
