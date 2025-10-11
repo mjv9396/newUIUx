@@ -1,765 +1,1159 @@
 import { useState, useEffect } from "react";
 import * as React from "react";
-import "./CheckoutPage.css";
-import "./CheckoutPage1.css";
+import "./CheckoutPage.css"; // You might need to adjust or create this for custom fonts/styles
 import { useLocation, useNavigate } from "react-router-dom";
 import { TransactionPayinRequestModel } from "../../model/TransactionPayinRequestModel.ts";
 import { PaymentTypeModel } from "../../model/PaymentTypeModel.ts";
-import CreditCardIcon from "@mui/icons-material/CreditCard";
-import AccountBalanceOutlinedIcon from "@mui/icons-material/AccountBalanceOutlined";
-import AccountBalanceWalletOutlinedIcon from "@mui/icons-material/AccountBalanceWalletOutlined";
-import {
-  Avatar,
-  Box,
-  Button,
-  LinearProgress,
-  ListItemAvatar,
-  Typography,
-} from "@mui/material";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemText from "@mui/material/ListItemText";
-import { msgTypes } from "../../constants/msgTypes.js";
-import UpiCollect from "./upi/UpiCollect.tsx";
-import { Formik, Form } from "formik";
-import { CheckoutSchema } from "../../schema/CheckoutSchema.jsx";
 import { PaymentInitModel } from "../../model/PaymentInitModel.ts";
 import { AuthService } from "../../service/AuthService.ts";
 import { toast } from "react-toastify";
-import { LoginModel } from "../../model/LoginModel.ts";
-import UpiIntent from "./upi/UpiIntent.tsx";
-import TransactionPurposePopup from "./TransactionPurposePopup.tsx";
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import { CheckoutSchema } from "../../schema/CheckoutSchema.jsx";
+import { msgTypes } from "../../constants/msgTypes.js";
 
-import { MobileView } from "react-device-detect";
-import UpiQr from "./upi/UpiQr.tsx";
+// MUI Components for a polished UI
+import {
+  Box,
+  Button,
+  CircularProgress,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  TextField,
+  Typography,
+  Grid,
+  Divider,
+  InputAdornment,
+  Tooltip,
+  IconButton,
+} from "@mui/material";
+
+// Icons
+import CreditCardIcon from "@mui/icons-material/CreditCard";
+import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
+import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import LockIcon from "@mui/icons-material/Lock";
+import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
+import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
+import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
+
+// Child Components for cleaner code
 import Loading from "../loader/Loading.tsx";
+import UpiQr from "./upi/UpiQr.tsx";
+
+// --- Card Detection Utility ---
+const detectCardType = (cardNumber: string) => {
+  const patterns = {
+    VI: /^4/,
+    MS: /^5[1-5]/,
+    AE: /^3[47]/,
+    DN: /^3(?:0[0-5]|[68][0-9])/,
+    RU: /^(60|65|81|82)/,
+  };
+  for (const key in patterns) {
+    if (patterns[key].test(cardNumber)) {
+      return key;
+    }
+  }
+  return "";
+};
+
 const CheckoutPage = () => {
   const { pathname } = useLocation();
-  const [loading, setLoading] = React.useState(true);
-  const [error, setError] = React.useState<string>("");
-  const [paymentInitModel, setPaymentInitModel] = React.useState(
-    new PaymentInitModel()
-  );
-  const [payinRequest, setPayinRequest] = React.useState(
-    new TransactionPayinRequestModel()
-  );
-  const [paymentType, setPaymentType] = React.useState(new PaymentTypeModel());
-  const [apiCall, setApiCall] = React.useState(false);
-  const [selectedPaymentMethod, setSelectedPaymentMethod] = React.useState("");
-  const [selectedMopType, setSelectedMopType] = React.useState<string[]>([]);
-  const [amount, setAmount] = React.useState("0.00");
-  const [transactionId, setTransactionId] = React.useState("");
-  const [showTransactionPurposePopup, setShowTransactionPurposePopup] =
-    React.useState(false);
-  const [transactionPurposeSubmitted, setTransactionPurposeSubmitted] =
-    React.useState(false);
-  const [transactionPurposeLoading, setTransactionPurposeLoading] =
-    React.useState(false);
-  const [txnId, setTxnId] = React.useState("");
   const navigate = useNavigate();
 
-  // React.useEffect(() => {
-  //     if (location.state) {
-  //         payentActive();
-  //     }
-  // }, [location?.state])
+  // --- Demo Mode Flag ---
+  // Set to true to show ALL payment options regardless of API response
+  // Set to false to use actual API payment type restrictions
+  const [isDemoMode, setIsDemoMode] = useState(true); // Set to true for demo mode
 
-  const payentActive = async () => {
-    setLoading(true);
-    try {
+  // --- State Management ---
+  const [loading, setLoading] = useState(true);
+  const [apiCall, setApiCall] = useState(false);
+  const [paymentInitModel, setPaymentInitModel] = useState(
+    new PaymentInitModel()
+  );
+  const [payinRequest, setPayinRequest] = useState(
+    new TransactionPayinRequestModel()
+  );
+  const [paymentType, setPaymentType] = useState(new PaymentTypeModel());
+
+  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState("");
+  const [selectedMopCode, setSelectedMopCode] = useState("");
+  const [selectedBankCode, setSelectedBankCode] = useState("");
+
+  const [cardNumber, setCardNumber] = useState("");
+  const [expiry, setExpiry] = useState("");
+  const [detectedCardNetwork, setDetectedCardNetwork] = useState("");
+  const [cardNetworkError, setCardNetworkError] = useState("");
+
+  // --- Demo Mode Payment Types ---
+  const demoPaymentType = {
+    CC: ["VI", "MS", "AE", "DN", "RU"], // All card types
+    DC: ["VI", "MS", "AE", "DN", "RU"], // All debit card types
+    UP: ["INTENT"], // Only UPI Apps, no QR or COLLECT
+    NB: ["HDFC", "ICICI", "SBI", "AXIS", "BOB", "PNB", "KOTAK"], // All banks
+    // WL: [] // No wallet in demo mode
+  };
+
+  const amount = isNaN(parseFloat(payinRequest.amount))
+    ? "0.00"
+    : parseFloat(payinRequest.amount).toFixed(2);
+
+  const getMopName = (mopCode: string): string =>
+    ({
+      VI: "Visa",
+      MS: "Mastercard",
+      AE: "American Express",
+      DN: "Diners Club",
+      RU: "RuPay",
+      INTENT: "UPI Apps",
+      QR: "Show QR Code",
+      COLLECT: "UPI ID / VPA",
+      HDFC: "HDFC Bank",
+      ICICI: "ICICI Bank",
+      SBI: "State Bank of India",
+      AXIS: "Axis Bank",
+      BOB: "Bank of Baroda",
+      PNB: "Punjab National Bank",
+      KOTAK: "Kotak Mahindra Bank",
+    }[mopCode] || mopCode);
+
+  const getMopIcon = (mopCode: string): string =>
+    ({
+      VI: "/images/cards/visa.png",
+      MS: "/images/cards/master.png",
+      AE: "/images/cards/amex.png",
+      DN: "/images/cards/diner.png",
+      RU: "/images/cards/rupey.png",
+    }[mopCode] || "/images/cards/default.png");
+
+  // --- API Calls ---
+  useEffect(() => {
+    const payentActive = async () => {
+      setLoading(true);
       const id = pathname.split("/pay/")[1];
-      setTxnId(id);
-      const requestData = { appId: msgTypes.APP_ID, txnPayinId: id };
-      const response = await AuthService.paymentActive(requestData);
-
-      if (msgTypes.SUCCESS_CODE.includes(response.statusCode)) {
-        setPaymentInitModel(response.data);
-        setPayinRequest(response.data.transactionPayinRequest);
-        setPaymentType(response.data.paymentType);
-        setSelectedPaymentMethod(
-          availablePaymentMethod(response.data.paymentType)
-        );
-        setTransactionId(response.data.transactionPayinRequest.txnId);
-        setAmount(
-          isNaN(parseFloat(response.data.transactionPayinRequest.amount))
-            ? "0.00"
-            : parseFloat(response.data.transactionPayinRequest.amount).toFixed(
-                2
-              )
-        );
-
-        // Data loaded successfully, stop loading first, then show popup
-        setLoading(false);
-        // Small delay to ensure loading state is updated before showing popup
-        setTimeout(() => {
-          setShowTransactionPurposePopup(true);
-        }, 100);
-      } else {
-        // Handle API error responses
-        const errorMessage = response.data || "Failed to load payment details";
-        setError(errorMessage);
-        toast.error(errorMessage);
-        console.error("Payment active API error:", response);
-      }
-    } catch (error) {
-      // Handle network or other errors
-      const errorMessage = "Failed to load payment details. Please try again.";
-      setError(errorMessage);
-      console.error("Error in paymentActive:", error);
-      toast.error(errorMessage);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const availablePaymentMethod = (paymentType: PaymentTypeModel) => {
-    if (paymentType?.UP) {
-      setSelectedMopType(paymentType?.UP);
-      return msgTypes.PAYMENT_METHOD.UPI;
-    } else if (paymentType?.CD) {
-      setSelectedMopType(paymentType?.CD);
-      return msgTypes.PAYMENT_METHOD.CARD;
-    } else if (paymentType?.NB) {
-      setSelectedMopType(paymentType?.NB);
-      return msgTypes.PAYMENT_METHOD.NETBANKING;
-    } else if (paymentType?.WL) {
-      setSelectedMopType(paymentType?.WL);
-      return msgTypes.PAYMENT_METHOD.WALLET;
-    } else {
-      return "";
-    }
-  };
-
-  const payNow = async (requestData: TransactionPayinRequestModel) => {
-    setApiCall(true);
-    const response = await AuthService.payNow(requestData);
-    if (msgTypes.SUCCESS_CODE.includes(response.statusCode)) {
-      setApiCall(false);
-      const res = response.data;
-      if (res.txnStatus === msgTypes.PENDING) {
-        navigate("/loader", {
-          state: { request: requestData },
+      try {
+        const response = await AuthService.paymentActive({
+          appId: msgTypes.APP_ID,
+          txnPayinId: id,
         });
+        if (msgTypes.SUCCESS_CODE.includes(response.statusCode)) {
+          setPaymentInitModel(response.data);
+          setPayinRequest(response.data.transactionPayinRequest);
+          // Keep original API logic but override with demo data if demo mode is enabled
+          setPaymentType(
+            isDemoMode ? demoPaymentType : response.data.paymentType
+          );
+        } else {
+          toast.error(response.message || "Failed to load payment details.");
+          // In demo mode, still show payment types even if API fails
+          if (isDemoMode) {
+            setPaymentType(demoPaymentType);
+          }
+        }
+      } catch (error) {
+        toast.error("An error occurred while fetching payment details.");
+        // In demo mode, still show payment types even if API fails
+        if (isDemoMode) {
+          setPaymentType(demoPaymentType);
+        }
+      } finally {
+        setLoading(false);
       }
-    } else {
-      setApiCall(false);
-      toast.error(response.data);
-    }
-  };
+    };
+    payentActive();
+  }, [pathname]);
 
-  const generateToken = async () => {
-    const loginRequestData = new LoginModel();
-    loginRequestData.username = msgTypes.USERNAME;
-    loginRequestData.password = msgTypes.PASSWORD;
-    const res = await AuthService.generatetoken(loginRequestData);
-    if (res.token) {
-      return res.token;
-    } else {
-      return "";
-    }
-  };
+  const handlePayNow = async (values: any) => {
+    setApiCall(true);
+    const requestData = { ...payinRequest };
 
-  const handleTransactionPurposeSubmit = async (txnPurpose: string) => {
-    setTransactionPurposeLoading(true);
+    if (["CREDIT_CARD", "DEBIT_CARD"].includes(selectedPaymentMethod)) {
+      Object.assign(requestData, {
+        paymentTypeCode: selectedPaymentMethod === "CREDIT_CARD" ? "CC" : "DC",
+        mopCode: detectedCardNetwork,
+        cardNumber: values.cardNumber.replace(/\s/g, ""),
+        cardHolderName: values.cardName,
+        cardExpiry: expiry.replace("/", ""),
+        cardCvv: values.cvv,
+      });
+    } else if (selectedPaymentMethod === "UPI") {
+      // Auto-determine UPI method: QR if intentUrl available, otherwise INTENT
+      const upiMethod = payinRequest.intentUrl ? "QR" : "INTENT";
+      Object.assign(requestData, {
+        paymentTypeCode: "UP",
+        mopCode: upiMethod,
+        custVpa: "", // No VPA collection anymore
+      });
+    } else if (selectedPaymentMethod === "NETBANKING") {
+      Object.assign(requestData, {
+        paymentTypeCode: "NB",
+        bankCode: selectedBankCode,
+      });
+    } else if (selectedPaymentMethod === "WALLET") {
+      Object.assign(requestData, {
+        paymentTypeCode: "WL",
+        mopCode: selectedMopCode,
+      });
+    }
+
     try {
-      const   requestData = {
-        transactionId: transactionId,
-        transactionPurpose: txnPurpose,
-      };
-
-      const response = await AuthService.submitTransactionPurpose(requestData);
-
+      const response = await AuthService.payNow(requestData);
       if (msgTypes.SUCCESS_CODE.includes(response.statusCode)) {
-        setTransactionPurposeSubmitted(true);
-        setShowTransactionPurposePopup(false);
-        toast.success("Transaction purpose submitted successfully");
+        if (response.data.txnStatus === msgTypes.PENDING) {
+          navigate("/loader", { state: { request: requestData } });
+        } else {
+          toast.info(`Transaction status: ${response.data.txnStatus}`);
+        }
       } else {
-        toast.error(response.data || "Failed to submit transaction purpose");
+        toast.error(response.data || "Payment failed.");
       }
     } catch (error) {
-      console.error("Error submitting transaction purpose:", error);
-      toast.error("Failed to submit transaction purpose. Please try again.");
+      toast.error("An error occurred during payment processing.");
     } finally {
-      setTransactionPurposeLoading(false);
+      setApiCall(false);
     }
   };
-  React.useEffect(() => {
-    payentActive();
-  }, []);
-  return (
-    <>
-      {loading ? (
-        <Loading />
-      ) : error ? (
-        <Box
-          display="flex"
-          flexDirection="column"
-          justifyContent="center"
-          alignItems="center"
-          minHeight="98vh"
-          overflow={"hidden"}
-          padding={5}
-        >
-          <TransactionPurposePopup
-            open={true}
-            txnId={txnId}
-            onSubmit={handleTransactionPurposeSubmit}
-            loading={transactionPurposeLoading}
-          />
-          <div className="text-center">
-            <Typography
-              variant="h4"
-              color="error"
-              sx={{ mb: 3, fontWeight: "bold" }}
-            >
-              Payment Error
-            </Typography>
-            <Typography variant="body1" sx={{ mb: 4 }}>
-              {error}
-            </Typography>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={() => {
-                setError("");
-                payentActive();
-              }}
-            >
-              Retry
-            </Button>
-          </div>
-        </Box>
-      ) : (
-        <>
-          {/* Transaction Purpose Popup */}
-          <TransactionPurposePopup
-            open={showTransactionPurposePopup}
-            txnId={txnId}
-            onSubmit={handleTransactionPurposeSubmit}
-            loading={transactionPurposeLoading}
-          />
 
-          {/* Main Checkout Content - always render but disable interaction when popup is open */}
-          <Formik
-            enableReinitialize={true}
-            initialValues={{ custVpa: "" }}
-            validationSchema={CheckoutSchema}
-            onSubmit={(values) => {
-              if (!showTransactionPurposePopup && transactionPurposeSubmitted) {
-                const requestData = payinRequest;
-                if (selectedPaymentMethod === msgTypes.PAYMENT_METHOD.UPI) {
-                  requestData.paymentTypeCode = msgTypes.PAYMENT_TYPE.UP;
-                  if (values.custVpa !== "") {
-                    requestData.custVpa = values.custVpa;
-                  }
-                  requestData.mopCode = msgTypes.UPI.COLLECT;
-                }
-                payNow(requestData);
+  // --- UI Event Handlers ---
+  const handlePaymentMethodSelect = (method: string) => {
+    setSelectedPaymentMethod(method);
+    [
+      setSelectedMopCode,
+      setSelectedBankCode,
+      setCardNumber,
+      setExpiry,
+      setDetectedCardNetwork,
+      setCardNetworkError,
+    ].forEach((f) => f(""));
+  };
+
+  const handleCardNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const rawValue = e.target.value.replace(/\s/g, "");
+    const formattedValue = rawValue
+      .replace(/\D/g, "")
+      .replace(/(.{4})/g, "$1 ")
+      .trim();
+    setCardNumber(formattedValue);
+    setCardNetworkError("");
+    if (rawValue.length >= 1) {
+      const network = detectCardType(rawValue);
+      setDetectedCardNetwork(network);
+      const supportedNetworks =
+        selectedPaymentMethod === "CREDIT_CARD"
+          ? paymentType.CC
+          : paymentType.DC;
+      if (network && !supportedNetworks?.includes(network)) {
+        setCardNetworkError(`${getMopName(network)} is not supported.`);
+      }
+    } else {
+      setDetectedCardNetwork("");
+    }
+  };
+
+  const handleExpiryChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    setFieldValue
+  ) => {
+    let value = e.target.value.replace(/\D/g, "");
+    if (value.length > 2)
+      value = `${value.substring(0, 2)}/${value.substring(2, 4)}`;
+    setExpiry(value);
+    setFieldValue("expiry", value);
+  };
+
+  // --- Render Logic ---
+  const renderPaymentMethodList = () => (
+    <Box
+      sx={{
+        background:
+          "linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(248,250,252,0.9) 100%)",
+        height: "100%",
+        position: "relative",
+        "&::before": {
+          content: '""',
+          position: "absolute",
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background:
+            "linear-gradient(135deg, rgba(21,184,109,0.05) 0%, rgba(14,165,233,0.05) 100%)",
+          backdropFilter: "blur(5px)",
+        },
+      }}
+    >
+      <Box sx={{ position: "relative", zIndex: 1, height: "100%" }}>
+        <Typography
+          variant="h5"
+          sx={{
+            p: 3,
+            fontWeight: 700,
+            background: "linear-gradient(135deg, #15b86d 0%, #0ea5e9 100%)",
+            backgroundClip: "text",
+            WebkitBackgroundClip: "text",
+            color: "transparent",
+            textAlign: "center",
+            borderBottom: "1px solid rgba(0,0,0,0.08)",
+          }}
+        >
+          Payment Methods
+        </Typography>
+        <List sx={{ px: 2, py: 1 }}>
+          {paymentType?.CC?.length > 0 && (
+            <PaymentMethodItem
+              name="Credit Card"
+              icon={<CreditCardIcon />}
+              method="CREDIT_CARD"
+              selected={selectedPaymentMethod === "CREDIT_CARD"}
+              onClick={handlePaymentMethodSelect}
+            />
+          )}
+          {paymentType?.DC?.length > 0 && (
+            <PaymentMethodItem
+              name="Debit Card"
+              icon={<CreditCardIcon />}
+              method="DEBIT_CARD"
+              selected={selectedPaymentMethod === "DEBIT_CARD"}
+              onClick={handlePaymentMethodSelect}
+            />
+          )}
+          {paymentType?.UP?.length > 0 && (
+            <PaymentMethodItem
+              name="UPI"
+              icon={
+                <img
+                  src="/images/bhim.png"
+                  alt="UPI"
+                  style={{ width: 28, height: 28 }}
+                />
               }
+              method="UPI"
+              selected={selectedPaymentMethod === "UPI"}
+              onClick={handlePaymentMethodSelect}
+            />
+          )}
+          {paymentType?.NB?.length > 0 && (
+            <PaymentMethodItem
+              name="Net Banking"
+              icon={<AccountBalanceIcon />}
+              method="NETBANKING"
+              selected={selectedPaymentMethod === "NETBANKING"}
+              onClick={handlePaymentMethodSelect}
+            />
+          )}
+          {paymentType?.WL?.length > 0 && (
+            <PaymentMethodItem
+              name="Wallet"
+              icon={<AccountBalanceWalletIcon />}
+              method="WALLET"
+              selected={selectedPaymentMethod === "WALLET"}
+              onClick={handlePaymentMethodSelect}
+            />
+          )}
+        </List>
+      </Box>
+    </Box>
+  );
+
+  const renderCardForm = (touched, errors, setFieldValue) => {
+    const fieldStyles = {
+      variant: "outlined",
+      sx: {
+        "& .MuiOutlinedInput-root": {
+          backgroundColor: "rgba(255, 255, 255, 0.8)",
+          borderRadius: "12px",
+          transition: "all 0.3s ease",
+          "& fieldset": {
+            borderColor: "rgba(0, 0, 0, 0.1)",
+            borderWidth: "1px",
+          },
+          "&:hover fieldset": {
+            borderColor: "#15b86d",
+            borderWidth: "2px",
+          },
+          "&.Mui-focused fieldset": {
+            borderColor: "#15b86d",
+            borderWidth: "2px",
+            boxShadow: "0 0 0 3px rgba(21, 184, 109, 0.1)",
+          },
+        },
+        "& .MuiInputLabel-root": {
+          color: "rgba(0, 0, 0, 0.6)",
+          fontWeight: 500,
+          "&.Mui-focused": {
+            color: "#15b86d",
+          },
+        },
+        "& .MuiInputAdornment-root": {
+          color: "rgba(0, 0, 0, 0.4)",
+        },
+      },
+    };
+
+    return (
+      <Box
+        sx={{
+          background:
+            "linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%)",
+          backdropFilter: "blur(10px)",
+          borderRadius: "20px",
+          border: "1px solid rgba(255, 255, 255, 0.2)",
+          padding: "32px",
+          boxShadow: "0 8px 32px rgba(0, 0, 0, 0.1)",
+        }}
+      >
+        <Typography
+          variant="h5"
+          sx={{
+            mb: 4,
+            fontWeight: 700,
+            background: "linear-gradient(135deg, #15b86d 0%, #0ea5e9 100%)",
+            backgroundClip: "text",
+            WebkitBackgroundClip: "text",
+            color: "transparent",
+            textAlign: "center",
+          }}
+        >
+          Enter Card Details
+        </Typography>
+        <Grid container spacing={3}>
+          <Grid item xs={12}>
+            <Field
+              as={TextField}
+              name="cardNumber"
+              label="Card Number"
+              fullWidth
+              value={cardNumber}
+              onChange={handleCardNumberChange}
+              {...fieldStyles}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <CreditCardIcon
+                      sx={{ color: "#15b86d", fontSize: "1.2rem" }}
+                    />
+                  </InputAdornment>
+                ),
+                endAdornment: detectedCardNetwork && (
+                  <InputAdornment position="end">
+                    <Box
+                      sx={{
+                        background: "white",
+                        borderRadius: "8px",
+                        padding: "4px 8px",
+                        display: "flex",
+                        alignItems: "center",
+                        boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
+                      }}
+                    >
+                      <img
+                        src={getMopIcon(detectedCardNetwork)}
+                        alt={detectedCardNetwork}
+                        style={{ height: "20px" }}
+                      />
+                    </Box>
+                  </InputAdornment>
+                ),
+              }}
+              inputProps={{ maxLength: 19 }}
+              error={
+                !!cardNetworkError ||
+                (touched.cardNumber && !!errors.cardNumber)
+              }
+              helperText={
+                cardNetworkError || (
+                  <ErrorMessage
+                    name="cardNumber"
+                    component="div"
+                    className="error-message"
+                  />
+                )
+              }
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <Field
+              as={TextField}
+              name="cardName"
+              label="Cardholder Name"
+              fullWidth
+              {...fieldStyles}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <PersonOutlineIcon
+                      sx={{ color: "#15b86d", fontSize: "1.2rem" }}
+                    />
+                  </InputAdornment>
+                ),
+              }}
+              inputProps={{ maxLength: 50 }}
+              error={touched.cardName && !!errors.cardName}
+              helperText={
+                <ErrorMessage
+                  name="cardName"
+                  component="div"
+                  className="error-message"
+                />
+              }
+            />
+          </Grid>
+          <Grid item xs={6}>
+            <TextField
+              name="expiry"
+              label="Expiry Date"
+              placeholder="MM / YY"
+              fullWidth
+              value={expiry}
+              variant="outlined"
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  backgroundColor: "rgba(255, 255, 255, 0.8)",
+                  borderRadius: "12px",
+                  transition: "all 0.3s ease",
+                  "& fieldset": {
+                    borderColor: "rgba(0, 0, 0, 0.1)",
+                    borderWidth: "1px",
+                  },
+                  "&:hover fieldset": {
+                    borderColor: "#15b86d",
+                    borderWidth: "2px",
+                  },
+                  "&.Mui-focused fieldset": {
+                    borderColor: "#15b86d",
+                    borderWidth: "2px",
+                    boxShadow: "0 0 0 3px rgba(21, 184, 109, 0.1)",
+                  },
+                },
+                "& .MuiInputLabel-root": {
+                  color: "rgba(0, 0, 0, 0.6)",
+                  fontWeight: 500,
+                  "&.Mui-focused": {
+                    color: "#15b86d",
+                  },
+                },
+              }}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                handleExpiryChange(e, setFieldValue)
+              }
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <CalendarTodayIcon
+                      sx={{ color: "#15b86d", fontSize: "1.1rem" }}
+                    />
+                  </InputAdornment>
+                ),
+              }}
+              inputProps={{ maxLength: 5 }}
+              error={touched.expiry && !!errors.expiry}
+              helperText={
+                <ErrorMessage
+                  name="expiry"
+                  component="div"
+                  className="error-message"
+                />
+              }
+            />
+          </Grid>
+          <Grid item xs={6}>
+            <Field
+              as={TextField}
+              name="cvv"
+              label="CVV"
+              type="password"
+              fullWidth
+              {...fieldStyles}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <LockIcon sx={{ color: "#15b86d", fontSize: "1.1rem" }} />
+                  </InputAdornment>
+                ),
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <Tooltip
+                      title="The 3 or 4-digit security code on your card"
+                      arrow
+                    >
+                      <IconButton
+                        size="small"
+                        sx={{ color: "rgba(0,0,0,0.4)" }}
+                      >
+                        <HelpOutlineIcon fontSize="small" />
+                      </IconButton>
+                    </Tooltip>
+                  </InputAdornment>
+                ),
+              }}
+              inputProps={{ maxLength: 4 }}
+              error={touched.cvv && !!errors.cvv}
+              helperText={
+                <ErrorMessage
+                  name="cvv"
+                  component="div"
+                  className="error-message"
+                />
+              }
+            />
+          </Grid>
+        </Grid>
+      </Box>
+    );
+  };
+
+  const renderUpiContent = () => {
+    // If QR URL is available, show QR directly
+    if (payinRequest.intentUrl) {
+      return (
+        <Box>
+          <Typography variant="h6" sx={{ mb: 3, fontWeight: 600 }}>
+            Scan QR Code to Pay
+          </Typography>
+          <Box textAlign="center">
+            <UpiQr url={payinRequest.intentUrl} />
+          </Box>
+        </Box>
+      );
+    }
+
+    // If no QR URL available, show UPI Apps button
+    // But only if not in demo mode or if API succeeded
+    if (!isDemoMode || payinRequest.intentUrl !== undefined) {
+      return (
+        <Box>
+          <Typography variant="h6" sx={{ mb: 3, fontWeight: 600 }}>
+            Pay with UPI Apps
+          </Typography>
+          <Button
+            fullWidth
+            variant="contained"
+            onClick={() => setSelectedMopCode("INTENT")}
+            sx={{
+              justifyContent: "flex-start",
+              p: 1.5,
+              textTransform: "none",
+              borderRadius: "8px",
+              background: "linear-gradient(135deg, #15b86d 0%, #0ea5e9 100%)",
             }}
           >
-            {({ isValid, dirty, isSubmitting, values }) => (
-              <Form>
+            Open UPI Apps
+          </Button>
+        </Box>
+      );
+    }
+
+    // Demo mode with no API data - show placeholder
+    return (
+      <Box textAlign="center" sx={{ p: 4, color: "text.secondary" }}>
+        <Typography variant="h6" gutterBottom>
+          UPI Payment
+        </Typography>
+        <Typography>
+          UPI payment will be available when connected to payment gateway.
+        </Typography>
+      </Box>
+    );
+  };
+
+  const renderMopSelection = () => {
+    let options: String[] = [],
+      title = "",
+      type: "mop" | "bank" = "mop";
+    switch (selectedPaymentMethod) {
+      case "NETBANKING":
+        [options, title, type] = [
+          isDemoMode ? demoPaymentType.NB : paymentType.NB || [],
+          "Select Your Bank",
+          "bank",
+        ];
+        break;
+      case "WALLET":
+        [options, title, type] = [
+          isDemoMode ? [] : paymentType.WL || [], // No wallet in demo mode
+          "Select Your Wallet",
+          "mop",
+        ];
+        break;
+      default:
+        return null;
+    }
+    return (
+      <Box>
+        <Typography variant="h6" sx={{ mb: 3, fontWeight: 600 }}>
+          {title}
+        </Typography>
+        <Grid container spacing={1.5}>
+          {options.map((option) => (
+            <Grid item xs={12} key={option.toString()}>
+              <Button
+                fullWidth
+                variant={
+                  (type === "mop" && selectedMopCode === option) ||
+                  (type === "bank" && selectedBankCode === option)
+                    ? "contained"
+                    : "outlined"
+                }
+                onClick={() =>
+                  type === "mop"
+                    ? setSelectedMopCode(option.toString())
+                    : setSelectedBankCode(option.toString())
+                }
+                sx={{
+                  justifyContent: "flex-start",
+                  p: 1.5,
+                  textTransform: "none",
+                  borderRadius: "8px",
+                }}
+              >
+                {getMopName(option.toString())}
+              </Button>
+            </Grid>
+          ))}
+        </Grid>
+      </Box>
+    );
+  };
+
+  const renderCentralContent = (touched, errors, setFieldValue) => {
+    if (!selectedPaymentMethod) {
+      return (
+        <Box textAlign="center" sx={{ p: 4, color: "text.secondary" }}>
+          <Typography variant="h6" gutterBottom>
+            Welcome to Secure Checkout
+          </Typography>
+          <Typography>
+            Please select a payment method from the left to begin.
+          </Typography>
+        </Box>
+      );
+    }
+    switch (selectedPaymentMethod) {
+      case "CREDIT_CARD":
+      case "DEBIT_CARD":
+        return renderCardForm(touched, errors, setFieldValue);
+      case "UPI":
+        return renderUpiContent();
+      case "NETBANKING":
+      case "WALLET":
+        return renderMopSelection();
+      default:
+        return null;
+    }
+  };
+
+  if (loading) return <Loading />;
+
+  return (
+    <Formik
+      initialValues={{
+        cardNumber: "",
+        cardName: "",
+        expiry: "",
+        cvv: "",
+        custVpa: "",
+      }}
+      validationSchema={CheckoutSchema}
+      onSubmit={handlePayNow}
+      enableReinitialize
+    >
+      {({ errors, touched, setFieldValue }) => (
+        <Form>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              minHeight: "100vh",
+              background:
+                "linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #f5576c 75%, #4facfe 100%)",
+              backgroundSize: "400% 400%",
+              animation: "gradientShift 15s ease infinite",
+              p: { xs: 1, sm: 2, md: 3 },
+              "@keyframes gradientShift": {
+                "0%": { backgroundPosition: "0% 50%" },
+                "50%": { backgroundPosition: "100% 50%" },
+                "100%": { backgroundPosition: "0% 50%" },
+              },
+            }}
+          >
+            <Grid
+              container
+              sx={{
+                maxWidth: { xs: "100%", sm: "95%", md: "1200px" },
+                width: "100%",
+                minHeight: { xs: "auto", md: "700px" },
+                background: "rgba(255, 255, 255, 0.95)",
+                backdropFilter: "blur(20px)",
+                borderRadius: { xs: "12px", md: "24px" },
+                boxShadow:
+                  "0 20px 60px rgba(0,0,0,0.1), 0 8px 25px rgba(0,0,0,0.05)",
+                overflow: "hidden",
+                border: "1px solid rgba(255,255,255,0.3)",
+              }}
+            >
+              <Grid
+                item
+                xs={12}
+                md={3.5}
+                sx={{
+                  order: { xs: 2, md: 1 },
+                }}
+              >
+                {renderPaymentMethodList()}
+              </Grid>
+
+              <Grid
+                item
+                xs={12}
+                md={4.5}
+                sx={{
+                  p: { xs: 2, sm: 3, md: 4 },
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  order: { xs: 1, md: 2 },
+                  minHeight: { xs: "auto", md: "500px" },
+                }}
+              >
+                {renderCentralContent(touched, errors, setFieldValue)}
+              </Grid>
+
+              <Grid
+                item
+                xs={12}
+                md={4}
+                sx={{
+                  order: { xs: 3, md: 3 },
+                }}
+              >
                 <Box
-                  display="flex"
-                  justifyContent="center"
-                  alignItems="center"
-                  minHeight="100vh"
-                  padding={5}
                   sx={{
-                    filter: showTransactionPurposePopup ? "blur(3px)" : "none",
-                    pointerEvents: showTransactionPurposePopup
-                      ? "none"
-                      : "auto",
-                    opacity: showTransactionPurposePopup ? 0.7 : 1,
+                    p: 0,
+                    display: "flex",
+                    flexDirection: "column",
+                    background:
+                      "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+                    position: "relative",
+                    overflow: "hidden",
+                    minHeight: { xs: "auto", md: "100%" },
+                    "&::before": {
+                      content: '""',
+                      position: "absolute",
+                      top: 0,
+                      left: 0,
+                      right: 0,
+                      bottom: 0,
+                      background:
+                        "linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%)",
+                      backdropFilter: "blur(10px)",
+                    },
                   }}
                 >
-                  <div
-                    className="row bg-grey-secondary border-radius-md-20 border-radius-tl-20 border-radius-tr-20 box-shadow-primary border-primary"
-                    id="custom-container-row"
+                  <Box
+                    sx={{
+                      position: "relative",
+                      zIndex: 1,
+                      p: { xs: 3, md: 4 },
+                      height: "100%",
+                      display: "flex",
+                      flexDirection: "column",
+                      color: "white",
+                    }}
                   >
-                    <div className="col-12 bg-white d-flex  align-items-center py-15 border-radius-tl-20 border-radius-tr-20 d-md-none">
-                      <button className="font-size-20 text-primary d-md-none border-none bg-none">
-                        <i className="pg-icon icon-menu d-block"></i>
-                      </button>
-                      <div id="logo-mobile">
-                        <img
-                          src="/images/logo.png"
-                          alt="ATMOON"
-                          height="50"
-                        />
-                      </div>
-                    </div>
-                    <div className="col-12 mobile-summary bg-white d-md-none">
-                      <ul className="list-unstyled bg-grey-primary p-15 mb-15 border-radius-8 box-shadow-primary border-primary font-size-14">
-                        <li className="d-flex justify-content-between">
-                          <span className="text-grey-light">
-                            {payinRequest.businessName}
-                          </span>
-                        </li>
-                        <li className="d-flex justify-content-between flex-wrap">
-                          <span
-                            className="text-grey-lighter lang"
-                            data-key="orderId"
-                          >
-                            Order ID
-                          </span>
-                          <span className="text-grey-light">
-                            {payinRequest.orderId}
-                          </span>
-                        </li>
-                      </ul>
-                    </div>
-                    <div className="col-12">
-                      <div className="row">
-                        <div
-                          className="col-12 col-md-4 col-lg-3 bg-white border-radius-tl-md-20 border-right-md-grey-lighter mh-xl-525"
-                          id="navigation-column"
-                        >
-                          <div
-                            className="logo h-105 align-items-center "
-                            id="logo"
-                          >
-                            <img
-                              src="/images/logo.jpg"
-                              alt="ATMOON"
-                              height="60"
-                              width="auto"
-                            />
-                          </div>
-                          <List sx={{ width: "100%" }} aria-label="contacts">
-                            {paymentType?.UP?.length > 0 && (
-                              <ListItem disablePadding>
-                                <ListItemButton
-                                  selected={
-                                    selectedPaymentMethod ===
-                                    msgTypes.PAYMENT_METHOD.UPI
-                                  }
-                                  onClick={() => {
-                                    setSelectedPaymentMethod(
-                                      msgTypes.PAYMENT_METHOD.UPI
-                                    );
-                                  }}
-                                >
-                                  <ListItemAvatar>
-                                    <Avatar>
-                                      <img
-                                        src="/images/bhim.png"
-                                        width={"30px"}
-                                        height={"30px"}
-                                        alt=""
-                                      ></img>
-                                    </Avatar>
-                                  </ListItemAvatar>
-                                  <ListItemText primary="UPI" />
-                                </ListItemButton>
-                              </ListItem>
-                            )}
-
-                            {paymentType?.CD?.length > 0 && (
-                              <ListItem disablePadding>
-                                <ListItemButton
-                                  selected={
-                                    selectedPaymentMethod ===
-                                    msgTypes.PAYMENT_METHOD.CARD
-                                  }
-                                  onClick={() => {
-                                    setSelectedPaymentMethod(
-                                      msgTypes.PAYMENT_METHOD.CARD
-                                    );
-                                  }}
-                                >
-                                  <ListItemAvatar>
-                                    <Avatar>
-                                      <CreditCardIcon />
-                                    </Avatar>
-                                  </ListItemAvatar>
-                                  <ListItemText primary="Cards" />
-                                </ListItemButton>
-                              </ListItem>
-                            )}
-
-                            {paymentType?.NB?.length > 0 && (
-                              <ListItem disablePadding>
-                                <ListItemButton
-                                  selected={
-                                    selectedPaymentMethod ===
-                                    msgTypes.PAYMENT_METHOD.NETBANKING
-                                  }
-                                  onClick={() => {
-                                    setSelectedPaymentMethod(
-                                      msgTypes.PAYMENT_METHOD.NETBANKING
-                                    );
-                                  }}
-                                >
-                                  <ListItemAvatar>
-                                    <Avatar>
-                                      <AccountBalanceOutlinedIcon />
-                                    </Avatar>
-                                  </ListItemAvatar>
-                                  <ListItemText primary="Net Banking" />
-                                </ListItemButton>
-                              </ListItem>
-                            )}
-                            {paymentType?.WL?.length > 0 && (
-                              <ListItem disablePadding>
-                                <ListItemButton
-                                  selected={
-                                    selectedPaymentMethod ===
-                                    msgTypes.PAYMENT_METHOD.WALLET
-                                  }
-                                  onClick={() => {
-                                    setSelectedPaymentMethod(
-                                      msgTypes.PAYMENT_METHOD.WALLET
-                                    );
-                                  }}
-                                >
-                                  <ListItemAvatar>
-                                    <Avatar>
-                                      <AccountBalanceWalletOutlinedIcon />
-                                    </Avatar>
-                                  </ListItemAvatar>
-                                  <ListItemText primary="Wallet" />
-                                </ListItemButton>
-                              </ListItem>
-                            )}
-                          </List>
-                          {/* <ul className="list-unstyled horizontal-nav-content mb-0 mb-md-15" id="navigation">
-                                <li className="nav-list">
-                                    <button id="creditLi" data-id="debitWithPin" data-type="CC" className="tabLi d-flex align-items-center ">
-                                        <span className="nav-icon">
-                                            <CreditCardIcon />
-                                        </span>
-                                        <span className="tab-span lang" data-key="card">Cards</span>
-                                    </button>
-                                </li>
-                                <li className="nav-list">
-                                    <button id="upiLi" data-id="upi" data-type="UP" className="tabLi d-flex align-items-center active">
-                                        <span className="nav-icon">
-                                            <img src='/images/bhim.png' width={30} height={30}></img>
-                                        </span>
-                                        <span className="tab-span lang" data-key="upi">UPI</span>
-                                    </button>
-                                </li>
-                                <li className="nav-list">
-                                    <button id="nbLi" data-id="netBanking" data-type="NB" className="tabLi d-flex align-items-center">
-                                        <span className="nav-icon">
-                                            <AccountBalanceOutlinedIcon />
-                                        </span>
-                                        <span className="tab-span lang" data-key="netBanking">Net Banking</span>
-                                    </button>
-                                </li>
-                                <li className="nav-list">
-                                    <button id="wlLi" data-id="wallet" data-type="WL" className="tabLi d-flex align-items-center">
-                                        <span className="nav-icon">
-                                            <AccountBalanceWalletOutlinedIcon />
-                                        </span>
-                                        <span className="tab-span lang" data-key="wallet">Wallet</span>
-                                    </button>
-                                </li>
-                            </ul> */}
-                        </div>
-                        <div className="col-12 col-md-8 col-lg-6 bg-white border-radius-br-md-20 border-radius-lg-none mh-xl-525">
-                          {/* <div className="row mt-md-30 mb-md-35">
-                      <div className="col-12 d-flex justify-content-between align-items-center px-xl-30">
-                        <div className="d-flex align-items-center custom-merchantName">
-                          <button className="font-size-20 text-primary d-none d-md-block d-lg-none mr-md-15 border-none bg-none">
-                            <i className="pg-icon icon-menu d-block"></i>
-                          </button> */}
-                          {/* <h3 id="merchantName" className="font-size-18 font-weight-medium text-black d-none d-md-block">Atmoon PG Hosted</h3> */}
-                          {/* </div>
-                        <div id="lang-switch-desktop">
-                          <select
-                            id="translate"
-                            className="form-control max-width-200"
-                          >
-                            <option value="english">English</option>
-                            <option value="hindi">Hindi</option>
-                            <option value="punjabi">Punjabi</option>
-                            <option value="urdu">Urdu</option>
-                            <option value="arabic">Arabic</option>
-                            <option value="telugu">Telugu</option>
-                            <option value="tamil">Tamil</option>
-                            <option value="french">French</option>
-                            <option value="spanish">Spanish</option>
-                            <option value="malayalam">Malayalam</option>
-                            <option value="kannada">Kannada</option>
-                            <option value="marathi">Marathi</option>
-                          </select>
-                        </div>
-                      </div>
-                    </div> */}
-                          <div className="row paymentSections p-4 mt-20">
-                            {/* {payinRequest.intentUrl &&
-                            selectedPaymentMethod ===
-                              msgTypes.PAYMENT_METHOD.QR && (
-                              <div className="col-md-6 col-sm-12 p-0 m-0 paymentWrapper">
-                                <UpiQr url={payinRequest.intentUrl || ""} />
-                              </div>
-                            )} */}
-                            {payinRequest.intentUrl &&
-                              selectedMopType.includes("QR") && (
-                                <div className="col-md-6 col-sm-12 p-0 m-0 paymentWrapper">
-                                  <UpiQr url={payinRequest.intentUrl} />
-                                </div>
-                              )}
-                            <div className="col-md-6 col-sm-12 p-0 m-0">
-                              {selectedPaymentMethod ===
-                                msgTypes.PAYMENT_METHOD.UPI &&
-                                selectedMopType.includes("COLLECT") && (
-                                  <UpiCollect />
-                                )}
-                            </div>
-                            <div className="col-md-6 col-sm-12 p-0 m-0">
-                              {selectedPaymentMethod ===
-                                msgTypes.PAYMENT_METHOD.UPI &&
-                                selectedMopType.length === 0 && (
-                                  <div>No Payment Methods available</div>
-                                )}
-                            </div>
-                            <div className="p-2">
-                              <MobileView>
-                                {payinRequest.intentUrl &&
-                                  selectedPaymentMethod ===
-                                    msgTypes.PAYMENT_METHOD.UPI && (
-                                    <UpiIntent
-                                      url={payinRequest.intentUrl || ""}
-                                      payinRequest={payinRequest}
-                                    />
-                                  )}
-                              </MobileView>
-                              {/* <UpiIntent
-                              url={payinRequest.intentUrl || ""}
-                              payinRequest={payinRequest}
-                            /> */}
-                            </div>
-                          </div>
-                        </div>
-                        <div
-                          className="col-12 col-lg-3 d-lg-block mh-xl-525 p-20"
-                          id="summary-column"
-                          style={{ background: "#15b86d" }}
-                        >
-                          <div className="mt-lg-95 mb-lg-50 px-xl-15">
-                            <div id="summary-wrap-desktop">
-                              <div className="row">
-                                <div className="col-12">
-                                  <h2
-                                    className="font-weight-bold font-size-16  text-light txt-white border-bottom-grey-darker pb-10 mb-10 lang"
-                                    data-key="summary"
-                                    id="summary-title"
-                                    style={{
-                                      textTransform: "uppercase",
-                                      letterSpacing: 2,
-                                      color: "white",
-                                    }}
-                                  >
-                                    Summary
-                                  </h2>
-                                  <ul
-                                    className="list-unstyled mb-0 font-size-lg-24"
-                                    id="order-summary"
-                                  >
-                                    <li
-                                      className="justify-content-between pt-15   font-weight-light font-size-16"
-                                      id="customerName"
-                                    >
-                                      <span className="txt-white text-white">
-                                        {payinRequest.businessName}
-                                      </span>
-                                    </li>
-                                    <li
-                                      className="d-flex justify-content-between flex-wrap font-weight-light border-bottom-grey-darker mb-30"
-                                      id="order-id"
-                                    >
-                                      <span
-                                        className="text-grey txt-white lang summary-label text-white font-size-16"
-                                        data-key="orderId"
-                                        style={{ textTransform: "uppercase" }}
-                                      >
-                                        Order ID
-                                      </span>
-                                      <span
-                                        className="text-grey txt-white summary-label-text text-white font-weight-bold font-size-18 mb-20"
-                                        title={payinRequest.orderId}
-                                        style={{ letterSpacing: 1 }}
-                                      >
-                                        {payinRequest.orderId}
-                                      </span>
-                                    </li>
-                                    {/* <li className="justify-content-between flex-wrap font-weight-medium-bold d-none" id="amout_tab">
-                                                <span className="text-grey txt-white lang summary-label" data-key="amount" id="amount">Amount</span>
-                                                <span className="text-grey txt-white summary-label-text d-inline-flex align-items-center" id="innerAmount">
-                                                    <i className="pg-icon icon-inr mr-5"></i>
-                                                    <span className="value-block">{payinRequest.amount}</span>
-                                                </span>
-                                            </li> */}
-                                    {/* <li className="justify-content-between flex-wrap font-weight-medium-bold d-none" id="tdrBLock_head">
-                                                <span id="surchargeName" className="text-grey txt-white lang summary-label" data-key="convenienceFee">Convenience Fee</span>
-                                                <span className="text-grey txt-white summary-label-text d-inline-flex align-items-center" id="surcharge">
-                                                    <i className="pg-icon icon-inr mr-5"></i><span className="value-block">0.00</span>
-                                                </span>
-                                            </li> */}
-                                    {/* <li className="justify-content-between flex-wrap d-none font-weight-medium-bold" id="gst-block">
-                                                <span id="gstName" className="text-grey txt-white lang summary-label" data-key="gst">GST</span>
-                                                <span className="text-grey txt-white summary-label-text d-inline-flex align-items-center" id="gstAmount">
-                                                    <i className="pg-icon icon-inr mr-5"></i><span className="value-block">0</span>
-                                                </span>
-                                            </li> */}
-                                    <li
-                                      className="d-flex justify-content-between font-size-22 font-weight-bold flex-wrap  "
-                                      id="new_head"
-                                    >
-                                      <span
-                                        className="txt-white lang summary-label text-white"
-                                        data-key="amountPayable"
-                                        style={{ textTransform: "uppercase" }}
-                                      >
-                                        Total Payable
-                                      </span>
-                                      <span
-                                        className="txt-white summary-label-text d-inline-flex align-items-center text-white"
-                                        id="totalAmount"
-                                      >
-                                        <i className="pg-icon icon-inr mr-5"></i>
-                                        <span className="value-block">
-                                          {amount}
-                                        </span>
-                                      </span>
-                                    </li>
-                                  </ul>
-                                </div>
-                              </div>
-                            </div>
-                            <div id="submit-btns-desktop">
-                              <Button
-                                variant="contained"
-                                type="submit"
-                                disabled={!dirty || !isValid}
-                                id="pay-now"
-                                color="success"
-                                size="large"
-                                sx={{
-                                  boxShadow: "0 0 3px 0 white",
-                                  backgroundColor: "rgb(237 141 1)",
-                                  width: "100%",
-                                  padding: "16px",
-                                  marginTop: "16px",
-                                  color: "white",
-                                  "&.Mui-disabled": {
-                                    backgroundColor: "#f5c882",
-                                    color: "white",
-                                    opacity: 0.9,
-                                    boxShadow: "0 0 3px 0 white",
-                                  },
-                                }}
-                              >
-                                {/* <CircularProgress /> */}
-                                <span className="d-flex align-items-center justify-content-center">
-                                  <span
-                                    className="lang mr-10 line-height-16"
-                                    id="payBtnKey"
-                                    data-key="payBtnText"
-                                  >
-                                    Pay
-                                  </span>
-                                  <span className="payBtnAmount d-inline-flex align-items-center">
-                                    <i className=" pg-icon icon-inr mr-5"></i>
-                                    <span className="value-block line-height-16">
-                                      {amount}
-                                    </span>
-                                  </span>
-                                </span>
-                              </Button>
-                              {apiCall && (
-                                <div className="pt-1">
-                                  <LinearProgress />
-                                </div>
-                              )}
-                              <div className="text-center mt-10 mt-md-0 mt-lg-10">
-                                <button
-                                  type="button"
-                                  id="ccCancelButton"
-                                  className="font-weight-bold font-size-14 lang bg-none text-white"
-                                  name="ccCancelButton"
-                                  data-key="cancel"
-                                >
-                                  Cancel
-                                </button>
-                              </div>
-                            </div>
-                            <div
-                              className="d-flex align-items-center mt-15 justify-content-center mb-15"
-                              id="safe-secure-logo"
-                            >
-                              <i className="pg-icon txt-white icon-secure-payment font-size-26"></i>
-                              <span className="font-size-12 txt-white ml-10 text-white">
-                                Safe and Secure Payments
-                              </span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div
-                        className="row custom-footer bg-grey-ternary border-radius-bl-20 border-radius-br-20 position-relative border-top"
-                        id="footer"
+                    <Box sx={{ mb: 3 }}>
+                      <Typography
+                        variant="overline"
+                        sx={{
+                          color: "rgba(255,255,255,0.7)",
+                          fontWeight: 600,
+                          letterSpacing: "1px",
+                        }}
                       >
-                        <div
-                          className="col-md-3 col-lg-3 d-flex justify-content-center align-items-center"
-                          style={{ backgroundColor: "#15b86d " }}
+                        PAYING TO
+                      </Typography>
+                      <Typography
+                        variant="h5"
+                        sx={{
+                          fontWeight: 700,
+                          mt: 1,
+                          textShadow: "0 2px 4px rgba(0,0,0,0.1)",
+                          fontSize: { xs: "1.25rem", md: "1.5rem" },
+                        }}
+                      >
+                        {payinRequest.businessName}
+                      </Typography>
+                    </Box>
+
+                    <Box
+                      sx={{
+                        background: "rgba(255,255,255,0.1)",
+                        borderRadius: "16px",
+                        p: 3,
+                        mb: 3,
+                        backdropFilter: "blur(10px)",
+                        border: "1px solid rgba(255,255,255,0.2)",
+                      }}
+                    >
+                      <Box
+                        sx={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          mb: 2,
+                        }}
+                      >
+                        <Typography
+                          sx={{
+                            color: "rgba(255,255,255,0.8)",
+                            fontWeight: 500,
+                          }}
                         >
-                          <span className="font-size-12 text-white">
-                            © 2025 ATMOON, All
-                            rights reserved.
-                          </span>
-                        </div>
-                        <div
-                          className="col-md-6 col-lg-6 d-sm-flex justify-content-sm-between justify-content-lg-center py-15 py-lg-20"
-                          style={{ backgroundColor: "#15b86d " }}
+                          Order ID
+                        </Typography>
+                        <Typography
+                          sx={{
+                            wordBreak: "break-all",
+                            fontWeight: 600,
+                            fontSize: { xs: "0.8rem", md: "0.9rem" },
+                          }}
                         >
-                          {/* <div className="d-flex justify-content-center align-items-center">
-                      <img src="/pgui/img/visa-logo.png" alt="" />
-                      <img src="/pgui/img/mcard.png" alt="" />
-                      <span className="pg-icon icon-rupay-logo font-size-20 mr-5">
-                        <span className="path1"></span>
-                        <span className="path2"></span>
-                        <span className="path3"></span>
-                        <span className="path4"></span>
-                      </span>
-                      <span className="pg-icon icon-american-express font-size-24 mr-md-5">
-                        <span className="path1"></span>
-                        <span className="path2"></span>
-                        <span className="path3"></span>
-                      </span>
-                    </div> */}
-                        </div>
-                        <div
-                          className="col-md-3 col-lg-3 bg-grey-dark-primary d-flex align-items-center border-radius-br-20 border-radius-bl-20 border-radius-bl-md-0 justify-content-center p-10"
-                          id="footer-poweredby"
+                          {payinRequest.orderId}
+                        </Typography>
+                      </Box>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                        }}
+                      >
+                        <Typography
+                          sx={{
+                            color: "rgba(255,255,255,0.8)",
+                            fontWeight: 500,
+                          }}
                         >
-                          <span className=" font-size-12 text-white">
-                            Powered By
-                            <span
-                              className=" font-size-18 text-white font-family-logo"
-                              id="companyName"
-                            >
-                              ATMOON
-                            </span>
-                            <span className="text-white">©</span>
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                          Email
+                        </Typography>
+                        <Typography
+                          sx={{
+                            fontWeight: 600,
+                            fontSize: { xs: "0.8rem", md: "0.9rem" },
+                          }}
+                        >
+                          {payinRequest.custEmail}
+                        </Typography>
+                      </Box>
+                    </Box>
+
+                    <Box sx={{ flexGrow: 1 }} />
+
+                    <Box
+                      sx={{
+                        background: "rgba(255,255,255,0.15)",
+                        borderRadius: "20px",
+                        p: 3,
+                        backdropFilter: "blur(15px)",
+                        border: "1px solid rgba(255,255,255,0.3)",
+                        boxShadow: "0 8px 32px rgba(0,0,0,0.1)",
+                      }}
+                    >
+                      <Box
+                        sx={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "center",
+                          mb: 3,
+                        }}
+                      >
+                        <Typography
+                          variant="h6"
+                          sx={{
+                            fontWeight: 600,
+                            color: "rgba(255,255,255,0.9)",
+                          }}
+                        >
+                          Total Payable
+                        </Typography>
+                        <Typography
+                          variant="h4"
+                          sx={{
+                            fontWeight: 800,
+                            textShadow: "0 2px 4px rgba(0,0,0,0.2)",
+                            fontSize: { xs: "1.5rem", md: "2rem" },
+                          }}
+                        >
+                          ₹{amount}
+                        </Typography>
+                      </Box>
+
+                      <Button
+                        type="submit"
+                        variant="contained"
+                        fullWidth
+                        size="large"
+                        disabled={apiCall}
+                        sx={{
+                          py: 2,
+                          fontSize: { xs: "1rem", md: "1.1rem" },
+                          fontWeight: 700,
+                          borderRadius: "16px",
+                          background:
+                            "linear-gradient(135deg, #15b86d 0%, #0ea5e9 100%)",
+                          boxShadow: "0 8px 25px rgba(21, 184, 109, 0.3)",
+                          border: "none",
+                          textTransform: "none",
+                          transition: "all 0.3s ease",
+                          "&:hover": {
+                            background:
+                              "linear-gradient(135deg, #13a85e 0%, #0284c7 100%)",
+                            transform: "translateY(-2px)",
+                            boxShadow: "0 12px 35px rgba(21, 184, 109, 0.4)",
+                          },
+                          "&:disabled": {
+                            background: "rgba(255,255,255,0.1)",
+                            color: "rgba(255,255,255,0.5)",
+                          },
+                        }}
+                      >
+                        {apiCall ? (
+                          <CircularProgress size={24} sx={{ color: "white" }} />
+                        ) : (
+                          `Pay ₹${amount} securely`
+                        )}
+                      </Button>
+                    </Box>
+
+                    <Box sx={{ textAlign: "center", mt: 4 }}>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          mb: 2,
+                        }}
+                      >
+                        <LockIcon
+                          sx={{
+                            fontSize: "1.2rem",
+                            mr: 1,
+                            color: "rgba(255,255,255,0.7)",
+                          }}
+                        />
+                        <Typography
+                          variant="body2"
+                          sx={{
+                            color: "rgba(255,255,255,0.7)",
+                            fontWeight: 500,
+                            fontSize: { xs: "0.8rem", md: "0.875rem" },
+                          }}
+                        >
+                          Secured by ATMOON
+                        </Typography>
+                      </Box>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          opacity: 0.6,
+                        }}
+                      >
+                        <img
+                          src="/images/pci-dss.png"
+                          alt="PCI DSS Compliant"
+                          style={{
+                            height: "25px",
+                            filter: "brightness(0) invert(1)",
+                            opacity: 0.7,
+                          }}
+                        />
+                      </Box>
+                    </Box>
+                  </Box>
                 </Box>
-              </Form>
-            )}
-          </Formik>
-        </>
+              </Grid>
+            </Grid>
+          </Box>
+        </Form>
       )}
-    </>
+    </Formik>
   );
 };
+
+const PaymentMethodItem = ({
+  name,
+  icon,
+  method,
+  selected,
+  onClick,
+}: {
+  name: string;
+  icon: React.ReactNode;
+  method: string;
+  selected: boolean;
+  onClick: (method: string) => void;
+}) => (
+  <ListItem disablePadding sx={{ my: 1 }}>
+    <ListItemButton
+      selected={selected}
+      onClick={() => onClick(method)}
+      sx={{
+        borderRadius: "16px",
+        py: 2,
+        px: 2.5,
+        transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+        background: selected
+          ? "linear-gradient(135deg, rgba(21,184,109,0.1) 0%, rgba(14,165,233,0.1) 100%)"
+          : "transparent",
+        border: selected
+          ? "2px solid rgba(21,184,109,0.3)"
+          : "2px solid transparent",
+        boxShadow: selected ? "0 8px 25px rgba(21,184,109,0.15)" : "none",
+        "&:hover": {
+          background: selected
+            ? "linear-gradient(135deg, rgba(21,184,109,0.15) 0%, rgba(14,165,233,0.15) 100%)"
+            : "rgba(21,184,109,0.05)",
+          transform: "translateY(-2px)",
+          boxShadow: "0 8px 25px rgba(21,184,109,0.1)",
+        },
+        "&.Mui-selected": {
+          color: "#15b86d",
+          fontWeight: "700",
+          "& .MuiListItemIcon-root": {
+            color: "#15b86d",
+            transform: "scale(1.1)",
+          },
+          "& .MuiListItemText-primary": {
+            fontWeight: "700",
+          },
+        },
+      }}
+    >
+      <ListItemIcon
+        sx={{
+          minWidth: "48px",
+          transition: "all 0.3s ease",
+        }}
+      >
+        {icon}
+      </ListItemIcon>
+      <ListItemText
+        primary={name}
+        sx={{
+          "& .MuiListItemText-primary": {
+            fontSize: "1rem",
+            fontWeight: selected ? 700 : 500,
+            transition: "all 0.3s ease",
+          },
+        }}
+      />
+    </ListItemButton>
+  </ListItem>
+);
 
 export default CheckoutPage;
