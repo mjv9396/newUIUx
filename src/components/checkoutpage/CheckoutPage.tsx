@@ -43,6 +43,7 @@ import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 // Child Components for cleaner code
 import Loading from "../loader/Loading.tsx";
 import UpiQr from "./upi/UpiQr.tsx";
+import TransactionPurposePopup from "./TransactionPurposePopup.tsx";
 
 // --- Card Detection Utility ---
 const detectCardType = (cardNumber: string) => {
@@ -90,6 +91,12 @@ const CheckoutPage = () => {
   const [detectedCardNetwork, setDetectedCardNetwork] = useState("");
   const [cardNetworkError, setCardNetworkError] = useState("");
 
+  // --- Transaction Purpose Popup State ---
+  const [showTransactionPurposePopup, setShowTransactionPurposePopup] = useState(true); // Show immediately
+  const [transactionPurposeSubmitted, setTransactionPurposeSubmitted] = useState(false);
+  const [transactionPurposeLoading, setTransactionPurposeLoading] = useState(false);
+  const [txnId, setTxnId] = useState("");
+
   // --- Demo Mode Payment Types ---
   const demoPaymentType = {
     CC: ["VI", "MS", "AE", "DN", "RU"], // All card types
@@ -133,9 +140,12 @@ const CheckoutPage = () => {
 
   // --- API Calls ---
   useEffect(() => {
+    // Set transaction ID immediately from URL
+    const id = pathname.split("/pay/")[1];
+    setTxnId(response.data.transactionPayinRequest.txnId);
+
     const payentActive = async () => {
       setLoading(true);
-      const id = pathname.split("/pay/")[1];
       try {
         const response = await AuthService.paymentActive({
           appId: msgTypes.APP_ID,
@@ -148,6 +158,8 @@ const CheckoutPage = () => {
           setPaymentType(
             isDemoMode ? demoPaymentType : response.data.paymentType
           );
+          
+          // No need to show popup here - it's already showing
         } else {
           toast.error(response.message || "Failed to load payment details.");
           // In demo mode, still show payment types even if API fails
@@ -167,6 +179,32 @@ const CheckoutPage = () => {
     };
     payentActive();
   }, [pathname]);
+
+  // --- Transaction Purpose Handler ---
+  const handleTransactionPurposeSubmit = async (txnPurpose: string) => {
+    setTransactionPurposeLoading(true);
+    try {
+      const requestData = {
+        transactionId: txnId,
+        transactionPurpose: txnPurpose,
+      };
+
+      const response = await AuthService.submitTransactionPurpose(requestData);
+
+      if (msgTypes.SUCCESS_CODE.includes(response.statusCode)) {
+        setTransactionPurposeSubmitted(true);
+        setShowTransactionPurposePopup(false);
+        toast.success("Transaction purpose submitted successfully");
+      } else {
+        toast.error(response.data || "Failed to submit transaction purpose");
+      }
+    } catch (error) {
+      console.error("Error submitting transaction purpose:", error);
+      toast.error("Failed to submit transaction purpose. Please try again.");
+    } finally {
+      setTransactionPurposeLoading(false);
+    }
+  };
 
   const handlePayNow = async (values: any) => {
     setApiCall(true);
@@ -750,18 +788,32 @@ const CheckoutPage = () => {
   if (loading) return <Loading />;
 
   return (
-    <Formik
-      initialValues={{
-        cardNumber: "",
-        cardName: "",
-        expiry: "",
-        cvv: "",
-        custVpa: "",
-      }}
-      validationSchema={CheckoutSchema}
-      onSubmit={handlePayNow}
-      enableReinitialize
-    >
+    <>
+      {/* Transaction Purpose Popup */}
+      <TransactionPurposePopup
+        open={showTransactionPurposePopup}
+        txnId={txnId}
+        onSubmit={handleTransactionPurposeSubmit}
+        loading={transactionPurposeLoading}
+      />
+
+      {/* Loading State - show if data is still loading and popup is not visible */}
+      {loading && !showTransactionPurposePopup && <Loading />}
+
+      {/* Main Checkout Content - only show if transaction purpose is submitted AND data is loaded */}
+      {transactionPurposeSubmitted && !loading && (
+        <Formik
+          initialValues={{
+            cardNumber: "",
+            cardName: "",
+            expiry: "",
+            cvv: "",
+            custVpa: "",
+          }}
+          validationSchema={CheckoutSchema}
+          onSubmit={handlePayNow}
+          enableReinitialize
+        >
       {({ errors, touched, setFieldValue }) => (
         <Form>
           <Box
@@ -1082,6 +1134,8 @@ const CheckoutPage = () => {
         </Form>
       )}
     </Formik>
+      )}
+    </>
   );
 };
 
