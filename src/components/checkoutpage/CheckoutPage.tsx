@@ -92,9 +92,12 @@ const CheckoutPage = () => {
   const [cardNetworkError, setCardNetworkError] = useState("");
 
   // --- Transaction Purpose Popup State ---
-  const [showTransactionPurposePopup, setShowTransactionPurposePopup] = useState(true); // Show immediately
-  const [transactionPurposeSubmitted, setTransactionPurposeSubmitted] = useState(false);
-  const [transactionPurposeLoading, setTransactionPurposeLoading] = useState(false);
+  const [showTransactionPurposePopup, setShowTransactionPurposePopup] =
+    useState(false);
+  const [transactionPurposeSubmitted, setTransactionPurposeSubmitted] =
+    useState(false);
+  const [transactionPurposeLoading, setTransactionPurposeLoading] =
+    useState(false);
   const [txnId, setTxnId] = useState("");
 
   // --- Demo Mode Payment Types ---
@@ -140,12 +143,9 @@ const CheckoutPage = () => {
 
   // --- API Calls ---
   useEffect(() => {
-    // Set transaction ID immediately from URL
-    const id = pathname.split("/pay/")[1];
-    setTxnId(response.data.transactionPayinRequest.txnId);
-
     const payentActive = async () => {
       setLoading(true);
+      const id = pathname.split("/pay/")[1];
       try {
         const response = await AuthService.paymentActive({
           appId: msgTypes.APP_ID,
@@ -158,13 +158,16 @@ const CheckoutPage = () => {
           setPaymentType(
             isDemoMode ? demoPaymentType : response.data.paymentType
           );
-          
-          // No need to show popup here - it's already showing
+          setTxnId(response.data.transactionPayinRequest.txnId);
+
+          // Show transaction purpose popup after data is loaded
+          setShowTransactionPurposePopup(true);
         } else {
           toast.error(response.message || "Failed to load payment details.");
           // In demo mode, still show payment types even if API fails
           if (isDemoMode) {
             setPaymentType(demoPaymentType);
+            setShowTransactionPurposePopup(true);
           }
         }
       } catch (error) {
@@ -172,6 +175,7 @@ const CheckoutPage = () => {
         // In demo mode, still show payment types even if API fails
         if (isDemoMode) {
           setPaymentType(demoPaymentType);
+          setShowTransactionPurposePopup(true);
         }
       } finally {
         setLoading(false);
@@ -797,11 +801,8 @@ const CheckoutPage = () => {
         loading={transactionPurposeLoading}
       />
 
-      {/* Loading State - show if data is still loading and popup is not visible */}
-      {loading && !showTransactionPurposePopup && <Loading />}
-
-      {/* Main Checkout Content - only show if transaction purpose is submitted AND data is loaded */}
-      {transactionPurposeSubmitted && !loading && (
+      {/* Main Checkout Content - only show if transaction purpose is submitted */}
+      {transactionPurposeSubmitted && (
         <Formik
           initialValues={{
             cardNumber: "",
@@ -814,326 +815,330 @@ const CheckoutPage = () => {
           onSubmit={handlePayNow}
           enableReinitialize
         >
-      {({ errors, touched, setFieldValue }) => (
-        <Form>
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              minHeight: "100vh",
-              background:
-                "linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #f5576c 75%, #4facfe 100%)",
-              backgroundSize: "400% 400%",
-              animation: "gradientShift 15s ease infinite",
-              p: { xs: 1, sm: 2, md: 3 },
-              "@keyframes gradientShift": {
-                "0%": { backgroundPosition: "0% 50%" },
-                "50%": { backgroundPosition: "100% 50%" },
-                "100%": { backgroundPosition: "0% 50%" },
-              },
-            }}
-          >
-            <Grid
-              container
-              sx={{
-                maxWidth: { xs: "100%", sm: "95%", md: "1200px" },
-                width: "100%",
-                minHeight: { xs: "auto", md: "700px" },
-                background: "rgba(255, 255, 255, 0.95)",
-                backdropFilter: "blur(20px)",
-                borderRadius: { xs: "12px", md: "24px" },
-                boxShadow:
-                  "0 20px 60px rgba(0,0,0,0.1), 0 8px 25px rgba(0,0,0,0.05)",
-                overflow: "hidden",
-                border: "1px solid rgba(255,255,255,0.3)",
-              }}
-            >
-              <Grid
-                item
-                xs={12}
-                md={3.5}
+          {({ errors, touched, setFieldValue }) => (
+            <Form>
+              <Box
                 sx={{
-                  order: { xs: 2, md: 1 },
-                }}
-              >
-                {renderPaymentMethodList()}
-              </Grid>
-
-              <Grid
-                item
-                xs={12}
-                md={4.5}
-                sx={{
-                  p: { xs: 2, sm: 3, md: 4 },
                   display: "flex",
-                  flexDirection: "column",
                   justifyContent: "center",
-                  order: { xs: 1, md: 2 },
-                  minHeight: { xs: "auto", md: "500px" },
+                  alignItems: "center",
+                  minHeight: "100vh",
+                  background:
+                    "linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #f5576c 75%, #4facfe 100%)",
+                  backgroundSize: "400% 400%",
+                  animation: "gradientShift 15s ease infinite",
+                  p: { xs: 1, sm: 2, md: 3 },
+                  "@keyframes gradientShift": {
+                    "0%": { backgroundPosition: "0% 50%" },
+                    "50%": { backgroundPosition: "100% 50%" },
+                    "100%": { backgroundPosition: "0% 50%" },
+                  },
                 }}
               >
-                {renderCentralContent(touched, errors, setFieldValue)}
-              </Grid>
-
-              <Grid
-                item
-                xs={12}
-                md={4}
-                sx={{
-                  order: { xs: 3, md: 3 },
-                }}
-              >
-                <Box
+                <Grid
+                  container
                   sx={{
-                    p: 0,
-                    display: "flex",
-                    flexDirection: "column",
-                    background:
-                      "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-                    position: "relative",
+                    maxWidth: { xs: "100%", sm: "95%", md: "1200px" },
+                    width: "100%",
+                    minHeight: { xs: "auto", md: "700px" },
+                    background: "rgba(255, 255, 255, 0.95)",
+                    backdropFilter: "blur(20px)",
+                    borderRadius: { xs: "12px", md: "24px" },
+                    boxShadow:
+                      "0 20px 60px rgba(0,0,0,0.1), 0 8px 25px rgba(0,0,0,0.05)",
                     overflow: "hidden",
-                    minHeight: { xs: "auto", md: "100%" },
-                    "&::before": {
-                      content: '""',
-                      position: "absolute",
-                      top: 0,
-                      left: 0,
-                      right: 0,
-                      bottom: 0,
-                      background:
-                        "linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%)",
-                      backdropFilter: "blur(10px)",
-                    },
+                    border: "1px solid rgba(255,255,255,0.3)",
                   }}
                 >
-                  <Box
+                  <Grid
+                    item
+                    xs={12}
+                    md={3.5}
                     sx={{
-                      position: "relative",
-                      zIndex: 1,
-                      p: { xs: 3, md: 4 },
-                      height: "100%",
-                      display: "flex",
-                      flexDirection: "column",
-                      color: "white",
+                      order: { xs: 2, md: 1 },
                     }}
                   >
-                    <Box sx={{ mb: 3 }}>
-                      <Typography
-                        variant="overline"
-                        sx={{
-                          color: "rgba(255,255,255,0.7)",
-                          fontWeight: 600,
-                          letterSpacing: "1px",
-                        }}
-                      >
-                        PAYING TO
-                      </Typography>
-                      <Typography
-                        variant="h5"
-                        sx={{
-                          fontWeight: 700,
-                          mt: 1,
-                          textShadow: "0 2px 4px rgba(0,0,0,0.1)",
-                          fontSize: { xs: "1.25rem", md: "1.5rem" },
-                        }}
-                      >
-                        {payinRequest.businessName}
-                      </Typography>
-                    </Box>
+                    {renderPaymentMethodList()}
+                  </Grid>
 
+                  <Grid
+                    item
+                    xs={12}
+                    md={4.5}
+                    sx={{
+                      p: { xs: 2, sm: 3, md: 4 },
+                      display: "flex",
+                      flexDirection: "column",
+                      justifyContent: "center",
+                      order: { xs: 1, md: 2 },
+                      minHeight: { xs: "auto", md: "500px" },
+                    }}
+                  >
+                    {renderCentralContent(touched, errors, setFieldValue)}
+                  </Grid>
+
+                  <Grid
+                    item
+                    xs={12}
+                    md={4}
+                    sx={{
+                      order: { xs: 3, md: 3 },
+                    }}
+                  >
                     <Box
                       sx={{
-                        background: "rgba(255,255,255,0.1)",
-                        borderRadius: "16px",
-                        p: 3,
-                        mb: 3,
-                        backdropFilter: "blur(10px)",
-                        border: "1px solid rgba(255,255,255,0.2)",
-                      }}
-                    >
-                      <Box
-                        sx={{
-                          display: "flex",
-                          justifyContent: "space-between",
-                          mb: 2,
-                        }}
-                      >
-                        <Typography
-                          sx={{
-                            color: "rgba(255,255,255,0.8)",
-                            fontWeight: 500,
-                          }}
-                        >
-                          Order ID
-                        </Typography>
-                        <Typography
-                          sx={{
-                            wordBreak: "break-all",
-                            fontWeight: 600,
-                            fontSize: { xs: "0.8rem", md: "0.9rem" },
-                          }}
-                        >
-                          {payinRequest.orderId}
-                        </Typography>
-                      </Box>
-                      <Box
-                        sx={{
-                          display: "flex",
-                          justifyContent: "space-between",
-                        }}
-                      >
-                        <Typography
-                          sx={{
-                            color: "rgba(255,255,255,0.8)",
-                            fontWeight: 500,
-                          }}
-                        >
-                          Email
-                        </Typography>
-                        <Typography
-                          sx={{
-                            fontWeight: 600,
-                            fontSize: { xs: "0.8rem", md: "0.9rem" },
-                          }}
-                        >
-                          {payinRequest.custEmail}
-                        </Typography>
-                      </Box>
-                    </Box>
-
-                    <Box sx={{ flexGrow: 1 }} />
-
-                    <Box
-                      sx={{
-                        background: "rgba(255,255,255,0.15)",
-                        borderRadius: "20px",
-                        p: 3,
-                        backdropFilter: "blur(15px)",
-                        border: "1px solid rgba(255,255,255,0.3)",
-                        boxShadow: "0 8px 32px rgba(0,0,0,0.1)",
-                      }}
-                    >
-                      <Box
-                        sx={{
-                          display: "flex",
-                          justifyContent: "space-between",
-                          alignItems: "center",
-                          mb: 3,
-                        }}
-                      >
-                        <Typography
-                          variant="h6"
-                          sx={{
-                            fontWeight: 600,
-                            color: "rgba(255,255,255,0.9)",
-                          }}
-                        >
-                          Total Payable
-                        </Typography>
-                        <Typography
-                          variant="h4"
-                          sx={{
-                            fontWeight: 800,
-                            textShadow: "0 2px 4px rgba(0,0,0,0.2)",
-                            fontSize: { xs: "1.5rem", md: "2rem" },
-                          }}
-                        >
-                          ₹{amount}
-                        </Typography>
-                      </Box>
-
-                      <Button
-                        type="submit"
-                        variant="contained"
-                        fullWidth
-                        size="large"
-                        disabled={apiCall}
-                        sx={{
-                          py: 2,
-                          fontSize: { xs: "1rem", md: "1.1rem" },
-                          fontWeight: 700,
-                          borderRadius: "16px",
+                        p: 0,
+                        display: "flex",
+                        flexDirection: "column",
+                        background:
+                          "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+                        position: "relative",
+                        overflow: "hidden",
+                        minHeight: { xs: "auto", md: "100%" },
+                        "&::before": {
+                          content: '""',
+                          position: "absolute",
+                          top: 0,
+                          left: 0,
+                          right: 0,
+                          bottom: 0,
                           background:
-                            "linear-gradient(135deg, #15b86d 0%, #0ea5e9 100%)",
-                          boxShadow: "0 8px 25px rgba(21, 184, 109, 0.3)",
-                          border: "none",
-                          textTransform: "none",
-                          transition: "all 0.3s ease",
-                          "&:hover": {
-                            background:
-                              "linear-gradient(135deg, #13a85e 0%, #0284c7 100%)",
-                            transform: "translateY(-2px)",
-                            boxShadow: "0 12px 35px rgba(21, 184, 109, 0.4)",
-                          },
-                          "&:disabled": {
-                            background: "rgba(255,255,255,0.1)",
-                            color: "rgba(255,255,255,0.5)",
-                          },
-                        }}
-                      >
-                        {apiCall ? (
-                          <CircularProgress size={24} sx={{ color: "white" }} />
-                        ) : (
-                          `Pay ₹${amount} securely`
-                        )}
-                      </Button>
-                    </Box>
-
-                    <Box sx={{ textAlign: "center", mt: 4 }}>
+                            "linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%)",
+                          backdropFilter: "blur(10px)",
+                        },
+                      }}
+                    >
                       <Box
                         sx={{
+                          position: "relative",
+                          zIndex: 1,
+                          p: { xs: 3, md: 4 },
+                          height: "100%",
                           display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          mb: 2,
+                          flexDirection: "column",
+                          color: "white",
                         }}
                       >
-                        <LockIcon
+                        <Box sx={{ mb: 3 }}>
+                          <Typography
+                            variant="overline"
+                            sx={{
+                              color: "rgba(255,255,255,0.7)",
+                              fontWeight: 600,
+                              letterSpacing: "1px",
+                            }}
+                          >
+                            PAYING TO
+                          </Typography>
+                          <Typography
+                            variant="h5"
+                            sx={{
+                              fontWeight: 700,
+                              mt: 1,
+                              textShadow: "0 2px 4px rgba(0,0,0,0.1)",
+                              fontSize: { xs: "1.25rem", md: "1.5rem" },
+                            }}
+                          >
+                            {payinRequest.businessName}
+                          </Typography>
+                        </Box>
+
+                        <Box
                           sx={{
-                            fontSize: "1.2rem",
-                            mr: 1,
-                            color: "rgba(255,255,255,0.7)",
-                          }}
-                        />
-                        <Typography
-                          variant="body2"
-                          sx={{
-                            color: "rgba(255,255,255,0.7)",
-                            fontWeight: 500,
-                            fontSize: { xs: "0.8rem", md: "0.875rem" },
+                            background: "rgba(255,255,255,0.1)",
+                            borderRadius: "16px",
+                            p: 3,
+                            mb: 3,
+                            backdropFilter: "blur(10px)",
+                            border: "1px solid rgba(255,255,255,0.2)",
                           }}
                         >
-                          Secured by ATMOON
-                        </Typography>
-                      </Box>
-                      <Box
-                        sx={{
-                          display: "flex",
-                          justifyContent: "center",
-                          alignItems: "center",
-                          opacity: 0.6,
-                        }}
-                      >
-                        <img
-                          src="/images/pci-dss.png"
-                          alt="PCI DSS Compliant"
-                          style={{
-                            height: "25px",
-                            filter: "brightness(0) invert(1)",
-                            opacity: 0.7,
+                          <Box
+                            sx={{
+                              display: "flex",
+                              justifyContent: "space-between",
+                              mb: 2,
+                            }}
+                          >
+                            <Typography
+                              sx={{
+                                color: "rgba(255,255,255,0.8)",
+                                fontWeight: 500,
+                              }}
+                            >
+                              Order ID
+                            </Typography>
+                            <Typography
+                              sx={{
+                                wordBreak: "break-all",
+                                fontWeight: 600,
+                                fontSize: { xs: "0.8rem", md: "0.9rem" },
+                              }}
+                            >
+                              {payinRequest.orderId}
+                            </Typography>
+                          </Box>
+                          <Box
+                            sx={{
+                              display: "flex",
+                              justifyContent: "space-between",
+                            }}
+                          >
+                            <Typography
+                              sx={{
+                                color: "rgba(255,255,255,0.8)",
+                                fontWeight: 500,
+                              }}
+                            >
+                              Email
+                            </Typography>
+                            <Typography
+                              sx={{
+                                fontWeight: 600,
+                                fontSize: { xs: "0.8rem", md: "0.9rem" },
+                              }}
+                            >
+                              {payinRequest.custEmail}
+                            </Typography>
+                          </Box>
+                        </Box>
+
+                        <Box sx={{ flexGrow: 1 }} />
+
+                        <Box
+                          sx={{
+                            background: "rgba(255,255,255,0.15)",
+                            borderRadius: "20px",
+                            p: 3,
+                            backdropFilter: "blur(15px)",
+                            border: "1px solid rgba(255,255,255,0.3)",
+                            boxShadow: "0 8px 32px rgba(0,0,0,0.1)",
                           }}
-                        />
+                        >
+                          <Box
+                            sx={{
+                              display: "flex",
+                              justifyContent: "space-between",
+                              alignItems: "center",
+                              mb: 3,
+                            }}
+                          >
+                            <Typography
+                              variant="h6"
+                              sx={{
+                                fontWeight: 600,
+                                color: "rgba(255,255,255,0.9)",
+                              }}
+                            >
+                              Total Payable
+                            </Typography>
+                            <Typography
+                              variant="h4"
+                              sx={{
+                                fontWeight: 800,
+                                textShadow: "0 2px 4px rgba(0,0,0,0.2)",
+                                fontSize: { xs: "1.5rem", md: "2rem" },
+                              }}
+                            >
+                              ₹{amount}
+                            </Typography>
+                          </Box>
+
+                          <Button
+                            type="submit"
+                            variant="contained"
+                            fullWidth
+                            size="large"
+                            disabled={apiCall}
+                            sx={{
+                              py: 2,
+                              fontSize: { xs: "1rem", md: "1.1rem" },
+                              fontWeight: 700,
+                              borderRadius: "16px",
+                              background:
+                                "linear-gradient(135deg, #15b86d 0%, #0ea5e9 100%)",
+                              boxShadow: "0 8px 25px rgba(21, 184, 109, 0.3)",
+                              border: "none",
+                              textTransform: "none",
+                              transition: "all 0.3s ease",
+                              "&:hover": {
+                                background:
+                                  "linear-gradient(135deg, #13a85e 0%, #0284c7 100%)",
+                                transform: "translateY(-2px)",
+                                boxShadow:
+                                  "0 12px 35px rgba(21, 184, 109, 0.4)",
+                              },
+                              "&:disabled": {
+                                background: "rgba(255,255,255,0.1)",
+                                color: "rgba(255,255,255,0.5)",
+                              },
+                            }}
+                          >
+                            {apiCall ? (
+                              <CircularProgress
+                                size={24}
+                                sx={{ color: "white" }}
+                              />
+                            ) : (
+                              `Pay ₹${amount} securely`
+                            )}
+                          </Button>
+                        </Box>
+
+                        <Box sx={{ textAlign: "center", mt: 4 }}>
+                          <Box
+                            sx={{
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                              mb: 2,
+                            }}
+                          >
+                            <LockIcon
+                              sx={{
+                                fontSize: "1.2rem",
+                                mr: 1,
+                                color: "rgba(255,255,255,0.7)",
+                              }}
+                            />
+                            <Typography
+                              variant="body2"
+                              sx={{
+                                color: "rgba(255,255,255,0.7)",
+                                fontWeight: 500,
+                                fontSize: { xs: "0.8rem", md: "0.875rem" },
+                              }}
+                            >
+                              Secured by ATMOON
+                            </Typography>
+                          </Box>
+                          <Box
+                            sx={{
+                              display: "flex",
+                              justifyContent: "center",
+                              alignItems: "center",
+                              opacity: 0.6,
+                            }}
+                          >
+                            <img
+                              src="/images/pci-dss.png"
+                              alt="PCI DSS Compliant"
+                              style={{
+                                height: "25px",
+                                filter: "brightness(0) invert(1)",
+                                opacity: 0.7,
+                              }}
+                            />
+                          </Box>
+                        </Box>
                       </Box>
                     </Box>
-                  </Box>
-                </Box>
-              </Grid>
-            </Grid>
-          </Box>
-        </Form>
-      )}
-    </Formik>
+                  </Grid>
+                </Grid>
+              </Box>
+            </Form>
+          )}
+        </Formik>
       )}
     </>
   );
