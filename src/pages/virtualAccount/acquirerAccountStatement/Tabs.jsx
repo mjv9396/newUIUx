@@ -19,7 +19,7 @@ const Tabs = () => {
           <i className="bi bi-wallet2"></i>
           Balances
         </button>
-        <button
+        {/* <button
           className={tab === 2 ? styles.tab + " " + styles.active : styles.tab}
           onClick={() => setTab(2)}
           disabled
@@ -34,7 +34,7 @@ const Tabs = () => {
         >
           <i className="bi bi-cloud"></i>
           Virtual Statement
-        </button>
+        </button> */}
       </div>
       {tab === 1 && <Balances />}
       {tab === 2 && (

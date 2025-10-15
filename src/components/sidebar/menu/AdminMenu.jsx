@@ -310,7 +310,7 @@ const AdminMenu = memo(({ toggle, setToggle }) => {
                 </Link>
               </li>
               <li>
-                <Link to="/check-account-balance">
+                <Link to="/bank/acquirer-account-statement">
                   <span>Account Balance</span>
                 </Link>
               </li>

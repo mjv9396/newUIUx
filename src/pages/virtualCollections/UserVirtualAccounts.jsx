@@ -112,71 +112,173 @@ const UserVirtualAccounts = () => {
 
   // Virtual Account Card Component
   const VirtualAccountCard = ({ virtualAccount }) => {
+    // Modern card UI with icons, sections, and better spacing
     return (
-      <div className={`${styles.virtualCard} mb-3`}>
-        <h4>{virtualAccount.name || "Virtual Account"}</h4>
+      <div
+        className="mb-3 shadow-sm"
+        style={{
+          background: "linear-gradient(135deg, #f8fafc 0%, #e0e7ef 100%)",
+          borderRadius: 18,
+          padding: 24,
+          minHeight: 260,
+          display: "flex",
+          flexDirection: "column",
+          boxShadow: "0 4px 16px rgba(21,184,109,0.07)",
+          border: "1px solid #e5e7eb",
+          position: "relative",
+        }}
+      >
+        <div
+          style={{ display: "flex", alignItems: "center", marginBottom: 10 }}
+        >
+          <i
+            className="bi bi-credit-card-2-front text-primary"
+            style={{ fontSize: 28, marginRight: 10 }}
+          ></i>
+          <h4
+            style={{
+              margin: 0,
+              fontWeight: 700,
+              fontSize: 20,
+              color: "#22223b",
+            }}
+          >
+            {virtualAccount.firstName ||
+              virtualAccount.businessName ||
+              "Virtual Account"}
+          </h4>
+        </div>
 
-        {virtualAccount.virtualUpi ? (
-          <>
-            <small>
-              Virtual VPA{" "}
-              <i
+        {/* Bank - acqCode */}
+        {virtualAccount.acqCode && (
+          <div style={{ marginBottom: 8 }}>
+            <small style={{ color: "#64748b" }}>Bank</small>
+            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+              <i className="bi bi-bank2 text-info" style={{ fontSize: 18 }}></i>
+              <span style={{ fontWeight: 600, fontSize: 16 }}>
+                {virtualAccount.acqCode}
+              </span>
+            </div>
+          </div>
+        )}
+
+        {/* User VPA */}
+        {virtualAccount.userVPA && (
+          <div style={{ marginBottom: 8 }}>
+            <small style={{ color: "#64748b" }}>
+              Virtual VPA
+              <span
+                style={{ cursor: "pointer", marginLeft: 6 }}
+                title="Copy VPA"
                 onClick={(e) =>
                   handleCopy(
-                    virtualAccount.virtualUpi,
+                    virtualAccount.userVPA,
                     "VPA copied to clipboard",
                     e
                   )
                 }
-                className="bi bi-copy"
-              ></i>
+              >
+                <i className="bi bi-clipboard text-secondary"></i>
+              </span>
             </small>
-            <h5>{virtualAccount.virtualUpi}</h5>
-          </>
-        ) : (
-          <>
-            <small>
-              Account Number{" "}
-              <i
+            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+              <i className="bi bi-at text-success" style={{ fontSize: 18 }}></i>
+              <span style={{ fontWeight: 600, fontSize: 16 }}>
+                {virtualAccount.userVPA}
+              </span>
+            </div>
+          </div>
+        )}
+
+        {/* Virtual Account Number */}
+        {virtualAccount.virtualAccount && (
+          <div style={{ marginBottom: 8 }}>
+            <small style={{ color: "#64748b" }}>
+              Account Number
+              <span
+                style={{ cursor: "pointer", marginLeft: 6 }}
+                title="Copy Account Number"
                 onClick={(e) =>
                   handleCopy(
-                    virtualAccount.virtualAccountNo,
+                    virtualAccount.virtualAccount,
                     "Account Number copied to clipboard",
                     e
                   )
                 }
-                className="bi bi-copy"
-              ></i>
+              >
+                <i className="bi bi-clipboard text-secondary"></i>
+              </span>
             </small>
-            <h5>{virtualAccount.virtualAccountNo}</h5>
-
-            {virtualAccount.virtualIfsc && (
-              <>
-                <small>
-                  IFSC Code{" "}
-                  <i
-                    onClick={(e) =>
-                      handleCopy(
-                        virtualAccount.virtualIfsc,
-                        "IFSC Code copied to clipboard",
-                        e
-                      )
-                    }
-                    className="bi bi-copy"
-                  ></i>
-                </small>
-                <h5>{virtualAccount.virtualIfsc}</h5>
-              </>
-            )}
-          </>
+            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+              <i
+                className="bi bi-hash text-warning"
+                style={{ fontSize: 18 }}
+              ></i>
+              <span style={{ fontWeight: 600, fontSize: 16 }}>
+                {virtualAccount.virtualAccount}
+              </span>
+            </div>
+          </div>
         )}
 
+        {/* IFSC Code */}
+        {virtualAccount.ifscCode && (
+          <div style={{ marginBottom: 8 }}>
+            <small style={{ color: "#64748b" }}>
+              IFSC Code
+              <span
+                style={{ cursor: "pointer", marginLeft: 6 }}
+                title="Copy IFSC Code"
+                onClick={(e) =>
+                  handleCopy(
+                    virtualAccount.ifscCode,
+                    "IFSC Code copied to clipboard",
+                    e
+                  )
+                }
+              >
+                <i className="bi bi-clipboard text-secondary"></i>
+              </span>
+            </small>
+            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+              <i
+                className="bi bi-hash text-danger"
+                style={{ fontSize: 18 }}
+              ></i>
+              <span style={{ fontWeight: 600, fontSize: 16 }}>
+                {virtualAccount.ifscCode}
+              </span>
+            </div>
+          </div>
+        )}
+
+        {/* Business Name as additional info if different from header */}
+        {virtualAccount.businessName &&
+          virtualAccount.firstName &&
+          virtualAccount.businessName !== virtualAccount.firstName && (
+            <div className="mt-2">
+              <small style={{ color: "#64748b" }}>Business Name</small>
+              <div style={{ fontSize: 14, fontWeight: 500 }}>
+                {virtualAccount.businessName}
+              </div>
+            </div>
+          )}
+
+        {/* Current Balance */}
         {virtualAccount.balance !== undefined && (
-          <div className="mt-2">
-            <small>Current Balance</small>
-            <h5 style={{ color: "var(--primary)", fontSize: "16px" }}>
+          <div className="mt-2" style={{ marginTop: 16 }}>
+            <small style={{ color: "#64748b" }}>Current Balance</small>
+            <div
+              style={{
+                color: "#15b86d",
+                fontWeight: 700,
+                fontSize: 18,
+                letterSpacing: 0.5,
+                marginTop: 2,
+              }}
+            >
               {formatToINRCurrency(virtualAccount.balance)}
-            </h5>
+            </div>
           </div>
         )}
       </div>
