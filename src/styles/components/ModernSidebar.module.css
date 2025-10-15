@@ -70,14 +70,14 @@
 }
 
 .logoWrapper img {
-  width: 120px;
+  width: 150px;
   height: auto;
-  max-height: 50px;
+  /* max-height: 50px; */
   border-radius: 8px;
   background: transparent;
   padding: 4px;
   transition: all 0.4s ease;
-  object-fit: contain;
+  /* object-fit: contain; */
   flex-shrink: 0;
 }
 
@@ -88,11 +88,11 @@
   border-radius: 50%;
 }
 
-.logoWrapper img:hover {
+/* .logoWrapper img:hover {
   transform: rotate(360deg) scale(1.1);
   box-shadow: 0 12px 30px rgba(212, 175, 55, 0.5),
     inset 0 2px 4px rgba(45, 80, 22, 0.1);
-}
+} */
 
 .brandText {
   color: #fff;
