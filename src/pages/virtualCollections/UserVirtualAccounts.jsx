@@ -121,6 +121,8 @@ const UserVirtualAccounts = () => {
           borderRadius: 18,
           padding: 24,
           minHeight: 260,
+          minWidth: 320,
+          width: "fit-content",
           display: "flex",
           flexDirection: "column",
           boxShadow: "0 4px 16px rgba(21,184,109,0.07)",
@@ -410,7 +412,7 @@ const UserVirtualAccounts = () => {
                   <h5 className="mb-0">
                     <i className="bi bi-credit-card-2-front me-2"></i>
                     Virtual Accounts ({virtualAccountData.data?.length || 0})
-                    {isAdmin() && merchantId && (
+                    {/* {isAdmin() && merchantId && (
                       <small className="text-muted ms-2">
                         (
                         {
@@ -425,7 +427,7 @@ const UserVirtualAccounts = () => {
                         }
                         )
                       </small>
-                    )}
+                    )} */}
                   </h5>
                   <button
                     className="btn btn-sm btn-outline-primary"
