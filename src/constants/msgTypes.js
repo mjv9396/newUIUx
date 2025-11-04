@@ -5,7 +5,7 @@ export const msgTypes = {
   // APP_ID: "APP752089274926",
   // SALT_ID: "2fe9b5395c714eef",
 
-  USERNAME: "user@atmoon.com",
+  USERNAME: "user@money.com",
   PASSWORD: "Test@123",
 
   KEY_LENGTH: 256, // Key length in bits

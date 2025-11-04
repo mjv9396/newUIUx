@@ -1109,7 +1109,7 @@ const CheckoutPage = () => {
                                 fontSize: { xs: "0.8rem", md: "0.875rem" },
                               }}
                             >
-                              Secured by ATMOON
+                              Secured by MONEYPAY
                             </Typography>
                           </Box>
                           <Box

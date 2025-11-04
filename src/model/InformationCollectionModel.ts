@@ -17,7 +17,7 @@ export class InformationCollectionModel {
         this.custEmail = "johnwilson@gmail.com";
         this.custPhone = "9987564321";
         this.currencyCode = "356";
-        this.returnUrl = "https://pgapi.atmoondps.com/response-page";
+        this.returnUrl = "https://pgapi.money.com/response-page";
         this.transactionType = "SALE";
         this.productDesc = "Transaction";
 
