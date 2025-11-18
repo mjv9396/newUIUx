@@ -5,7 +5,7 @@
   left: 0;
   width: 280px;
   height: 100vh;
-  background: linear-gradient(135deg, #2d5016 0%, #4a7c59 30%, #d4af37 100%);
+  background: linear-gradient(135deg, #fa481a 0%, #d21923 30%, #f8c54d 100%);
   backdrop-filter: blur(20px);
   border-right: 2px solid rgba(212, 175, 55, 0.3);
   transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);

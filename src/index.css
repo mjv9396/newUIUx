@@ -1,16 +1,28 @@
 :root {
-  --primary: #2d5016; /* Deep forest green */
-  --secondary: #d4af37; /* Golden yellow */
-  --accent: #4a7c59; /* Medium green */
-  --light-green: #8fbc8f; /* Light sage green */
-  --gold-light: #f4e99b; /* Light gold */
-  --gold-dark: #b8860b; /* Dark goldenrod */
-  --success: #228b22; /* Forest green for success states */
-  --warning: #daa520; /* Goldenrod for warnings */
-  --required: #cd853f; /* Peru gold for required fields */
+  /* BirdPay Brand Colors */
+  --primary: #fa481a; /* Orange-red from logo */
+  --primary-dark: #d21923; /* Deep red for gradient */
+  --secondary: #f8c54d; /* Golden yellow from logo */
+  --accent: #363435; /* Dark gray from logo text */
+
+  /* Gradient */
+  --primary-gradient: linear-gradient(135deg, #fa481a 0%, #d21923 100%);
+
+  /* Legacy color mappings for compatibility */
+  --light-orange: #ff6b4a; /* Lighter orange */
+  --gold-light: #ffd66b; /* Light gold */
+  --gold-dark: #e6b043; /* Dark gold */
+
+  /* Status colors */
+  --success: #28a745; /* Green for success states */
+  --warning: #f8c54d; /* Use brand yellow for warnings */
+  --danger: #d21923; /* Use brand red for errors */
+  --required: #fa481a; /* Use brand orange for required fields */
+
+  /* Neutral colors */
   --gray: #6c757d;
-  --text-primary: #2d3748; /* Dark gray for primary text */
-  --text-secondary: #4a5568; /* Medium gray for secondary text */
+  --text-primary: #363435; /* Use brand dark gray */
+  --text-secondary: #6c757d; /* Medium gray for secondary text */
   --bg-light: #f7fafc; /* Very light background */
   --border: #e2e8f0; /* Light border color */
   --bs: 1px;

@@ -54,7 +54,7 @@ const PayinAnalytics = ({ type, value, min, max }) => {
           speed: 800,
         },
       },
-      colors: ["#2d5016", "#4a7c59", "#d4af37", "#10b981", "#f59e0b"],
+      colors: ["#fa481a", "#d21923", "#f8c54d", "#363435", "#f59e0b"],
       stroke: {
         width: 3,
         curve: "smooth",
@@ -78,7 +78,7 @@ const PayinAnalytics = ({ type, value, min, max }) => {
         ...state.options.xaxis,
         labels: {
           style: {
-            colors: "#2d5016",
+            colors: "#363435",
             fontSize: "12px",
             fontWeight: 500,
           },
@@ -94,7 +94,7 @@ const PayinAnalytics = ({ type, value, min, max }) => {
         ...state.options.yaxis,
         labels: {
           style: {
-            colors: "#2d5016",
+            colors: "#363435",
             fontSize: "12px",
             fontWeight: 500,
           },
@@ -103,7 +103,7 @@ const PayinAnalytics = ({ type, value, min, max }) => {
       legend: {
         ...state.options.legend,
         labels: {
-          colors: "#2d5016",
+          colors: "#363435",
         },
       },
       tooltip: {
@@ -121,7 +121,7 @@ const PayinAnalytics = ({ type, value, min, max }) => {
       },
       markers: {
         size: 5,
-        colors: ["#2d5016", "#4a7c59", "#d4af37"],
+        colors: ["#fa481a", "#d21923", "#f8c54d"],
         strokeColors: "#fff",
         strokeWidth: 2,
         hover: {
@@ -152,7 +152,7 @@ const PayinAnalytics = ({ type, value, min, max }) => {
               margin: "0",
               fontSize: "0.95rem",
               fontWeight: "700",
-              color: "#2d5016",
+              color: "#363435",
               textAlign: "center",
             }}
           >
@@ -162,7 +162,7 @@ const PayinAnalytics = ({ type, value, min, max }) => {
             style={{
               margin: "2px 0 0 0",
               fontSize: "0.7rem",
-              color: "rgba(45, 80, 22, 0.7)",
+              color: "rgba(54, 52, 53, 0.7)",
               textAlign: "center",
               fontWeight: "500",
             }}

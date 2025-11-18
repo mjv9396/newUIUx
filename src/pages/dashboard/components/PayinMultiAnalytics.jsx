@@ -162,7 +162,7 @@ const PayinMultiAnalytics = () => {
             type: "datetime",
             labels: {
               style: {
-                colors: "#2d5016",
+                colors: "#363435",
                 fontSize: "11px",
                 fontWeight: 500,
               },
@@ -180,14 +180,14 @@ const PayinMultiAnalytics = () => {
               title: {
                 text: "Transaction Count",
                 style: {
-                  color: "#2d5016",
+                  color: "#363435",
                   fontSize: "12px",
                   fontWeight: 600,
                 },
               },
               labels: {
                 style: {
-                  colors: "#2d5016",
+                  colors: "#363435",
                   fontSize: "11px",
                   fontWeight: 500,
                 },
@@ -209,14 +209,14 @@ const PayinMultiAnalytics = () => {
               title: {
                 text: "Transaction Amount (₹)",
                 style: {
-                  color: "#2d5016",
+                  color: "#363435",
                   fontSize: "12px",
                   fontWeight: 600,
                 },
               },
               labels: {
                 style: {
-                  colors: "#2d5016",
+                  colors: "#363435",
                   fontSize: "11px",
                   fontWeight: 500,
                 },
@@ -243,7 +243,7 @@ const PayinMultiAnalytics = () => {
             position: "top",
             horizontalAlign: "center",
             labels: {
-              colors: "#2d5016",
+              colors: "#363435",
             },
             markers: {
               width: 12,
@@ -321,7 +321,7 @@ const PayinMultiAnalytics = () => {
               margin: "0",
               fontSize: "1rem",
               fontWeight: "700",
-              color: "#2d5016",
+              color: "#363435",
               textAlign: "center",
             }}
           >
@@ -331,7 +331,7 @@ const PayinMultiAnalytics = () => {
             style={{
               margin: "4px 0 0 0",
               fontSize: "0.75rem",
-              color: "rgba(45, 80, 22, 0.7)",
+              color: "rgba(54, 52, 53, 0.7)",
               textAlign: "center",
               fontWeight: "500",
             }}

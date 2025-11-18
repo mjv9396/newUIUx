@@ -1,18 +1,22 @@
 .profileContainer {
   padding: 20px;
-  background: linear-gradient(135deg, 
-    rgba(45, 80, 22, 0.03) 0%, 
-    rgba(212, 175, 55, 0.02) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(45, 80, 22, 0.03) 0%,
+    rgba(212, 175, 55, 0.02) 100%
+  );
   min-height: 100vh;
 }
 
 .profileHeader {
   display: flex;
   align-items: center;
-  background: linear-gradient(135deg, 
-    rgba(45, 80, 22, 0.95) 0%, 
+  background: linear-gradient(
+    135deg,
+    rgba(45, 80, 22, 0.95) 0%,
     rgba(74, 124, 89, 0.9) 50%,
-    rgba(212, 175, 55, 0.85) 100%);
+    rgba(212, 175, 55, 0.85) 100%
+  );
   backdrop-filter: blur(20px);
   color: white;
   padding: 30px;
@@ -25,13 +29,13 @@
 }
 
 .profileHeader::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   height: 3px;
-  background: linear-gradient(90deg, #d4af37 0%, #4a7c59 50%, #2d5016 100%);
+  background: linear-gradient(90deg, #f8c54d 0%, #d21923 50%, #fa481a 100%);
   border-radius: 16px 16px 0 0;
 }
 
@@ -71,9 +75,11 @@
 .statItem {
   text-align: center;
   padding: 15px;
-  background: linear-gradient(135deg, 
-    rgba(255, 255, 255, 0.15) 0%, 
-    rgba(212, 175, 55, 0.1) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.15) 0%,
+    rgba(212, 175, 55, 0.1) 100%
+  );
   border: 1px solid rgba(212, 175, 55, 0.2);
   border-radius: 12px;
   backdrop-filter: blur(15px);
@@ -83,9 +89,11 @@
 
 .statItem:hover {
   transform: translateY(-2px);
-  background: linear-gradient(135deg, 
-    rgba(255, 255, 255, 0.2) 0%, 
-    rgba(212, 175, 55, 0.15) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.2) 0%,
+    rgba(212, 175, 55, 0.15) 100%
+  );
   box-shadow: 0 4px 16px rgba(212, 175, 55, 0.2);
 }
 
@@ -103,9 +111,11 @@
 }
 
 .profileCard {
-  background: linear-gradient(135deg, 
-    rgba(255, 255, 255, 0.95) 0%, 
-    rgba(255, 255, 255, 0.85) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.95) 0%,
+    rgba(255, 255, 255, 0.85) 100%
+  );
   backdrop-filter: blur(20px);
   border: 1px solid rgba(212, 175, 55, 0.2);
   border-radius: 16px;
@@ -118,13 +128,13 @@
 }
 
 .profileCard::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   height: 2px;
-  background: linear-gradient(90deg, #2d5016 0%, #4a7c59 50%, #d4af37 100%);
+  background: linear-gradient(90deg, #fa481a 0%, #d21923 50%, #f8c54d 100%);
   border-radius: 16px 16px 0 0;
 }
 
@@ -135,9 +145,11 @@
 }
 
 .cardHeader {
-  background: linear-gradient(135deg, 
-    rgba(45, 80, 22, 0.05) 0%, 
-    rgba(212, 175, 55, 0.03) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(45, 80, 22, 0.05) 0%,
+    rgba(212, 175, 55, 0.03) 100%
+  );
   padding: 20px;
   border-bottom: 1px solid rgba(212, 175, 55, 0.15);
   position: relative;
@@ -147,7 +159,7 @@
   margin: 0;
   font-size: 1.2rem;
   font-weight: 700;
-  color: #2d5016;
+  color: #fa481a;
   display: flex;
   align-items: center;
 }
@@ -188,7 +200,7 @@
 
 .infoRow span:first-child {
   font-weight: 600;
-  color: #2d5016;
+  color: #fa481a;
   margin-bottom: 0;
   flex-shrink: 0;
   width: 40%;
@@ -211,14 +223,16 @@
 }
 
 .infoRow .font-monospace {
-  background: linear-gradient(135deg, 
-    rgba(45, 80, 22, 0.05) 0%, 
-    rgba(212, 175, 55, 0.03) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(250, 72, 26, 0.05) 0%,
+    rgba(248, 197, 77, 0.03) 100%
+  );
   padding: 0.4em 0.6em;
   border-radius: 6px;
   font-size: 0.85rem;
-  border: 1px solid rgba(212, 175, 55, 0.15);
-  color: #2d5016;
+  border: 1px solid rgba(248, 197, 77, 0.15);
+  color: #fa481a;
   font-weight: 600;
 }
 
@@ -312,12 +326,12 @@
 }
 
 .profileContainer::-webkit-scrollbar-thumb {
-  background: linear-gradient(135deg, #2d5016 0%, #4a7c59 100%);
+  background: linear-gradient(135deg, #fa481a 0%, #d21923 100%);
   border-radius: 3px;
 }
 
 .profileContainer::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(135deg, #4a7c59 0%, #d4af37 100%);
+  background: linear-gradient(135deg, #d21923 0%, #f8c54d 100%);
 }
 
 /* Animation for cards */
@@ -358,9 +372,11 @@
 }
 
 .profileCard .table th {
-  background: linear-gradient(135deg, 
-    rgba(45, 80, 22, 0.08) 0%, 
-    rgba(212, 175, 55, 0.05) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(45, 80, 22, 0.08) 0%,
+    rgba(212, 175, 55, 0.05) 100%
+  );
   color: #2d5016;
   font-weight: 600;
   border-bottom: 2px solid rgba(212, 175, 55, 0.2);
@@ -421,26 +437,32 @@
 
 /* Custom alert styling */
 .profileContainer .alert-warning {
-  background: linear-gradient(135deg, 
-    rgba(245, 158, 11, 0.1) 0%, 
-    rgba(251, 191, 36, 0.05) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(245, 158, 11, 0.1) 0%,
+    rgba(251, 191, 36, 0.05) 100%
+  );
   border: 1px solid rgba(245, 158, 11, 0.2);
   color: #92400e;
 }
 
 .profileContainer .alert-danger {
-  background: linear-gradient(135deg, 
-    rgba(239, 68, 68, 0.1) 0%, 
-    rgba(248, 113, 113, 0.05) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(239, 68, 68, 0.1) 0%,
+    rgba(248, 113, 113, 0.05) 100%
+  );
   border: 1px solid rgba(239, 68, 68, 0.2);
   color: #991b1b;
 }
 
 /* Modal styling */
 .profileContainer .modal-content {
-  background: linear-gradient(135deg, 
-    rgba(255, 255, 255, 0.95) 0%, 
-    rgba(255, 255, 255, 0.9) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.95) 0%,
+    rgba(255, 255, 255, 0.9) 100%
+  );
   backdrop-filter: blur(20px);
   border: 1px solid rgba(212, 175, 55, 0.2);
   border-radius: 16px;
@@ -448,9 +470,11 @@
 }
 
 .profileContainer .modal-header {
-  background: linear-gradient(135deg, 
-    rgba(45, 80, 22, 0.05) 0%, 
-    rgba(212, 175, 55, 0.03) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(45, 80, 22, 0.05) 0%,
+    rgba(212, 175, 55, 0.03) 100%
+  );
   border-bottom: 1px solid rgba(212, 175, 55, 0.15);
   border-radius: 16px 16px 0 0;
 }
