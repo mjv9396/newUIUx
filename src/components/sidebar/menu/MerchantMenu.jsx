@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import styles from "../../../styles/components/Sidebar.module.css";
 import home from "../../../assets/dashboard.png";
 import payin from "../../../assets/pay.png";
@@ -22,7 +22,14 @@ import { endpoints } from "../../../services/apiEndpoints";
 
 const MerchantMenu = ({ toggle, setToggle, status }) => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { fetchData: LogoutUser } = useFetch();
+
+  const isActive = (path) => {
+    return (
+      location.pathname === path || location.pathname.startsWith(path + "/")
+    );
+  };
 
   const handleLogout = () => {
     LogoutUser(endpoints.logout);
@@ -87,7 +94,10 @@ const MerchantMenu = ({ toggle, setToggle, status }) => {
           {status && (
             <>
               <li className={styles.menuItem}>
-                <Link to="/dashboard">
+                <Link
+                  to="/dashboard"
+                  className={isActive("/dashboard") ? styles.active : ""}
+                >
                   <span>
                     <img src={home} alt="dashboard" width={20} height={20} />
                     <span>Dashboard</span>
@@ -95,7 +105,10 @@ const MerchantMenu = ({ toggle, setToggle, status }) => {
                 </Link>
               </li>
               <li className={styles.menuItem}>
-                <Link to="/merchant-profile">
+                <Link
+                  to="/merchant-profile"
+                  className={isActive("/merchant-profile") ? styles.active : ""}
+                >
                   <span>
                     <img src={avatar} alt="profile" width={20} height={20} />
                     <span> Profile</span>
@@ -314,7 +327,10 @@ const MerchantMenu = ({ toggle, setToggle, status }) => {
             </>
           )}
           <li className={styles.menuItem}>
-            <Link to="/login-history">
+            <Link
+              to="/login-history"
+              className={isActive("/login-history") ? styles.active : ""}
+            >
               <span>
                 <img src={login} alt="login" width={20} height={20} />
                 <span>Login History</span>
@@ -322,7 +338,10 @@ const MerchantMenu = ({ toggle, setToggle, status }) => {
             </Link>
           </li>
           <li className={styles.menuItem}>
-            <Link to="/update-password">
+            <Link
+              to="/update-password"
+              className={isActive("/update-password") ? styles.active : ""}
+            >
               <span>
                 <i className="bi bi-key"></i>
                 <span>Reset Password</span>

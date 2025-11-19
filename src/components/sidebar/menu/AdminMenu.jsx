@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { memo } from "react";
 import styles from "../../../styles/components/Sidebar.module.css";
 import home from "../../../assets/dashboard.png";
@@ -25,7 +25,14 @@ import { endpoints } from "../../../services/apiEndpoints";
 
 const AdminMenu = memo(({ toggle, setToggle }) => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { fetchData: LogoutUser } = useFetch();
+
+  const isActive = (path) => {
+    return (
+      location.pathname === path || location.pathname.startsWith(path + "/")
+    );
+  };
 
   const handleLogout = () => {
     LogoutUser(endpoints.logout);
@@ -80,7 +87,10 @@ const AdminMenu = memo(({ toggle, setToggle }) => {
       <nav>
         <ul className={styles.menu}>
           <li className={styles.menuItem}>
-            <Link to="/dashboard">
+            <Link
+              to="/dashboard"
+              className={isActive("/dashboard") ? styles.active : ""}
+            >
               <span>
                 <img src={home} alt="dashboard" width={20} height={20} />
                 <span>Dashboard</span>
@@ -114,35 +124,6 @@ const AdminMenu = memo(({ toggle, setToggle }) => {
               <li>
                 <Link to="/merchant-whitelist">
                   <span>Whitelist</span>
-                </Link>
-              </li>
-            </ul>
-          </li>
-
-          <li className={styles.menuItem}>
-            <Link
-              to="#reseller"
-              data-bs-toggle="collapse"
-              role="button"
-              aria-expanded="false"
-              aria-controls="#reseller"
-            >
-              <span>
-                <img src={reseller} alt="reseller" width={20} height={20} />
-                <span>Reseller Setup</span>
-              </span>
-              <i className="bi bi-chevron-down"></i>
-            </Link>
-
-            <ul className={`${styles.subMenu} collapse`} id="reseller">
-              <li>
-                <Link to="/reseller">
-                  <span>Resellers</span>
-                </Link>
-              </li>
-              <li>
-                <Link to="/reseller-mapping">
-                  <span>Reseller Mapping</span>
                 </Link>
               </li>
             </ul>
@@ -209,6 +190,35 @@ const AdminMenu = memo(({ toggle, setToggle }) => {
               </li>
             </ul>
           </li>
+
+          <li className={styles.menuItem}>
+            <Link
+              to="#reseller"
+              data-bs-toggle="collapse"
+              role="button"
+              aria-expanded="false"
+              aria-controls="#reseller"
+            >
+              <span>
+                <img src={reseller} alt="reseller" width={20} height={20} />
+                <span>Reseller Setup</span>
+              </span>
+              <i className="bi bi-chevron-down"></i>
+            </Link>
+
+            <ul className={`${styles.subMenu} collapse`} id="reseller">
+              <li>
+                <Link to="/reseller">
+                  <span>Resellers</span>
+                </Link>
+              </li>
+              <li>
+                <Link to="/reseller-mapping">
+                  <span>Reseller Mapping</span>
+                </Link>
+              </li>
+            </ul>
+          </li>
           <li className={styles.menuItem}>
             <Link
               to="#payin"
@@ -257,7 +267,10 @@ const AdminMenu = memo(({ toggle, setToggle }) => {
             </ul>
           </li>
           <li className={styles.menuItem}>
-            <Link to="/dispute">
+            <Link
+              to="/dispute"
+              className={isActive("/dispute") ? styles.active : ""}
+            >
               <span>
                 <img src={chargeback} alt="user" width={20} height={20} />
                 <span>Dispute</span>
@@ -449,7 +462,10 @@ const AdminMenu = memo(({ toggle, setToggle }) => {
 
           <li className={styles.menuHeader}>EXTRA</li>
           <li className={styles.menuItem}>
-            <Link to="/login-history">
+            <Link
+              to="/login-history"
+              className={isActive("/login-history") ? styles.active : ""}
+            >
               <span>
                 <img src={login} alt="login" width={20} height={20} />
                 <span>Login History</span>
@@ -457,7 +473,10 @@ const AdminMenu = memo(({ toggle, setToggle }) => {
             </Link>
           </li>
           <li className={styles.menuItem}>
-            <Link to="/update-password">
+            <Link
+              to="/update-password"
+              className={isActive("/update-password") ? styles.active : ""}
+            >
               <span>
                 <i className="bi bi-key"></i>
                 <span>Reset Password</span>
