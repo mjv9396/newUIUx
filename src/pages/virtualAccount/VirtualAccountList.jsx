@@ -457,7 +457,7 @@ const VirtualAccountList = () => {
                     <th>UTR No</th>
                     <th>Remitter Name</th>
                     <th>Remitter Account No</th>
-                    <th>TXN DESC</th>
+                    <th>TXN REMARK</th>
                     <th>Virtual UPI</th>
                     <th>Corp Client Code</th>
                     <th>Corp Client Name</th>
