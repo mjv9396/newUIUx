@@ -97,7 +97,7 @@ const VPAAbsent = () => {
                 id="mobile"
                 placeholder="Enter Mobile Number"
                 autoComplete="on"
-                maxLength={256}
+                maxLength={10}
                 onChange={handleChange}
                 value={formData.mobile}
                 required

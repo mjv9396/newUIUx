@@ -113,7 +113,9 @@ const VPAExist = () => {
                     id="transactionAmmount"
                     placeholder="Enter Transaction Amount"
                     autoComplete="on"
-                    maxLength={256}
+                    min="1"
+                    max="10000000"
+                    step="0.01"
                     onChange={handleChange}
                     value={formData.transactionAmmount}
                     required

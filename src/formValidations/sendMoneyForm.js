@@ -7,6 +7,9 @@ import {
   validateVpa,
   validateIntegerNumber,
   validateOrderId,
+  validateAccountNumber,
+  validateIFSC,
+  validateAmount,
 } from "../utils/validations";
 
 export const validateSendMoneyForm = (formData) => {
@@ -64,7 +67,7 @@ export const validateSendMoneyForm = (formData) => {
 
   const amountEmptyError = validateEmpty(formData.transactionAmmount);
   const amountFormatError = !amountEmptyError
-    ? validateDecimalNumber(formData.transactionAmmount)
+    ? validateAmount(formData.transactionAmmount, 1, 10000000)
     : null;
   if (amountEmptyError) {
     errors.transactionAmmount = "Amount is required";
@@ -89,16 +92,24 @@ export const validateSendMoneyForm = (formData) => {
     }
   } else {
     const accountNoEmptyError = validateEmpty(formData.accountNo);
-    const accountFormatError = accountNoEmptyError
-      ? validateIntegerNumber(formData.accountNo)
+    const accountFormatError = !accountNoEmptyError
+      ? validateAccountNumber(formData.accountNo)
       : null;
     if (accountNoEmptyError) {
       errors.accountNo = "Account Number is required";
     } else if (accountFormatError) {
       errors.accountNo = accountFormatError;
     }
-    const ifscError = validateEmpty(formData.ifscCode);
-    if (ifscError) errors.ifscCode = "IFSC Code is required";
+    
+    const ifscEmptyError = validateEmpty(formData.ifscCode);
+    const ifscFormatError = !ifscEmptyError
+      ? validateIFSC(formData.ifscCode)
+      : null;
+    if (ifscEmptyError) {
+      errors.ifscCode = "IFSC Code is required";
+    } else if (ifscFormatError) {
+      errors.ifscCode = ifscFormatError;
+    }
   }
 
   return errors;

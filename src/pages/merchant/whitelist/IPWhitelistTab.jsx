@@ -6,11 +6,13 @@ import { endpoints } from "../../../services/apiEndpoints";
 import { successMessage, errorMessage } from "../../../utils/messges";
 import styles from "../../../styles/common/Add.module.css";
 import { GetUserRole, GetUserId, isAdmin } from "../../../services/cookieStore";
+import { validateIPAddress } from "../../../utils/validations";
 
 const IPWhitelistTab = () => {
   const [selectedMerchant, setSelectedMerchant] = useState("");
   const [ipAddress, setIpAddress] = useState("");
   const [showAddForm, setShowAddForm] = useState(false);
+  const [ipError, setIpError] = useState("");
 
   // Get user role and info
   const userRole = GetUserRole();
@@ -93,11 +95,15 @@ const IPWhitelistTab = () => {
       return;
     }
 
-    if (!ipAddress.trim()) {
-      errorMessage("Please enter an IP address");
+    // Validate IP address using validation function
+    const validationError = validateIPAddress(ipAddress);
+    if (validationError) {
+      setIpError(validationError);
+      errorMessage(validationError);
       return;
     }
 
+    setIpError("");
     await addIP({
       userId: parseInt(selectedMerchant),
       ipAddress: ipAddress.trim(),
@@ -195,11 +201,15 @@ const IPWhitelistTab = () => {
                           type="text"
                           id="ipAddress"
                           value={ipAddress}
-                          onChange={(e) => setIpAddress(e.target.value)}
+                          onChange={(e) => {
+                            setIpAddress(e.target.value);
+                            setIpError("");
+                          }}
                           placeholder="e.g., 192.168.1.1"
-                          pattern="^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$"
+                          maxLength={15}
                           required
                         />
+                        {ipError && <span className="errors">{ipError}</span>}
                       </div>
                     </div>
                     <div className="col-md-4 d-flex align-items-end gap-2">

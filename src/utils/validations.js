@@ -173,3 +173,145 @@ export const validateVpa = (input) => {
   if (!vpaRegex.test(input)) return "Invalid VPA format";
   return null;
 };
+
+export const validateIPAddress = (ip) => {
+  if (!ip || ip.trim() === "") return "IP address is required";
+  
+  // Trim the input
+  const trimmedIp = ip.trim();
+  
+  // Regular expression for IPv4 validation
+  const ipv4Regex = /^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
+  
+  if (!ipv4Regex.test(trimmedIp)) {
+    return "Invalid IP address format. Use format: xxx.xxx.xxx.xxx";
+  }
+  
+  // Additional check: Ensure each octet is valid
+  const octets = trimmedIp.split('.');
+  for (let octet of octets) {
+    const num = parseInt(octet, 10);
+    if (num < 0 || num > 255) {
+      return "IP address octets must be between 0 and 255";
+    }
+  }
+  
+  return null;
+};
+
+export const validateURL = (url) => {
+  if (!url || url.trim() === "") return "URL is required";
+  
+  const trimmedUrl = url.trim();
+  
+  // Comprehensive URL regex that requires protocol
+  const urlRegex = /^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)$/;
+  
+  if (!urlRegex.test(trimmedUrl)) {
+    return "Invalid URL format. Must start with http:// or https://";
+  }
+  
+  // Check for potentially malicious patterns
+  if (trimmedUrl.includes('<') || trimmedUrl.includes('>') || trimmedUrl.includes('"') || trimmedUrl.includes("'")) {
+    return "URL contains invalid characters";
+  }
+  
+  return null;
+};
+
+export const validateAccountNumber = (accountNo) => {
+  if (!accountNo || accountNo.toString().trim() === "") return "Account number is required";
+  
+  const accountStr = accountNo.toString().trim();
+  
+  // Check if it contains only digits
+  if (!/^\d+$/.test(accountStr)) {
+    return "Account number should contain only digits";
+  }
+  
+  // Check length (Indian bank account numbers are typically 9-18 digits)
+  if (accountStr.length < 9 || accountStr.length > 18) {
+    return "Account number must be between 9 and 18 digits";
+  }
+  
+  return null;
+};
+
+export const validateIFSC = (ifsc) => {
+  if (!ifsc || ifsc.trim() === "") return "IFSC code is required";
+  
+  const trimmedIfsc = ifsc.trim().toUpperCase();
+  
+  // IFSC format: 4 letters (bank code) + 0 + 6 alphanumeric characters (branch code)
+  const ifscRegex = /^[A-Z]{4}0[A-Z0-9]{6}$/;
+  
+  if (!ifscRegex.test(trimmedIfsc)) {
+    return "Invalid IFSC code format. Example: SBIN0001234";
+  }
+  
+  return null;
+};
+
+export const validateCardNumber = (cardNumber) => {
+  if (!cardNumber || cardNumber.toString().trim() === "") return "Card number is required";
+  
+  const cardStr = cardNumber.toString().trim().replace(/\s/g, ''); // Remove spaces
+  
+  // Check if it contains only digits
+  if (!/^\d+$/.test(cardStr)) {
+    return "Card number should contain only digits";
+  }
+  
+  // Card numbers are typically 13-19 digits
+  if (cardStr.length < 13 || cardStr.length > 19) {
+    return "Card number must be between 13 and 19 digits";
+  }
+  
+  return null;
+};
+
+export const validateAmount = (amount, min = 1, max = 10000000) => {
+  if (!amount || amount.toString().trim() === "") return "Amount is required";
+  
+  const amountStr = amount.toString().trim();
+  
+  // Check if it's a valid number format
+  const decimalRegex = /^\d+(\.\d{1,2})?$/;
+  if (!decimalRegex.test(amountStr)) {
+    return "Invalid amount format. Use up to 2 decimal places";
+  }
+  
+  const numAmount = parseFloat(amountStr);
+  
+  // Check if amount is positive
+  if (numAmount <= 0) {
+    return "Amount must be greater than 0";
+  }
+  
+  // Check minimum amount
+  if (numAmount < min) {
+    return `Amount must be at least ₹${min}`;
+  }
+  
+  // Check maximum amount
+  if (numAmount > max) {
+    return `Amount cannot exceed ₹${max.toLocaleString('en-IN')}`;
+  }
+  
+  return null;
+};
+
+export const sanitizeInput = (input) => {
+  if (typeof input !== 'string') return input;
+  
+  // Trim whitespace
+  let sanitized = input.trim();
+  
+  // Remove potentially dangerous characters for XSS prevention
+  sanitized = sanitized
+    .replace(/[<>]/g, '') // Remove angle brackets
+    .replace(/javascript:/gi, '') // Remove javascript: protocol
+    .replace(/on\w+\s*=/gi, ''); // Remove event handlers like onclick=
+  
+  return sanitized;
+};

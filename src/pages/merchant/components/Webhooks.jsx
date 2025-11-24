@@ -3,10 +3,10 @@ import { useEffect, useState } from "react";
 import usePost from "../../../hooks/usePost";
 import { endpoints } from "../../../services/apiEndpoints";
 import styles from "../../../styles/merchant/Merchant.module.css";
-
 import useFetch from "../../../hooks/useFetch";
 import useDelete from "../../../hooks/useDelete";
-import { successMessage } from "../../../utils/messges";
+import { successMessage, errorMessage } from "../../../utils/messges";
+import { validateURL } from "../../../utils/validations";
 
 const Webhooks = ({ userId }) => {
   const { fetchData, data } = useFetch();
@@ -48,11 +48,20 @@ const Webhooks = ({ userId }) => {
     error: payoutError,
   } = usePost(endpoints.webhook.payoutWebhook);
   const handleSaveUrl = async (e, type) => {
+    const url = e.target.value.trim();
+
+    // Validate URL format
+    const urlError = validateURL(url);
+    if (urlError) {
+      errorMessage(urlError);
+      return;
+    }
+
     setType(null);
     if (type === "payin") {
-      await payin({ userId: userId, payinWebHookUrl: e.target.value });
+      await payin({ userId: userId, payinWebHookUrl: url });
     } else if (type === "payout") {
-      await payout({ userId: userId, payoutWebHookUrl: e.target.value });
+      await payout({ userId: userId, payoutWebHookUrl: url });
     }
   };
   useEffect(() => {
@@ -95,6 +104,8 @@ const Webhooks = ({ userId }) => {
                           name="payin"
                           id="payin"
                           className="w-100"
+                          placeholder="https://example.com/webhook"
+                          maxLength={500}
                         />
                       ) : (
                         data.data.payinWebHookUrl || "NA"
@@ -133,6 +144,8 @@ const Webhooks = ({ userId }) => {
                           onBlur={(e) => handleSaveUrl(e, "payout")}
                           name="payout"
                           id="payout"
+                          placeholder="https://example.com/webhook"
+                          maxLength={500}
                         />
                       ) : (
                         data.data.payoutWebHookUrl || "NA"

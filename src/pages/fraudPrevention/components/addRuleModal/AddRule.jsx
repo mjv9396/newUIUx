@@ -1,11 +1,19 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/prop-types */
-import { Fragment, useEffect } from "react";
+import { Fragment, useEffect, useState } from "react";
 import styles from "./AddRule.module.css";
 import { createPortal } from "react-dom";
 import usePost from "../../../../hooks/usePost";
 import { endpoints } from "../../../../services/apiEndpoints";
-import { successMessage } from "../../../../utils/messges";
+import { successMessage, errorMessage } from "../../../../utils/messges";
+import {
+  validateEmail,
+  validateVpa,
+  validateContact,
+  validateIPAddress,
+  validateURL,
+  validateEmpty,
+} from "../../../../utils/validations";
 const Backdrop = () => {
   return <div className={styles.backdrop}></div>;
 };
@@ -17,18 +25,58 @@ const Overlay = ({
   placeholder = "Enter Value",
   onClose,
 }) => {
-  const { postData, error, data } = usePost(endpoints.fraud.fraudPrevention);
+  const [error, setError] = useState("");
+  const {
+    postData,
+    error: apiError,
+    data,
+  } = usePost(endpoints.fraud.fraudPrevention);
+
+  // Determine validation function based on type
+  const getValidationFunction = (ruleType) => {
+    const typeLower = ruleType.toLowerCase();
+
+    if (typeLower.includes("email")) return validateEmail;
+    if (typeLower.includes("vpa")) return validateVpa;
+    if (typeLower.includes("phone") || typeLower.includes("mobile"))
+      return validateContact;
+    if (typeLower.includes("ip")) return validateIPAddress;
+    if (
+      typeLower.includes("url") ||
+      typeLower.includes("domain") ||
+      typeLower.includes("callback") ||
+      typeLower.includes("return")
+    )
+      return validateURL;
+
+    return validateEmpty; // Default validation
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await postData({ type, userId, value1: e.target.value.value });
+
+    const inputValue = e.target.value.value.trim();
+
+    // Get appropriate validation function
+    const validationFn = getValidationFunction(type);
+    const validationError = validationFn(inputValue);
+
+    if (validationError) {
+      setError(validationError);
+      errorMessage(validationError);
+      return;
+    }
+
+    setError("");
+    await postData({ type, userId, value1: inputValue });
   };
   useEffect(() => {
-    if (data && !error) {
+    if (data && !apiError) {
       successMessage("data added successfully");
       onSuccess();
       onClose();
     }
-  }, [data, error]);
+  }, [data, apiError]);
   return (
     <div className={styles.modal}>
       <div
@@ -41,13 +89,19 @@ const Overlay = ({
       <div className={styles.detail}>
         <form onSubmit={handleSubmit}>
           <div className="">
-            <label htmlFor="value">Value</label>
+            <label htmlFor="value">
+              Value <span className="required">*</span>
+            </label>
             <input
               type="text"
               id="value"
               name="value"
               placeholder={placeholder}
+              maxLength={256}
+              onChange={() => setError("")}
+              required
             />
+            {error && <span className="errors">{error}</span>}
           </div>
           <div className="d-flex mt-4">
             <button type="submit">Add</button>

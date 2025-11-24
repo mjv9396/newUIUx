@@ -160,6 +160,8 @@ const InternalTransfer = () => {
                         id="amount"
                         placeholder="Enter amount to transfer"
                         autoComplete="off"
+                        min="1"
+                        max="10000000"
                         step="0.01"
                         onChange={handleChange}
                         value={formData.amount}

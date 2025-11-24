@@ -130,12 +130,12 @@ const SendMoney = () => {
                     Mobile <span className="required">*</span>
                   </label>
                   <input
-                    type="number"
+                    type="text"
                     name="mobile"
                     id="mobile"
                     placeholder="Enter Mobile Number"
                     autoComplete="on"
-                    maxLength={256}
+                    maxLength={10}
                     onChange={handleChange}
                     value={formData.mobile}
                     required
@@ -173,7 +173,9 @@ const SendMoney = () => {
                     id="transactionAmmount"
                     placeholder="Enter Transfer amount"
                     autoComplete="on"
-                    maxLength={256}
+                    min="1"
+                    max="10000000"
+                    step="0.01"
                     onChange={handleChange}
                     value={formData.transactionAmmount}
                     required

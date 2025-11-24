@@ -52,9 +52,7 @@ const AddLoadMoney = () => {
       setFormData(addLoadMoney);
     }
     if (data?.statusCode >= 400) {
-      errorMessage(
-        data?.data || "Error Adding Load Money, Please try again"
-      );
+      errorMessage(data?.data || "Error Adding Load Money, Please try again");
     }
   }, [error, data]);
   if (merchantError) <Error error="Error loading Merchants" />;
@@ -104,7 +102,9 @@ const AddLoadMoney = () => {
                 id="transactionAmount"
                 placeholder="Enter Transaction Amount"
                 autoComplete="on"
-                maxLength={256}
+                min="1"
+                max="10000000"
+                step="0.01"
                 onChange={handleChange}
                 value={formData.transactionAmount}
                 required
