@@ -162,17 +162,17 @@ const PayinMultiAnalytics = () => {
             type: "datetime",
             labels: {
               style: {
-                colors: "#2d5016",
+                colors: "#003B5C",
                 fontSize: "11px",
                 fontWeight: 500,
               },
               format: "dd MMM",
             },
             axisBorder: {
-              color: "rgba(212, 175, 55, 0.2)",
+              color: "rgba(0, 169, 157, 0.2)",
             },
             axisTicks: {
-              color: "rgba(212, 175, 55, 0.2)",
+              color: "rgba(0, 169, 157, 0.2)",
             },
           },
           yaxis: [
@@ -180,14 +180,14 @@ const PayinMultiAnalytics = () => {
               title: {
                 text: "Transaction Count",
                 style: {
-                  color: "#2d5016",
+                  color: "#003B5C",
                   fontSize: "12px",
                   fontWeight: 600,
                 },
               },
               labels: {
                 style: {
-                  colors: "#2d5016",
+                  colors: "#003B5C",
                   fontSize: "11px",
                   fontWeight: 500,
                 },
@@ -197,11 +197,11 @@ const PayinMultiAnalytics = () => {
               },
               axisBorder: {
                 show: true,
-                color: "#10b981",
+                color: "#4DD0E1",
               },
               axisTicks: {
                 show: true,
-                color: "#10b981",
+                color: "#4DD0E1",
               },
             },
             {
@@ -209,14 +209,14 @@ const PayinMultiAnalytics = () => {
               title: {
                 text: "Transaction Amount (₹)",
                 style: {
-                  color: "#2d5016",
+                  color: "#003B5C",
                   fontSize: "12px",
                   fontWeight: 600,
                 },
               },
               labels: {
                 style: {
-                  colors: "#2d5016",
+                  colors: "#003B5C",
                   fontSize: "11px",
                   fontWeight: 500,
                 },
@@ -230,11 +230,11 @@ const PayinMultiAnalytics = () => {
               },
               axisBorder: {
                 show: true,
-                color: "#d4af37",
+                color: "#00A99D",
               },
               axisTicks: {
                 show: true,
-                color: "#d4af37",
+                color: "#00A99D",
               },
             },
           ],
@@ -243,7 +243,7 @@ const PayinMultiAnalytics = () => {
             position: "top",
             horizontalAlign: "center",
             labels: {
-              colors: "#2d5016",
+              colors: "#003B5C",
             },
             markers: {
               width: 12,
@@ -312,7 +312,7 @@ const PayinMultiAnalytics = () => {
         <div
           style={{
             marginBottom: "14px",
-            borderBottom: "1px solid rgba(212, 175, 55, 0.1)",
+            borderBottom: "1px solid rgba(0, 169, 157, 0.1)",
             paddingBottom: "10px",
           }}
         >
@@ -321,7 +321,7 @@ const PayinMultiAnalytics = () => {
               margin: "0",
               fontSize: "1rem",
               fontWeight: "700",
-              color: "#2d5016",
+              color: "#003B5C",
               textAlign: "center",
             }}
           >
@@ -331,7 +331,7 @@ const PayinMultiAnalytics = () => {
             style={{
               margin: "4px 0 0 0",
               fontSize: "0.75rem",
-              color: "rgba(45, 80, 22, 0.7)",
+              color: "rgba(0, 59, 92, 0.7)",
               textAlign: "center",
               fontWeight: "500",
             }}

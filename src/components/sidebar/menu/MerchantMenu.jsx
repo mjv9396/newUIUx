@@ -43,7 +43,7 @@ const MerchantMenu = ({ toggle, setToggle, status }) => {
       <div className={styles.sidebarHeader}>
         <div className={styles.logoContainer}>
           <div className={styles.logoWrapper}>
-            <img src={logo} alt="MoneyPay" />
+            <img src={logo} alt="MindMesh" />
           </div>
 
           <button

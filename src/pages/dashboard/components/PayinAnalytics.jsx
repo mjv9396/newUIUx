@@ -54,7 +54,7 @@ const PayinAnalytics = ({ type, value, min, max }) => {
           speed: 800,
         },
       },
-      colors: ["#2d5016", "#4a7c59", "#d4af37", "#10b981", "#f59e0b"],
+      colors: ["#003B5C", "#0077A8", "#00A99D", "#4DD0E1", "#80DEEA"],
       stroke: {
         width: 3,
         curve: "smooth",
@@ -78,23 +78,23 @@ const PayinAnalytics = ({ type, value, min, max }) => {
         ...state.options.xaxis,
         labels: {
           style: {
-            colors: "#2d5016",
+            colors: "#003B5C",
             fontSize: "12px",
             fontWeight: 500,
           },
         },
         axisBorder: {
-          color: "rgba(212, 175, 55, 0.2)",
+          color: "rgba(0, 169, 157, 0.2)",
         },
         axisTicks: {
-          color: "rgba(212, 175, 55, 0.2)",
+          color: "rgba(0, 169, 157, 0.2)",
         },
       },
       yaxis: {
         ...state.options.yaxis,
         labels: {
           style: {
-            colors: "#2d5016",
+            colors: "#003B5C",
             fontSize: "12px",
             fontWeight: 500,
           },
@@ -103,7 +103,7 @@ const PayinAnalytics = ({ type, value, min, max }) => {
       legend: {
         ...state.options.legend,
         labels: {
-          colors: "#2d5016",
+          colors: "#003B5C",
         },
       },
       tooltip: {
@@ -121,7 +121,7 @@ const PayinAnalytics = ({ type, value, min, max }) => {
       },
       markers: {
         size: 5,
-        colors: ["#2d5016", "#4a7c59", "#d4af37"],
+        colors: ["#003B5C", "#0077A8", "#00A99D"],
         strokeColors: "#fff",
         strokeWidth: 2,
         hover: {
@@ -152,7 +152,7 @@ const PayinAnalytics = ({ type, value, min, max }) => {
               margin: "0",
               fontSize: "0.95rem",
               fontWeight: "700",
-              color: "#2d5016",
+              color: "#003B5C",
               textAlign: "center",
             }}
           >
@@ -162,7 +162,7 @@ const PayinAnalytics = ({ type, value, min, max }) => {
             style={{
               margin: "2px 0 0 0",
               fontSize: "0.7rem",
-              color: "rgba(45, 80, 22, 0.7)",
+              color: "rgba(0, 59, 92, 0.7)",
               textAlign: "center",
               fontWeight: "500",
             }}

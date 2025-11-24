@@ -1,16 +1,16 @@
 :root {
-  --primary: #2d5016; /* Deep forest green */
-  --secondary: #d4af37; /* Golden yellow */
-  --accent: #4a7c59; /* Medium green */
-  --light-green: #8fbc8f; /* Light sage green */
-  --gold-light: #f4e99b; /* Light gold */
-  --gold-dark: #b8860b; /* Dark goldenrod */
-  --success: #228b22; /* Forest green for success states */
-  --warning: #daa520; /* Goldenrod for warnings */
-  --required: #cd853f; /* Peru gold for required fields */
+  --primary: #003B5C; /* Dark navy blue */
+  --secondary: #00A99D; /* Teal cyan */
+  --accent: #0077A8; /* Medium blue */
+  --light-green: #4DD0E1; /* Light cyan */
+  --gold-light: #80DEEA; /* Light teal */
+  --gold-dark: #006B7D; /* Dark teal */
+  --success: #00A99D; /* Teal for success states */
+  --warning: #00BCD4; /* Cyan for warnings */
+  --required: #0097A7; /* Deep cyan for required fields */
   --gray: #6c757d;
-  --text-primary: #2d3748; /* Dark gray for primary text */
-  --text-secondary: #4a5568; /* Medium gray for secondary text */
+  --text-primary: #003B5C; /* Dark navy blue for primary text */
+  --text-secondary: #0077A8; /* Medium blue for secondary text */
   --bg-light: #f7fafc; /* Very light background */
   --border: #e2e8f0; /* Light border color */
   --bs: 1px;

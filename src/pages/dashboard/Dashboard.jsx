@@ -242,7 +242,7 @@ const Dashboard = () => {
         <div className={styles.dashboardHeader}>
           <div className={styles.titleSection}>
             <div>
-              <h1 className={styles.dashboardTitle}>MoneyPay Dashboard</h1>
+              <h1 className={styles.dashboardTitle}>MindMesh Dashboard</h1>
               <p className={styles.dashboardSubtitle}>
                 Your financial overview at a glance
               </p>
