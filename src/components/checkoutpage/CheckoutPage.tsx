@@ -1109,7 +1109,7 @@ const CheckoutPage = () => {
                                 fontSize: { xs: "0.8rem", md: "0.875rem" },
                               }}
                             >
-                              Secured by MONEYPAY
+                              Secured by MINDMESH
                             </Typography>
                           </Box>
                           <Box

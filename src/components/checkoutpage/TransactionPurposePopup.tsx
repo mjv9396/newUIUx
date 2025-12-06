@@ -63,11 +63,7 @@ const TransactionPurposePopup: React.FC<TransactionPurposePopupProps> = ({
           }}
         >
           <Box sx={{ mb: 2 }}>
-            <img
-              src="/images/logo.png"
-              alt="MONEYPAY Logo"
-              height="50"
-            />
+            <img src="/images/logo.png" alt="MINDMESH Logo" height="50" />
           </Box>
           <Typography
             variant="h6"
