@@ -85,6 +85,10 @@ export const endpoints = {
     addBankAccount: "/bank-account",
     searchBankAccount: "/bank-account/search",
     updateBankAccountStatus: "/bank-account/status",
+    // Virtual Address Whitelist - TODO: Update these endpoints when API is ready
+    addVirtualAddressWhitelist: "/virtual-address-whitelist",
+    virtualAddressWhitelistList: "/virtual-address-whitelist/search",
+    updateVirtualAddressWhitelistStatus: "/virtual-address-whitelist/status",
     transactionChart: "/transactions/payin-line-chart",
     updateAccountStatus: "/service/user-accountStatus",
     updatePassword: "/user/update-password",

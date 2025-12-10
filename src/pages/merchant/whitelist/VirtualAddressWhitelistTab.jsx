@@ -1,16 +1,17 @@
 import { useState, useEffect } from "react";
 import usePost from "../../../hooks/usePost";
+import useFetch from "../../../hooks/useFetch";
 import { endpoints } from "../../../services/apiEndpoints";
 import { successMessage, errorMessage } from "../../../utils/messges";
 import { apiClient } from "../../../services/httpRequest";
 import styles from "../../../styles/common/Add.module.css";
-import AccountWhitelistModal from "./AccountWhitelistModal";
 import { GetUserRole, GetUserId, isAdmin } from "../../../services/cookieStore";
+import VirtualAddressWhitelistModal from "./VirtualAddressWhitelistModal";
 
-const AccountWhitelistTab = () => {
+const VirtualAddressWhitelistTab = () => {
   const [selectedMerchant, setSelectedMerchant] = useState("");
   const [showModal, setShowModal] = useState(false);
-  const [editingAccount, setEditingAccount] = useState(null);
+  const [editingWhitelist, setEditingWhitelist] = useState(null);
 
   // Get user role and info
   const userRole = GetUserRole();
@@ -24,14 +25,14 @@ const AccountWhitelistTab = () => {
     loading: merchantsLoading,
   } = usePost(endpoints.user.userList);
 
-  // Fetch account whitelist
+  // Fetch virtual address whitelist - TODO: Update endpoint when API is ready
   const {
-    postData: getAccountList,
-    data: accountList,
-    loading: accountListLoading,
-  } = usePost(endpoints.user.searchBankAccount);
+    postData: getWhitelistData,
+    data: whitelistData,
+    loading: whitelistLoading,
+  } = usePost(endpoints.user.virtualAddressWhitelistList);
 
-  // Toggle account status using PUT for dynamic URL
+  // Toggle whitelist status
   const [toggleLoading, setToggleLoading] = useState(false);
 
   // Fetch merchants on component mount
@@ -45,66 +46,67 @@ const AccountWhitelistTab = () => {
     }
   }, [isMerchant, currentUserId]);
 
-  // Fetch account list when merchant is selected
+  // Fetch whitelist when merchant is selected
   useEffect(() => {
     if (selectedMerchant) {
-      getAccountList({
+      getWhitelistData({
         userId: selectedMerchant,
       });
     }
   }, [selectedMerchant]);
 
-  const handleToggleStatus = async (accountId, currentStatus) => {
+  const handleToggleStatus = async (whitelistId, currentStatus) => {
     const newStatus = !currentStatus;
     setToggleLoading(true);
 
     try {
+      // TODO: Update endpoint when API is ready
       const response = await apiClient.post(
-        `${endpoints.user.updateBankAccountStatus}/${accountId}?isActive=${newStatus}`,
+        `${endpoints.user.updateVirtualAddressWhitelistStatus}/${whitelistId}?isActive=${newStatus}`,
         {}
       );
 
       if (response.data && response.data.statusCode < 400) {
-        successMessage("Account status updated successfully");
+        successMessage("Virtual address whitelist status updated successfully");
         if (selectedMerchant) {
-          getAccountList({
+          getWhitelistData({
             userId: selectedMerchant,
           });
         }
       } else {
-        errorMessage("Failed to update account status");
+        errorMessage("Failed to update whitelist status");
       }
     } catch (error) {
-      errorMessage("An error occurred while updating account status");
+      errorMessage("An error occurred while updating whitelist status");
     } finally {
       setToggleLoading(false);
     }
   };
 
-  const handleAddAccount = () => {
+  const handleAddWhitelist = () => {
     if (!selectedMerchant) {
       errorMessage("Please select a merchant first");
       return;
     }
-    setEditingAccount(null);
+    setEditingWhitelist(null);
     setShowModal(true);
   };
 
-  const handleEditAccount = (account) => {
-    setEditingAccount(account);
+  const handleEditWhitelist = (whitelist) => {
+    setEditingWhitelist(whitelist);
     setShowModal(true);
   };
 
   const handleModalClose = () => {
     setShowModal(false);
-    setEditingAccount(null);
+    setEditingWhitelist(null);
   };
 
-  const handleAccountSaved = () => {
+  const handleWhitelistSaved = () => {
     setShowModal(false);
-    setEditingAccount(null);
+    setEditingWhitelist(null);
     if (selectedMerchant) {
-      getAccountList({
+      getWhitelistData({
         userId: selectedMerchant,
       });
     }
@@ -141,51 +143,35 @@ const AccountWhitelistTab = () => {
               )}
             </select>
           </div>
-          {/* <div className="col-md-6 col-sm-12 mb-2 d-flex align-items-end">
-            {selectedMerchant && (
-              <button
-                className="btn btn-primary"
-                onClick={handleAddAccount}
-                disabled={accountListLoading}
-                style={{
-                  backgroundColor: "var(--primary)",
-                  borderColor: "var(--primary)",
-                }}
-              >
-                <i className="bi bi-plus"></i> Add Bank Account
-              </button>
-            )}
-          </div> */}
         </div>
       )}
 
-      {/* Add Account Button for Merchants */}
+      {/* Add Whitelist Button for Admin */}
       {isAdmin() && selectedMerchant && (
         <div className="row mb-4">
           <div className="col-12">
             <button
               className="btn btn-primary"
-              onClick={handleAddAccount}
-              disabled={accountListLoading}
+              onClick={handleAddWhitelist}
+              disabled={whitelistLoading}
               style={{
                 backgroundColor: "var(--primary)",
                 borderColor: "var(--primary)",
               }}
             >
-              <i className="bi bi-plus"></i> Add Bank Account
+              <i className="bi bi-plus"></i> Add Virtual Address Whitelist
             </button>
           </div>
         </div>
       )}
 
-      {/* Account List Table */}
+      {/* Whitelist Table */}
       {selectedMerchant && (
         <div className="row">
           <div className="col-12">
             <div className="card">
               <div className="card-body">
-                {/* <h6>Bank Account Whitelist</h6> */}
-                {accountListLoading ? (
+                {whitelistLoading ? (
                   <div className="text-center py-4">
                     <div className="spinner-border" aria-hidden="true">
                       <span className="visually-hidden">Loading...</span>
@@ -199,43 +185,40 @@ const AccountWhitelistTab = () => {
                     >
                       <thead className="table-light">
                         <tr>
+                          <th style={{ minWidth: "140px" }}>
+                            Virtual Acc. No.
+                          </th>
+                          <th style={{ minWidth: "120px" }}>User Name</th>
+                          <th style={{ minWidth: "150px" }}>User Email</th>
+                          <th style={{ minWidth: "110px" }}>Mobile</th>
                           <th style={{ minWidth: "120px" }}>Account No.</th>
-                          <th style={{ minWidth: "150px" }}>Holder Name</th>
-                          <th style={{ minWidth: "120px" }}>Bank</th>
                           <th style={{ minWidth: "100px" }}>IFSC</th>
-                          <th style={{ minWidth: "120px" }}>Branch</th>
-                          <th style={{ minWidth: "90px" }}>Type</th>
                           <th style={{ minWidth: "100px" }}>Status</th>
-                          <th style={{ minWidth: "90px" }}>Verified</th>
                           <th style={{ minWidth: "80px" }}>Actions</th>
                         </tr>
                       </thead>
                       <tbody>
-                        {accountList?.data && accountList.data.length > 0 ? (
-                          accountList.data.map((account) => (
-                            <tr key={account.id}>
+                        {whitelistData?.data &&
+                        whitelistData.data.length > 0 ? (
+                          whitelistData.data.map((whitelist) => (
+                            <tr key={whitelist.id}>
                               <td>
-                                <small>{account.accountNumber}</small>
+                                <small>{whitelist.virtualAccountNo}</small>
                               </td>
                               <td>
-                                <small>{account.accountHolderName}</small>
+                                <small>{whitelist.userName}</small>
                               </td>
                               <td>
-                                <small>{account.bankName}</small>
+                                <small>{whitelist.userEmail}</small>
                               </td>
                               <td>
-                                <small>{account.ifscCode}</small>
+                                <small>{whitelist.userMobile}</small>
                               </td>
                               <td>
-                                <small>{account.branch}</small>
+                                <small>{whitelist.accountNumber}</small>
                               </td>
                               <td>
-                                <span
-                                  className="badge bg-secondary"
-                                  style={{ fontSize: "0.7rem" }}
-                                >
-                                  {account.accountType}
-                                </span>
+                                <small>{whitelist.ifscCode}</small>
                               </td>
                               <td>
                                 <div
@@ -245,11 +228,11 @@ const AccountWhitelistTab = () => {
                                   <input
                                     className="form-check-input"
                                     type="checkbox"
-                                    checked={account.active}
+                                    checked={whitelist.active}
                                     onChange={() =>
                                       handleToggleStatus(
-                                        account.id,
-                                        account.active
+                                        whitelist.id,
+                                        whitelist.active
                                       )
                                     }
                                     disabled={toggleLoading}
@@ -258,22 +241,10 @@ const AccountWhitelistTab = () => {
                                 </div>
                               </td>
                               <td>
-                                <span
-                                  className={`badge ${
-                                    account.verified
-                                      ? "bg-success"
-                                      : "bg-warning text-dark"
-                                  }`}
-                                  style={{ fontSize: "0.7rem" }}
-                                >
-                                  {account.verified ? "Verified" : "Pending"}
-                                </span>
-                              </td>
-                              <td>
                                 <button
                                   className="btn btn-sm btn-outline-primary"
-                                  onClick={() => handleEditAccount(account)}
-                                  title="Edit Account"
+                                  onClick={() => handleEditWhitelist(whitelist)}
+                                  title="Edit Whitelist"
                                   style={{ padding: "0.25rem 0.5rem" }}
                                 >
                                   <i className="bi bi-pencil"></i>
@@ -283,8 +254,8 @@ const AccountWhitelistTab = () => {
                           ))
                         ) : (
                           <tr>
-                            <td colSpan={9} className="text-center text-muted">
-                              <small>No bank accounts whitelisted</small>
+                            <td colSpan={8} className="text-center text-muted">
+                              <small>No virtual address whitelisted</small>
                             </td>
                           </tr>
                         )}
@@ -298,13 +269,13 @@ const AccountWhitelistTab = () => {
         </div>
       )}
 
-      {/* Account Modal */}
+      {/* Whitelist Modal */}
       {showModal && (
-        <AccountWhitelistModal
+        <VirtualAddressWhitelistModal
           show={showModal}
           onHide={handleModalClose}
-          onSaved={handleAccountSaved}
-          editingAccount={editingAccount}
+          onSaved={handleWhitelistSaved}
+          editingWhitelist={editingWhitelist}
           selectedMerchant={selectedMerchant}
         />
       )}
@@ -312,4 +283,4 @@ const AccountWhitelistTab = () => {
   );
 };
 
-export default AccountWhitelistTab;
+export default VirtualAddressWhitelistTab;

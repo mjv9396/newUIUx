@@ -261,26 +261,37 @@ const IPWhitelistTab = () => {
                     </div>
                   </div>
                 ) : (
-                  <div className={styles.table}>
-                    <table className="table table-responsive-sm">
-                      <thead>
+                  <div className="table-responsive">
+                    <table
+                      className="table table-sm table-hover"
+                      style={{ fontSize: "0.875rem" }}
+                    >
+                      <thead className="table-light">
                         <tr>
-                          <th>IP Address</th>
-                          <th>Added Date</th>
-                          <th>Action</th>
+                          <th style={{ minWidth: "150px" }}>IP Address</th>
+                          <th style={{ minWidth: "120px" }}>Added Date</th>
+                          <th style={{ minWidth: "80px" }}>Action</th>
                         </tr>
                       </thead>
                       <tbody>
                         {ipList?.data && ipList.data.length > 0 ? (
                           ipList.data.map((item) => (
                             <tr key={item.payoutWhitelistId}>
-                              <td>{item.ipAddress}</td>
                               <td>
-                                {item.createdDate
-                                  ? new Date(
-                                      item.createdDate
-                                    ).toLocaleDateString()
-                                  : "N/A"}
+                                <strong>{item.ipAddress}</strong>
+                              </td>
+                              <td>
+                                <small>
+                                  {item.createdDate
+                                    ? new Date(
+                                        item.createdDate
+                                      ).toLocaleDateString("en-GB", {
+                                        day: "2-digit",
+                                        month: "short",
+                                        year: "numeric",
+                                      })
+                                    : "N/A"}
+                                </small>
                               </td>
                               <td>
                                 <button
@@ -290,6 +301,7 @@ const IPWhitelistTab = () => {
                                   }
                                   disabled={deleteLoading}
                                   title="Delete IP Address"
+                                  style={{ padding: "0.25rem 0.5rem" }}
                                 >
                                   <i className="bi bi-trash-fill"></i>
                                 </button>
@@ -298,8 +310,8 @@ const IPWhitelistTab = () => {
                           ))
                         ) : (
                           <tr>
-                            <td colSpan={3} className="text-center">
-                              No IP addresses whitelisted
+                            <td colSpan={3} className="text-center text-muted">
+                              <small>No IP addresses whitelisted</small>
                             </td>
                           </tr>
                         )}

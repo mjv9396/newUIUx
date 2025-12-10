@@ -3,6 +3,7 @@ import DashboardLayout from "../../layouts/DashboardLayout";
 import styles from "../../styles/common/Add.module.css";
 import IPWhitelistTab from "./whitelist/IPWhitelistTab";
 import AccountWhitelistTab from "./whitelist/AccountWhitelistTab";
+import VirtualAddressWhitelistTab from "./whitelist/VirtualAddressWhitelistTab";
 
 const MerchantWhitelist = () => {
   const [activeTab, setActiveTab] = useState(1);
@@ -32,6 +33,15 @@ const MerchantWhitelist = () => {
                   IP Whitelist
                 </button>
               </li>
+              <li className="nav-item">
+                <button
+                  className={`nav-link ${activeTab === 3 ? "active" : ""}`}
+                  onClick={() => setActiveTab(3)}
+                  type="button"
+                >
+                  Virtual Address Whitelist
+                </button>
+              </li>
             </ul>
           </div>
         </div>
@@ -40,6 +50,7 @@ const MerchantWhitelist = () => {
         <div className="tab-content">
           {activeTab === 1 && <AccountWhitelistTab />}
           {activeTab === 2 && <IPWhitelistTab />}
+          {activeTab === 3 && <VirtualAddressWhitelistTab />}
         </div>
       </div>
     </DashboardLayout>
